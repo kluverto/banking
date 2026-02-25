@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - User Details</title>
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    form { max-width: 400px; margin: 20px auto; display: flex; flex-direction: column; gap: 10px; }
+    input { padding: 8px; }
+    button { padding: 10px; cursor: pointer; }
+  </style>
+</head>
+
+<!-- Header -->
+  <header>
+    <section class="nav-bar">
+      <div class="hero-image">
+        <img src="images/evergreen_transparent.png" alt="Evergreen financial Bank" width="200" height="200">
+      </div>
+      <div class="nav">
+        <ul>
+          <li><a href="admin.html">Dashboard</a></li>
+          <li><a href="manage_users.html" class="active">Users</a></li>
+          <li><a href="transactions.html">Transactions</a></li>
+          <li><a href="reports.html">Reports</a></li>
+          <li><a href="settings.html">Settings</a></li>
+          <li class="logout"><a href="signin.html">Logout</a></li>
+        </ul>
+      </div>
+    </section>
+  </header>
+
+<body>
+  <h1>User Details</h1>
+  <form id="userForm">
+    <input type="text" name="firstname" placeholder="First Name">
+    <input type="text" name="secondname" placeholder="Second Name">
+    <input type="text" name="phonenumber" placeholder="Phone Number">
+    <input type="date" name="date_of_birth" placeholder="Date of Birth">
+    <input type="text" name="account_number" placeholder="Account Number" readonly>
+    <input type="number" name="account_balance" placeholder="Account Balance">
+    <input type="number" name="savings_balance" placeholder="Savings Balance">
+    <input type="number" name="card_balance" placeholder="Card Balance">
+    <button type="submit">Update User</button>
+  </form>
+
+  <!-- Footer -->
+  <footer>
+        <div class="footer-container">
+            <h4>Contact Us</h4>
+            <p id="email">Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a>
+            <p>&copy; 2025 Evergreen financial Bank. All rights reserved.</p>
+            <nav>
+                <ul>
+                    <li><a href="">Privacy Policy</a></li>
+                    <li><a href="">Terms of Service</a></li>
+                    <li><a href="">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="social-media">
+            <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
+            <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>        
+    </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const accountNumber = params.get("account");
+
+    if (!accountNumber) {
+      alert("No account number provided");
+    } else if (accountNumber){
+      // Fetch user details
+      fetch(`/admin/user/${accountNumber}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const user = data.user;
+            const form = document.getElementById("userForm");
+            form.firstname.value = user.firstname;
+            form.secondname.value = user.secondname;
+            form.phonenumber.value = user.phonenumber;
+            if (user.dob) {
+              const date = new Date(user.dob);
+              form.date_of_birth.value = date.toISOString().split("T")[0]; // "yyyy-MM-dd"
+            } else {
+              form.date_of_birth.value = "";
+            }
+            form.account_number.value = user.account_number;
+            form.account_balance.value = user.account_balance;
+            form.savings_balance.value = user.savings_balance;
+            form.card_balance.value = user.card_balance;
+            
+          } else {
+            alert("User not found: " + data.message);
+          }
+        })
+        .catch(err => console.error("Error fetching user:", err));
+    }
+
+    // Handle form update
+    document.getElementById("userForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target).entries());
+
+      const res = await fetch(`/admin/user/${accountNumber}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("✅ User updated successfully");
+        window.location.href="manage_users.html"
+      } else {
+        alert("❌ Error: " + data.message);
+      }
+    });
+  </script>
+</body>
+</html>

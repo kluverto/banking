@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evergreen financial Bank - User Dashboard</title>
+  <link rel="stylesheet" href="userdashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <section class="nav-bar">
+      <div class="hero-image">
+        <a href ="index.html"><img src="images/evergreen_transparent.png" alt="Evergreen financial Bank" width="200" height="200"></a>
+      </div>
+      <button class="menu-toggle">&#9776;</button>
+      <div class="nav">
+        <ul>
+          <li><a href="userdashboard.html">Dashboard</a></li>
+          <li><a href="transactions.html">Transactions</a></li>
+          <li><a href="signin.html">Logout</a></li>
+        </ul>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div class="transfer-user-info">
+        <h3>Sender Details</h3>
+        <p><strong>Name:</strong> <span id="userName"></span></p>
+        <p><strong>Account Number:</strong> <span id="userAccount"></span></p>
+        <p><strong>Main Balance:</strong> $<span id="mainBalance"></span></p>
+        <p><strong>Savings Balance:</strong> $<span id="savingsBalance"></span></p>
+        <p><strong>Card Balance:</strong> $<span id="cardBalance"></span></p>
+    </div>
+
+    <section class="user-overview">
+      <h2><i class="fa fa-exchange-alt"></i> Transfer Funds</h2>
+      <p>Send money securely to another bank account.</p>
+
+      <div class="transfer-form-container">
+        <form id="transferForm">
+
+          <!-- Choose Account -->
+          <div class="form-group">
+            <label for="fromAccount">Choose Account</label>
+            <select id="fromAccount" required>
+              <option value="">-- Select Account --</option>
+              <option value="main">Main Account</option>
+              <option value="savings">Savings Account</option>
+              <option value="card">Card</option>
+            </select>
+          </div>
+
+          <!-- Recipient Bank -->
+          <div class="form-group">
+            <label for="recipientBank">Recipient Bank</label>
+            <input type="text" id="recipientBank" placeholder="Enter recipient bank name" required>
+          </div>
+
+        <!--Recipient Account Name-->
+            <div class="form-group">
+            <label for="recipientName">Recipient Name</label>
+            <input type="text" id="recipientName" placeholder="Enter recipient name" required>
+          </div>
+          <!-- Recipient Account Number -->
+          <div class="form-group">
+            <label for="recipientAccount">Recipient Account Number</label>
+            <input type="text" id="recipientAccount" placeholder="Enter account number" required>
+          </div>
+
+          <!-- Amount -->
+          <div class="form-group">
+            <label for="amount">Amount ($)</label>
+            <input type="number" id="amount" placeholder="Enter amount" required>
+          </div>
+
+          <!--Description-->
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" placeholder="Enter description for transfer" required>
+          </div>
+
+          <button type="submit" class="action-btn">
+            <i class="fa fa-paper-plane"></i> Send
+          </button>
+
+        </form>
+
+        <div id="transferMessage"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+        <div class="footer-container">
+            <h4>Contact Us</h4>
+            <p id="email">Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a>
+            <p>&copy; 2026 Evergreen financial Bank. All rights reserved.</p>
+            <nav>
+                <ul>
+                    <li><a href="">Privacy Policy</a></li>
+                    <li><a href="">Terms of Service</a></li>
+                    <li><a href="">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="social-media">
+            <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
+            <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>        
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('.nav');
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+
+  const email = localStorage.getItem("userEmail");
+
+  if (!email) {
+    alert("User not logged in");
+    window.location.href = "signin.html";
+  }
+
+  const transferForm = document.getElementById("transferForm");
+  const messageBox = document.getElementById("transferMessage");
+
+  const userName = document.getElementById("userName");
+  const userAccount = document.getElementById("userAccount");
+  const mainBalance = document.getElementById("mainBalance");
+  const savingsBalance = document.getElementById("savingsBalance");
+  const cardBalance = document.getElementById("cardBalance");
+
+  // 🔹 FETCH USER DATA FROM DATABASE
+  async function loadUser() {
+    if (!email) {
+      alert("No user email found in URL");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/dashboard/${email}`);
+      const data = await res.json();
+
+      if (!data.success) {
+        alert("Failed to load user data");
+        return;
+      }
+
+      const user = data.user;
+
+      userName.textContent = `${user.firstname} ${user.secondname}`;
+      userAccount.textContent = user.account_number;
+      mainBalance.textContent = user.account_balance;
+      savingsBalance.textContent = user.savings_balance;
+      cardBalance.textContent = user.card_balance;
+
+    } catch (err) {
+      console.error("Error loading user:", err);
+    }
+  }
+
+  loadUser();
+
+  // 🔹 HANDLE TRANSFER
+transferForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const fromAccount = document.getElementById("fromAccount").value;
+  const recipientBank = document.getElementById("recipientBank").value;
+  const recipientName = document.getElementById("recipientName").value;
+  const recipientAccount = document.getElementById("recipientAccount").value;
+  const amount = document.getElementById("amount").value;
+  const description = document.getElementById("description").value;
+
+  if (!email) {
+    messageBox.innerHTML = "<p style='color:red;'>User email missing.</p>";
+    return;
+  }
+
+  try {
+    const res = await fetch("/transfer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        fromAccount,
+        recipientBank,
+        recipientName,
+        recipientAccount,
+        recipientName,
+        amount,
+        description
+      })
+    });
+
+    const data = await res.json();
+
+  if (data.success) {
+
+        // Redirect to receipt page
+        window.location.href = `/receipt/${data.transactionRef}`;
+
+        return;
+      } else {
+        messageBox.innerHTML = `<p style='color:red;'>${data.message}</p>`;
+      }
+
+        transferForm.reset();
+
+      } catch (err) {
+        console.error("Transfer error:", err);
+        messageBox.innerHTML = "<p style='color:red;'>An error occurred. Please try again.</p>";
+      }
+});
+</script>
+
+</body>
+</html>

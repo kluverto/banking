@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Users | Evergreen financial Bank Admin</title>
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <style>
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f4f4f4; }
+    tr:hover { background: #f9f9f9; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <section class="nav-bar">
+      <div class="hero-image">
+        <img src="images/evergreen_transparent.png" alt="Evergreen financial Bank" width="200" height="200">
+      </div>
+      <div class="nav">
+        <ul>
+          <li><a href="admin.html">Dashboard</a></li>
+          <li><a href="users.html" class="active">Users</a></li>
+          <li><a href="admin-transaction.html">Transactions</a></li>
+          <li><a href="reports.html">Reports</a></li>
+          <li><a href="settings.html">Settings</a></li>
+          <li class="logout"><a href="signin.html">Logout</a></li>
+        </ul>
+      </div>
+    </section>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="user-list">
+      <h2>All Registered Users</h2>
+      <p>Below is the list of all users in the system.</p>
+
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Second Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Date of Birth</th>
+            <th>Account Balance</th>
+            <th>Savings Balance</th>
+            <th>Card Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- User rows will be inserted dynamically via JS -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+ <!-- Footer -->
+  <footer>
+        <div class="footer-container">
+            <h4>Contact Us</h4>
+            <p id="email">Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a>
+            <p>&copy; 2025 Evergreen financial Bank. All rights reserved.</p>
+            <nav>
+                <ul>
+                    <li><a href="">Privacy Policy</a></li>
+                    <li><a href="">Terms of Service</a></li>
+                    <li><a href="">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="social-media">
+            <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
+            <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>        
+    </footer>
+
+  <script>
+    // Fetch all users from backend API
+    async function loadUsers() {
+      try {
+        const response = await fetch("admindash/users"); // backend endpoint
+        const users = await response.json();
+
+        const tbody = document.querySelector("#usersTable tbody");
+        tbody.innerHTML = "";
+
+        users.forEach(user => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.firstname}</td>
+            <td>${user.secondname}</td>
+            <td>${user.email}</td>
+            <td>${user.phonenumber}</td>
+            <td>${user.dob}</td>
+            <td>$${user.account_balance.toLocaleString()}</td>
+            <td>$${user.savings_balance.toLocaleString()}</td>
+            <td>$${user.card_balance.toLocaleString()}</td>
+          `;
+          // Click row to go to details page
+            row.addEventListener("click", () => {
+              window.location.href = `/admin_users_details.html?account=${user.account_number}`;
+            });
+          tbody.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Error loading users:", error);
+      }
+    }
+
+    // Load users on page load
+    window.onload = loadUsers;
+  </script>
+</body>
+</html>

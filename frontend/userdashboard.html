@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evergreen financial Bank - User Dashboard</title>
+  <link rel="stylesheet" href="userdashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <section class="nav-bar">
+      <div class="hero-image">
+        <a href ="index.html"><img src="images/evergreen_transparent.png" alt="Evergreen financial Bank" width="200" height="200"></a>
+      </div>
+      <button class="menu-toggle">&#9776;</button>
+      <div class="nav">
+        <ul>
+          <li><a href="userdashboard.html">Dashboard</a></li>
+          <li><a href="transactions.html">Transactions</a></li>
+          <li><a href="transfer.html">Transfer</a></li>
+          <li><a href="signin.html">Logout</a></li>
+        </ul>
+      </div>
+    </section>
+  </header>
+
+  <!-- Main Dashboard -->
+  <main>
+    <section class="user-overview">
+      <div class="profile-pic-wrapper">
+        <label for="profileUpload">
+          <img id="profilePic" src=""alt="Profile Picture"/>
+          <div class="edit-icon">
+            <i class="fa fa-camera"></i>
+          </div>
+        </label>
+        <input type="file" id="profileUpload" accept="image/*" hidden/>
+      </div>
+      <h2>Welcome back </h2> <h2 class="user-name"></h2> <h2 class="user-number"></h2>
+      <p>Your financial summary at a glance.</p>
+
+      <div class="cards-container">
+        <div class="card">
+          <i class="fa fa-wallet"></i>
+          <h3>Account Balance</h3>
+          <p class="user-balance"></p>
+        </div>
+        <div class="card">
+          <i class="fa fa-piggy-bank"></i>
+          <h3>Savings Balance</h3>
+          <p class="user-savings"></p>
+        </div>
+        <div class="card">
+          <i class="fa fa-credit-card"></i>
+          <h3>Credit Card</h3>
+          <p class="user-card"> due</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-actions">
+      <h3>Quick Actions</h3>
+      <div class="actions-grid">
+        <a href="transfer.html" class="action-btn"><i class="fa fa-exchange-alt"></i> Transfer Funds</a>
+        <a href="payments.html" class="action-btn"><i class="fa fa-file-invoice"></i> Pay Bills</a>
+        <a href="accounts.html" class="action-btn"><i class="fa fa-university"></i> View Accounts</a>
+      </div>
+    </section>
+
+    <section class="recent-trans">
+      <h3>Recent Transactions</h3>
+      <table id="transactions">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    </section>
+    <div id="chatWidget">
+      <div id="chatIcon">💬<span id="newMsgBadge" style="display:none;">1</span></div>
+      <div id="chatWindow">
+        <div id="chatHeader">Support Chat <span id="closeChat" style="float:right;cursor:pointer;">✖</span></div>
+        <div id="messages"></div>
+        <div id="inputContainer">
+        <input type="text" id="messageInput" placeholder="Type a message" />
+        <button id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+        <div class="footer-container">
+            <h4>Contact Us</h4>
+            <p id="email">Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a>
+            <p>&copy; 2026 Evergreen financial Bank. All rights reserved.</p>
+            <nav>
+                <ul>
+                    <li><a href="">Privacy Policy</a></li>
+                    <li><a href="">Terms of Service</a></li>
+                    <li><a href="">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="social-media">
+            <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
+            <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>        
+  </footer>
+  <script>
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.nav');
+    toggle.addEventListener('click', () => {
+        nav.classList.toggle('open');
+    });
+  </script>
+  <script>
+    const email = localStorage.getItem("userEmail");
+    if (!email) {
+      alert("You are not logged in!");
+      window.location.href = "signin.html";
+    } else {
+      fetch(`/dashboard/${email}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const profile = data.user;
+
+            // Show saved profile image if exists
+            if (profile.profile_image) {
+              profilePic.src = profile.profile_image;
+            } else {
+              profilePic.src = "";
+            }
+
+            // Fill profile info
+            document.querySelector(".user-name").textContent =
+              `${profile.firstname} ${profile.secondname}`;
+            document.querySelector(".user-savings").textContent =
+              `$${profile.savings_balance}`;
+            document.querySelector(".user-balance").textContent =
+              `$${profile.account_balance}`;
+            document.querySelector(".user-card").textContent =
+              `$${profile.card_balance}`;
+            document.querySelector(".user-number").textContent =
+              `${profile.account_number}`;
+
+            // Fill transactions table
+            const tbody = document.querySelector("#transactions tbody");
+            tbody.innerHTML = ""; // clear old rows
+            if (Array.isArray(data.transactions) && data.transactions.length > 0) data.transactions.forEach(tx => {
+              const row = document.createElement("tr");
+
+              row.innerHTML = `
+                <td>${tx.description}</td>
+                <td>${tx.type}</td>
+                <td>$${tx.amount}</td>
+                <td>${tx.status}</td>
+                <td><small>${new Date(tx.date).toLocaleString()}</small></td>
+              `;
+              // Make row clickable
+              row.style.cursor = "pointer";
+              row.addEventListener("click", () => {
+                window.location.href = `/receipt/${tx.transaction_ref}`;
+              });
+              tbody.appendChild(row);
+            });
+            function viewReceipt(ref) {
+              window.location.href = `/receipt/${ref}`;
+            }
+
+            loadTransactions();
+
+          } else {
+            document.getElementById("profile").innerHTML =
+              `<p>Error: ${data.message}</p>`;
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching profile:", err);
+          document.getElementById("profile").innerHTML =
+            "<p>Failed to load profile data.</p>";
+        });
+    }
+  const uploadInput = document.getElementById("profileUpload");
+  const profilePic = document.getElementById("profilePic");
+
+  uploadInput.addEventListener("change", async () => {
+    const file = uploadInput.files[0];
+    if (!file) return;
+
+    // Preview immediately
+    const reader = new FileReader();
+    reader.onload = () => {
+      profilePic.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+
+    // Send file to backend
+    const formData = new FormData();
+    formData.append("image", file);   // MUST match upload.single("image")
+    formData.append("email", email);  // email from URL or logged-in user
+
+    try {
+      const res = await fetch("/upload-profile-pic", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+      throw new Error(data.message || "Upload failed");
+    }
+
+      // ✅ Cloudinary returns a full URL
+      profilePic.src = data.image;
+
+      // Optional: cache it locally so refresh keeps it
+      localStorage.setItem("profileImage", data.image);
+
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Image upload failed");
+    }
+  });
+    const savedImage = localStorage.getItem("profileImage");
+    if (savedImage) {
+      profilePic.src = savedImage;
+    }
+  </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+  const socket = io();
+  const chatIcon = document.getElementById("chatIcon");
+  const chatWindow = document.getElementById("chatWindow");
+  const messagesDiv = document.getElementById("messages");
+  const input = document.getElementById("messageInput");
+  const sendBtn = document.getElementById("sendBtn");
+  const badge = document.getElementById("newMsgBadge");
+  const closeChat = document.getElementById("closeChat");
+
+  let chatOpen = false;
+  let unreadCount = 0;
+
+    // Floating chat toggle
+  chatIcon.addEventListener("click", () => {
+chatOpen = !chatOpen;
+if (chatOpen) {
+  chatWindow.classList.add("open");
+  badge.style.display = "none";
+  unreadCount = 0;
+} else {
+  chatWindow.classList.remove("open");
+}
+});
+
+//transaction dashboard update
+socket.on("transactionUpdated", (data) => {
+  // Reload dashboard automatically
+  location.reload();
+});
+
+// Close button inside chat
+closeChat.addEventListener("click", () => {
+  chatOpen = false;
+  chatWindow.classList.remove("open");
+});
+
+  // Dynamically get user email from URL parameter
+  const userEmail = params.get("email"); 
+
+  async function loadHistory(email) {
+  const res = await fetch(`/chat/${encodeURIComponent(email)}`);
+  const data = await res.json();
+  if (data.success) {
+    messagesDiv.innerHTML = "";
+    data.messages.forEach(msg => {
+      const p = document.createElement("p");
+      p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
+      p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
+      messagesDiv.appendChild(p);
+    });
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+}
+
+
+  if (!userEmail) {
+    alert("No email found in URL. Cannot join chat.");
+  } else {
+    loadHistory(userEmail);
+    socket.emit("joinRoom", { email: userEmail, role: "user" });
+  }
+
+  // Receive messages
+  socket.on("chatMessage", (msg) => {
+    const p = document.createElement("p");
+    p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
+    p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
+    messagesDiv.appendChild(p);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    if(!chatOpen){ unreadCount++; badge.style.display="flex"; badge.textContent=unreadCount;  chatIcon.classList.add("bounce"); 
+    setTimeout(() => {
+      chatIcon.classList.remove("bounce");
+    }, 4000); }
+  });
+
+  // Send messages
+  sendBtn.addEventListener("click", () => {
+    const text = input.value.trim();
+    if (!text) return;
+    socket.emit("chatMessage", {
+    text,
+    sender: userEmail,      
+    receiver: "admin"
+  });
+    input.value = "";
+  });
+
+  input.addEventListener("keypress", e => {
+    if (e.key === "Enter") sendBtn.click();
+  });
+  </script>
+
+
+</body>
+</html>

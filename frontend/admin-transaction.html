@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - All Transactions</title>
+<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+</head>
+<body>
+
+  <header>
+    <section class="nav-bar">
+      <div class="hero-image">
+        <a href ="index.html"><img src="images/evergreen_transparent.png" alt="Evergreen financial Bank" width="200" height="200"></a>
+      </div>
+      <button class="menu-toggle">&#9776;</button>
+      <div class="nav">
+        <ul>
+          <li><a href="admin.html">Dashboard</a></li>
+          <li><a href="manage_users.html">Users</a></li>
+          <li><a href="admin-transaction.html">Transactions</a></li>
+          <li><a href="reports.html">Reports</a></li>
+          <li><a href="settings.html">Settings</a></li>
+          <li class="logout"><a href="signin.html">Logout</a></li>
+        </ul>
+      </div>
+    </section>
+  </header>
+
+<main>
+  <h2>Admin Panel - All Transactions</h2>
+<section class="filters">
+  <select id="filterType">
+    <option value="">All Types</option>
+    <option value="credit">Credit</option>
+    <option value="debit">Debit</option>
+  </select>
+
+  <select id="filterStatus">
+    <option value="">All Status</option>
+    <option value="completed">Completed</option>
+    <option value="pending">Pending</option>
+    <option value="failed">Failed</option>
+  </select>
+
+  <button onclick="applyFilters()">Apply Filter</button>
+</section>
+
+<section>
+<table id="transactions">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Description</th>
+      <th>Type</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Date</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+</section>
+
+</main>
+<!-- Footer -->
+  <footer>
+    <div class="footer-container">
+        <h4>Contact Us</h4>
+        <p id="email">Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a>
+        <p>&copy; 2025 Evergreen financial Bank. All rights reserved.</p>
+        <nav>
+            <ul>
+                <li><a href="">Privacy Policy</a></li>
+                <li><a href="">Terms of Service</a></li>
+                <li><a href="">Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="social-media">
+        <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
+        <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>        
+  </footer>
+<script>
+let allTransactions = [];
+
+fetch("/admin/all-transactions")
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      allTransactions = data.transactions;
+      renderTransactions(allTransactions);
+    }
+  })
+  .catch(err => console.error(err));
+
+function renderTransactions(transactions) {
+  const tbody = document.querySelector("#transactions tbody");
+  tbody.innerHTML = "";
+
+  transactions.forEach(tx => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${tx.email}</td>
+      <td>${tx.description}</td>
+      <td>${tx.type}</td>
+      <td>$${tx.amount}</td>
+      <td id="status-${tx.id}">${tx.status}</td>
+      <td>${new Date(tx.date).toLocaleString()}</td>
+      <td>
+        ${
+          tx.status === "pending"
+            ? `
+              <button onclick="updateTransaction(${tx.id}, 'approve')">Approve</button>
+              <button onclick="updateTransaction(${tx.id}, 'reject')">Reject</button>
+            `
+            : "-"
+        }
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+
+function applyFilters() {
+  const type = document.getElementById("filterType").value;
+  const status = document.getElementById("filterStatus").value;
+
+  let filtered = allTransactions;
+
+  if (type) {
+    filtered = filtered.filter(tx => tx.type === type);
+  }
+
+  if (status) {
+    filtered = filtered.filter(tx => tx.status === status);
+  }
+
+  renderTransactions(filtered);
+}
+</script>
+
+<script>
+    async function updateTransaction(id, action) {
+  const res = await fetch("/admin/update-transaction", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      transactionId: id,
+      action
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    alert(data.message);
+  }
+}
+
+
+</script>
+</body>
+</html>

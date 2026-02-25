@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evergreen financial Bank - Transactions</title>
+  <link rel="stylesheet" href="userdashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <section class="nav-bar">
+      <div class="hero-image">
+        <a href="index.html">
+          <img src="images/evergreen_transparent.png" alt="Evergreen financial Bank" width="200" height="200">
+        </a>
+      </div>
+      <button class="menu-toggle">&#9776;</button>
+      <div class="nav">
+        <ul>
+          <li><a href="userdashboard.html">Dashboard</a></li>
+          <li><a href="user-transfer.html">Transfers</a></li>
+          <li><a href="settings.html">Settings</a></li>
+          <li><a href="signin.html">Logout</a></li>
+        </ul>
+      </div>
+    </section>
+  </header>
+
+  <!-- Main -->
+  <main>
+
+    <!-- Page Header -->
+    <section class="user-overview">
+      <h2>Transaction History</h2>
+      <p>View all your account activity.</p>
+    </section>
+
+    <!-- Filters -->
+    <section class="quick-actions">
+      <h3>Filter Transactions</h3>
+      <div class="actions-grid">
+        <select id="filterType">
+          <option value="">All Types</option>
+          <option value="credit">Credit</option>
+          <option value="debit">Debit</option>
+        </select>
+
+        <select id="filterStatus">
+          <option value="">All Status</option>
+          <option value="completed">Completed</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Failed</option>
+        </select>
+
+        <button onclick="applyFilters()">Apply Filter</button>
+      </div>
+    </section>
+
+    <!-- Transactions Table -->
+    <section class="recent-trans">
+      <h3>All Transactions</h3>
+      <table id="transactions">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Chat Widget (unchanged) -->
+    <div id="chatWidget">
+      <div id="chatIcon">💬<span id="newMsgBadge" style="display:none;">1</span></div>
+      <div id="chatWindow">
+        <div id="chatHeader">Support Chat 
+          <span id="closeChat" style="float:right;cursor:pointer;">✖</span>
+        </div>
+        <div id="messages"></div>
+        <div id="inputContainer">
+          <input type="text" id="messageInput" placeholder="Type a message" />
+          <button id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <h4>Contact Us</h4>
+      <p>Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a></p>
+      <p>&copy; 2026 Evergreen financial Bank. All rights reserved.</p>
+    </div>
+  </footer>
+
+<script>
+const toggle = document.querySelector('.menu-toggle');
+const nav = document.querySelector('.nav');
+toggle.addEventListener('click', () => {
+  nav.classList.toggle('open');
+});
+</script>
+
+<script>
+// Get email from URL
+const params = new URLSearchParams(window.location.search);
+const email = params.get("email");
+
+let allTransactions = [];
+
+async function loadTransactions() {
+  try {
+    const res = await fetch("/admin/all-transactions"); // ✅ fixed URL
+    const data = await res.json();
+    if (data.success) {
+      allTransactions = data.transactions || [];
+      renderTransactions(allTransactions);
+    }
+  } catch (err) {
+    console.error("Error fetching transactions:", err);
+  }
+}
+
+// Initial load
+loadTransactions();
+
+function renderTransactions(transactions) {
+  const tbody = document.querySelector("#transactions tbody");
+  tbody.innerHTML = "";
+
+  if (transactions.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7">No transactions found</td></tr>`;
+    return;
+  }
+
+  transactions.forEach(tx => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${tx.description}</td>
+      <td>${tx.type}</td>
+      <td>$${Number(tx.amount).toLocaleString()}</td>
+      <td>
+        <span class="status ${tx.status}">
+          ${tx.status}
+        </span>
+      </td>
+      <td><small>${new Date(tx.date).toLocaleString()}</small></td>
+      <td>
+        ${tx.status === "pending" ? `
+          <button class="approve-btn" data-id="${tx.id}">Approve</button>
+          <button class="reject-btn" data-id="${tx.id}">Reject</button>
+        ` : ""}
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+
+  // Attach event listeners for pending transactions
+  document.querySelectorAll(".approve-btn").forEach(btn => {
+    btn.addEventListener("click", () => updateTransaction(btn.dataset.id, "approve"));
+  });
+  document.querySelectorAll(".reject-btn").forEach(btn => {
+    btn.addEventListener("click", () => updateTransaction(btn.dataset.id, "reject"));
+  });
+}
+
+function applyFilters() {
+  const type = document.getElementById("filterType").value;
+  const status = document.getElementById("filterStatus").value;
+
+  let filtered = allTransactions;
+
+  if (type) filtered = filtered.filter(tx => tx.type === type);
+  if (status) filtered = filtered.filter(tx => tx.status === status);
+
+  renderTransactions(filtered);
+}
+
+async function updateTransaction(transactionId, action) {
+  try {
+    const res = await fetch("/admin/update-transaction", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ transactionId: Number(transactionId), action })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      alert(`Transaction ${action}d successfully`);
+      loadTransactions(); // reload updated transactions
+    } else {
+      alert(`Failed to ${action}: ${data.message}`);
+    }
+  } catch (err) {
+    console.error(`Error ${action} transaction:`, err);
+    alert(`Error ${action} transaction. See console for details.`);
+  }
+}
+</script>
+
+
+<script>
+const tbody = document.querySelector("#transactions tbody");
+
+// Load all transactions
+async function loadTransactions() {
+  try {
+    const res = await fetch("/admin/all-transactions");
+    const data = await res.json();
+    if (!data.success) return;
+
+    tbody.innerHTML = "";
+
+    const pendingTx = data.transactions.filter(tx => tx.status === "pending");
+
+    if (pendingTx.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8">No pending transactions</td></tr>`;
+      return;
+    }
+
+    pendingTx.forEach(tx => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${tx.id}</td>
+        <td>${tx.email}</td>
+        <td>${tx.account_number}</td>
+        <td>$${Number(tx.amount).toLocaleString()}</td>
+        <td>${tx.type}</td>
+        <td>${tx.description}</td>
+        <td>${new Date(tx.date).toLocaleString()}</td>
+        <td>
+          <button class="approve-btn" data-id="${tx.id}">Approve</button>
+          <button class="reject-btn" data-id="${tx.id}">Reject</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    document.querySelectorAll(".approve-btn").forEach(btn => {
+      btn.addEventListener("click", () => updateTransaction(btn.dataset.id, "approve"));
+    });
+    document.querySelectorAll(".reject-btn").forEach(btn => {
+      btn.addEventListener("click", () => updateTransaction(btn.dataset.id, "reject"));
+    });
+
+  } catch (err) {
+    console.error("Error loading transactions:", err);
+  }
+}
+
+// Approve/Reject a transaction
+async function updateTransaction(id, action) {
+  try {
+    const res = await fetch("/admin/update-transaction", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ transactionId: id, action })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      alert(`Transaction ${action}d successfully`);
+      loadTransactions(); // reload table
+    } else {
+      alert(`Failed: ${data.message}`);
+    }
+  } catch (err) {
+    console.error("Error updating transaction:", err);
+  }
+}
+
+// Initial load
+loadTransactions();
+
+// Real-time updates via Socket.IO
+socket.on("transactionUpdated", () => loadTransactions());
+</script>
+
+
+<script src="/socket.io/socket.io.js"></script>
+  <script>
+  const socket = io();
+  const chatIcon = document.getElementById("chatIcon");
+  const chatWindow = document.getElementById("chatWindow");
+  const messagesDiv = document.getElementById("messages");
+  const input = document.getElementById("messageInput");
+  const sendBtn = document.getElementById("sendBtn");
+  const badge = document.getElementById("newMsgBadge");
+  const closeChat = document.getElementById("closeChat");
+
+  let chatOpen = false;
+  let unreadCount = 0;
+
+    // Floating chat toggle
+  chatIcon.addEventListener("click", () => {
+chatOpen = !chatOpen;
+if (chatOpen) {
+  chatWindow.classList.add("open");
+  badge.style.display = "none";
+  unreadCount = 0;
+} else {
+  chatWindow.classList.remove("open");
+}
+});
+
+//transaction dashboard update
+socket.on("transactionUpdated", (data) => {
+  // Reload dashboard automatically
+  location.reload();
+});
+
+// Close button inside chat
+closeChat.addEventListener("click", () => {
+  chatOpen = false;
+  chatWindow.classList.remove("open");
+});
+
+  // Dynamically get user email from URL parameter
+  const userEmail = params.get("email"); 
+
+  async function loadHistory(email) {
+  const res = await fetch(`/chat/${encodeURIComponent(email)}`);
+  const data = await res.json();
+  if (data.success) {
+    messagesDiv.innerHTML = "";
+    data.messages.forEach(msg => {
+      const p = document.createElement("p");
+      p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
+      p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
+      messagesDiv.appendChild(p);
+    });
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+}
+
+
+  if (!userEmail) {
+    alert("No email found in URL. Cannot join chat.");
+  } else {
+    loadHistory(userEmail);
+    socket.emit("joinRoom", { email: userEmail, role: "user" });
+  }
+
+  // Receive messages
+  socket.on("chatMessage", (msg) => {
+    const p = document.createElement("p");
+    p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
+    p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
+    messagesDiv.appendChild(p);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    if(!chatOpen){ unreadCount++; badge.style.display="flex"; badge.textContent=unreadCount;  chatIcon.classList.add("bounce"); 
+    setTimeout(() => {
+      chatIcon.classList.remove("bounce");
+    }, 4000); }
+  });
+
+  // Send messages
+  sendBtn.addEventListener("click", () => {
+    const text = input.value.trim();
+    if (!text) return;
+    socket.emit("chatMessage", {
+    text,
+    sender: userEmail,      
+    receiver: "admin"
+  });
+    input.value = "";
+  });
+
+  input.addEventListener("keypress", e => {
+    if (e.key === "Enter") sendBtn.click();
+  });
+  </script>
+
+</body>
+</html>
