@@ -82,9 +82,13 @@ const db = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ssl: {rejectUnauthorized: false}
-})
-
+  ssl: {rejectUnauthorized: false},
+  max: 3,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
+module.exports = Pool;
+const pool = require("./db");
 // GET chat history for a user
 app.get("/chat/:email", async (req, res) => {
   try {
