@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evergreen financial Bank Admin</title>
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <section class="nav-bar">
+      <div class="hero-image">
+        <a href ="index.html"><img src="images/evergreen_transparent.png" alt="Evergreen financial Bank" width="200" height="200"></a>
+      </div>
+      <button class="menu-toggle">&#9776;</button>
+      <div class="nav">
+        <ul>
+          <li><a href="admin.html">Dashboard</a></li>
+          <li><a href="manage_users.html">Users</a></li>
+          <li><a href="admin-transaction.html">Transactions</a></li>
+          <li><a href="reports.html">Reports</a></li>
+          <li><a href="settings.html">Settings</a></li>
+          <li class="logout"><a href="signin.html">Logout</a></li>
+        </ul>
+      </div>
+    </section>
+  </header>
+
+  <!-- Main content -->
+  <main>
+    <section class="admin-overview">
+      <h2>Welcome, Admin</h2>
+      <p>Quick overview of the bank’s system status.</p>
+
+      <div class="cards-container">
+        <a href="manage_users.html"><div class="card">
+          <i class="fa fa-users"></i>
+          <h3>Total Users</h3>
+          <p class="total_users"></p>
+        </div></a>
+        <div class="card">
+          <i class="fa fa-exchange-alt"></i>
+          <h3>Transactions Today</h3>
+          <p>1,245</p>
+        </div>
+        <div class="card">
+          <i class="fa fa-dollar-sign"></i>
+          <h3>Total Balance</h3>
+          <p class="total_balance"></p>
+        </div>
+        <div class="card">
+          <i class="fa fa-bell"></i>
+          <h3>Alerts</h3>
+          <p>5 pending</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="form-container">
+        <form id="adminTransactionForm">
+          <h3>Credit/Debit User Balance</h3>
+          <div id="userDetail">
+            <label for="email">Select User</label>
+            <select name="email" class="selectUser" required>
+              <option value="">-- Select a user --</option>
+            </select>
+            <label for="target">Select Account Type</label>
+            <select name="target" required class="detail">
+              <option value="account_balance">Main Account</option>
+              <option value="savings_balance">Savings</option>
+              <option value="card_balance">Card</option>
+            </select>
+            <label for="type">Transaction Type</label>
+            <select name="type" required class="detail">
+              <option value="credit">Credit</option>
+              <option value="debit">Debit</option>
+            </select>
+            <label for="status">Status</label>
+            <select name="status" required class="detail">
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+            </select>
+          </div>
+
+          <label for="amount">Amount</label>
+          <input type="number" name="amount" placeholder="Enter amount" required>
+
+          <label for="description">Description</label>
+          <input type="text" name="description" placeholder="Description (optional)">
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+
+      <div class="create-user-container">
+        <h3>Create New User</h3>
+          <form id="adminCreateUserForm">
+            <input type="text" name="firstname" placeholder="First Name" required />
+            <input type="text" name="secondname" placeholder="Second Name" required />
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="text" name="phonenumber" placeholder="Phone Number" required />
+            <input type="date" name="dob" placeholder="Date of Birth" required />
+            <input type="number" name="account_balance" placeholder="Initial Account Balance" required />
+            <input type="number" name="savings_balance" placeholder="Initial Savings Balance" required />
+            <input type="number" name="card_balance" placeholder="Initial Card Balance" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <button type="submit">Create User</button>
+          </form>
+      </div>
+    </section>
+
+    <section class="recent-activity">
+      <h3>Recent User Activity</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Account Number</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+    <div id="chatWidget">
+      <div id="chatIcon">💬<span id="newMsgBadge" style="display:none;">1</span></div>
+      <div id="chatWindow">
+        <div id="chatHeader">Support Chat <span id="closeChat" style="float:right;cursor:pointer;">✖</span></div>
+        <div id="userSelectContainer">
+          <select id="userSelect">
+            <option value="">-- Select a user --</option>
+          </select>
+          <button id="joinRoomBtn">Join Chat</button>
+        </div>
+        <div id="messages"></div>
+        <div id="inputContainer">
+          <input type="text" id="messageInput" placeholder="Type a message" />
+          <button id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+ <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+        <h4>Contact Us</h4>
+        <p id="email">Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a>
+        <p>&copy; 2025 Evergreen financial Bank. All rights reserved.</p>
+        <nav>
+            <ul>
+                <li><a href="">Privacy Policy</a></li>
+                <li><a href="">Terms of Service</a></li>
+                <li><a href="">Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="social-media">
+        <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
+        <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>        
+  </footer>
+  <script>
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.nav');
+    toggle.addEventListener('click', () => {
+        nav.classList.toggle('open');
+    });
+  </script>
+  <script>
+    // Populate user dropdown dynamically
+    async function loadUsers() {
+      try {
+        const res = await fetch("/admin/users");
+        const data = await res.json();
+        if (data.success) {
+          const select = document.querySelector(".selectUser");
+          data.users.forEach(user => {
+            const option = document.createElement("option");
+            option.value = user.email;
+            option.textContent = `${user.firstname} ${user.secondname} (${user.email})`;
+            select.appendChild(option);
+          });
+        }
+      } catch (err) {
+        console.error("Error loading users:", err);
+      }
+    }
+    loadUsers();
+      let accountNumber = null; // replace dynamically for selected user
+      // When admin enters email, fetch account number
+      document.querySelector(".selectUser").addEventListener("change", async (e) => {
+        const email = e.target.value;
+        if (!email) return;
+
+        try {
+          const res = await fetch(`/admin/user/email/${encodeURIComponent(email)}`);
+          const data = await res.json();
+
+          if (data.success) {
+            accountNumber = data.user.account_number; // ✅ store account number
+            console.log("Fetched account number:", accountNumber);
+          } else {
+            alert("❌ " + data.message);
+          }
+        } catch (err) {
+          console.error("Error fetching account number:", err);
+        }
+      });
+
+      //Admin gets total user, transactions and balance
+      fetch("/admin/stats")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.querySelector(".total_users").textContent = data.total_users;
+          document.querySelector(".total_balance").textContent = `$${data.total_balance}`;
+        }
+      })
+      .catch(err => console.error("Error fetching stats:", err));
+
+      // Handle transaction form submit
+      document.getElementById("adminTransactionForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = Object.fromEntries(new FormData(e.target).entries());
+
+        if (!accountNumber) {
+          alert("⚠ Please enter a valid email first, account not found.");
+          return;
+        }
+
+        const res = await fetch(`/admin/transaction/${accountNumber}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert("✅ Transaction successful: " + data.message);
+          window.location.href="admin.html"
+        } else {
+          alert("❌ Error: " + data.message);
+        }
+      });
+
+      //Create new user
+      document.getElementById("adminCreateUserForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const formData = Object.fromEntries(new FormData(e.target).entries());
+
+      // Format date for Postgres
+      if (formData.dob) {
+        formData.dob = new Date(formData.dob).toISOString().split('T')[0];
+      }
+
+      try {
+        const res = await fetch("/admin/create-user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          alert("✅ User created successfully");
+          e.target.reset(); // Clear form
+        } else {
+          alert("❌ Error: " + data.message);
+        }
+      } catch (err) {
+        console.error("Error creating user:", err);
+        alert("❌ Server error");
+      }
+    });
+
+
+      //load recent transactions
+      async function loadRecentTransactions() {
+        try {
+          const res = await fetch("/admin/recent-transactions");
+          const data = await res.json();
+
+          if (!data.success) {
+            console.error("Error loading transactions:", data.message);
+            return;
+          }
+
+          const tbody = document.querySelector(".recent-activity");
+          tbody.innerHTML = ""; 
+
+          data.transactions.forEach(tx => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${tx.email}</td>
+              <td>${tx.account_number}</td>
+              <td>${tx.type}</td>
+              <td>$${Number(tx.amount).toLocaleString()}</td>
+              <td>${tx.status}</td>
+              <td>${new Date(tx.date).toLocaleString()}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        } catch (err) {
+          console.error("Failed to fetch transactions:", err);
+        }
+      }
+
+    // Load on page ready
+    document.addEventListener("DOMContentLoaded", loadRecentTransactions);
+  </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+  const socket = io();
+  const chatIcon = document.getElementById("chatIcon");
+  const chatWindow = document.getElementById("chatWindow");
+  const messagesDiv = document.getElementById("messages");
+  const input = document.getElementById("messageInput");
+  const sendBtn = document.getElementById("sendBtn");
+  const badge = document.getElementById("newMsgBadge");
+  const closeChat = document.getElementById("closeChat");
+
+  let chatOpen = false;
+  let unreadCount = 0;
+
+  // Floating chat toggle
+  chatIcon.addEventListener("click", () => {
+    chatOpen = !chatOpen;
+    if (chatOpen) {
+      chatWindow.classList.add("open");
+      badge.style.display = "none";
+      unreadCount = 0;
+    } else {
+      chatWindow.classList.remove("open");
+    }
+  });
+
+
+  // Close button inside chat
+  closeChat.addEventListener("click", () => {
+    chatOpen = false;
+    chatWindow.classList.remove("open");
+  });
+
+  // Populate user dropdown dynamically
+  async function loadUsers() {
+    try {
+      const res = await fetch("/admin/users");
+      const data = await res.json();
+      if (data.success) {
+        const select = document.getElementById("userSelect");
+        data.users.forEach(user => {
+          const option = document.createElement("option");
+          option.value = user.email;
+          option.textContent = `${user.firstname} ${user.secondname} (${user.email})`;
+          select.appendChild(option);
+        });
+      }
+    } catch (err) {
+      console.error("Error loading users:", err);
+    }
+  }
+  loadUsers();
+
+  async function loadHistory(email) {
+    const res = await fetch(`/chat/${encodeURIComponent(email)}`);
+    const data = await res.json();
+    if (data.success) {
+      messagesDiv.innerHTML = "";
+      data.messages.forEach(msg => {
+        const p = document.createElement("p");
+        p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
+        p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
+        messagesDiv.appendChild(p);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  }
+
+
+  document.getElementById("joinRoomBtn").addEventListener("click", () => {
+    const email = document.getElementById("userSelect").value.trim();
+    if (!email) return alert("Enter a user email");
+    targetUserEmail = email;
+    loadHistory(targetUserEmail);
+    socket.emit("joinRoom", { email: targetUserEmail, role: "admin" });
+  });
+
+  socket.on("chatMessage", (msg) => {
+    const p = document.createElement("p");
+    p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
+    p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
+    messagesDiv.appendChild(p);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    if(!chatOpen){ unreadCount++; badge.style.display="flex"; badge.textContent=unreadCount;  chatIcon.classList.add("bounce"); 
+    setTimeout(() => {
+        chatIcon.classList.remove("bounce");
+      }, 4000); }
+  });
+
+  sendBtn.addEventListener("click", () => {
+    if (!targetUserEmail) return alert("Select a user first!");
+    const text = input.value.trim();
+    if (!text) return;
+    socket.emit("chatMessage", {
+      text,
+      sender: "admin",          
+      receiver: targetUserEmail 
+    });
+    input.value = "";
+  });
+
+  input.addEventListener("keypress", e => {
+    if (e.key === "Enter") sendBtn.click();
+  });
+
+  // Listen for transaction updates
+  socket.on("transactionUpdated", (data) => {
+    const statusCell = document.getElementById(`status-${data.id}`);
+    if (statusCell) {
+      statusCell.textContent = data.status;
+    }
+  });
+
+
+</script>
+
+</body>
+</html>

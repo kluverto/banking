@@ -1,0 +1,38 @@
+{
+  "name": "new-bank-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kluverto/new-bank-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kluverto/new-bank-project/issues"
+  },
+  "homepage": "https://github.com/kluverto/new-bank-project#readme",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "cloudinary": "^1.41.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
+    "nodemon": "^3.1.10",
+    "pdfkit": "^0.17.2",
+    "pg": "^8.16.3",
+    "postgres": "^3.4.7",
+    "socket.io": "^4.8.1",
+    "uuid": "^13.0.0"
+  }
+}
