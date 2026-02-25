@@ -207,14 +207,18 @@ transferForm.addEventListener("submit", async (e) => {
     const data = await res.json();
 
   if (data.success) {
+    // Check if transaction is pending and show alert
+    if (data.message === "Transfer pending. Please contact admin for help and support") {
+      alert("Transfer pending. Please contact admin for help and support");
+    }
 
-        // Redirect to receipt page
-        window.location.href = `/receipt/${data.transactionRef}`;
+    // Redirect to receipt page
+    window.location.href = `/receipt/${data.transactionRef}`;
 
-        return;
-      } else {
-        messageBox.innerHTML = `<p style='color:red;'>${data.message}</p>`;
-      }
+    return;
+  } else {
+    messageBox.innerHTML = `<p style='color:red;'>${data.message}</p>`;
+  }
 
         transferForm.reset();
 
