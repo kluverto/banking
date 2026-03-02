@@ -279,7 +279,7 @@ closeChat.addEventListener("click", () => {
 });
 
   // Dynamically get user email from URL parameter
-  const userEmail = params.get("email"); 
+  const userEmail = localStorage.getItem("userEmail");
 
   async function loadHistory(email) {
   const res = await fetch(`/chat/${encodeURIComponent(email)}`);
