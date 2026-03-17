@@ -8,16 +8,16 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   background: #fff; /* light, vibrant background */
-  color: #003b2e; /* dark green for text */
+  color: #0b1d33; /* dark navy for text */
   line-height: 1.5;
   font-size: 15px;
 }
 
 /* Header */
 header {
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
+  background: linear-gradient(100deg, #1a4379, #0f2f55);
   width: 100%;
-  box-shadow: #004d40 0px -2px 10px;
+  box-shadow: 0 3px 14px rgba(26, 67, 121, 0.3);
   border-bottom-right-radius: 26px;
   border-bottom-left-radius: 26px;
 }
@@ -28,7 +28,7 @@ header {
   background: none;
   border: none;
   cursor: pointer;
-  color: #004d40;
+  color: #f5f8ff;
 }
 
 .nav {
@@ -62,7 +62,7 @@ header {
 .nav ul li a {
   position: relative;
   text-decoration: none;
-  color: #00675b;
+  color: #f5f8ff;
   font-weight: bold;
 }
 
@@ -71,7 +71,7 @@ header {
   position: absolute;
   width: 100%;
   height: 2px;
-  background: #00bfa5;
+  background: #b7181a;
   bottom: -5px;
   left: 0;
   transform: scaleX(0);
@@ -80,7 +80,7 @@ header {
 
 .nav ul li a:hover::after {
   transform: scaleX(1);
-  color: #00bfa5;
+  color: #b7181a;
 }
 
 /* Overview Section */
@@ -90,12 +90,12 @@ header {
 }
 
 .admin-overview h2 {
-  color: #004d40;
+  color: #0b1d33;
   margin-bottom: 10px;
 }
 
 .admin-overview p {
-  color: #3c635f;
+  color: #5c6f85;
 }
 
 .cards-container {
@@ -111,10 +111,10 @@ header {
 
 
 .card {
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
+  background: linear-gradient(100deg, #d7e8ff, #a3c7ff);
   padding: 25px;
   border-radius: 16px;
-  box-shadow: #205241 0px 0px 10px;
+  box-shadow: 0 0 15px rgba(26, 67, 121, 0.25);
   text-align: center;
   transition: transform 0.3s ease;
 }
@@ -126,13 +126,13 @@ header {
 
 .card i {
   font-size: 2rem;
-  color: #004d40;
+  color: #1a4379;
   margin-bottom: 10px;
 }
 
 .card h3 {
   margin-bottom: 8px;
-  color: #004d40;
+  color: #1a4379;
 }
 
 .card p {
@@ -147,13 +147,13 @@ header {
   background: #fff;
   padding: 30px;
   border-radius: 16px;
-  box-shadow: #205241 0px 0px 10px;
+  box-shadow: 0 0 15px rgba(26, 67, 121, 0.25);
 }
 
 .form-container h3 {
   text-align: center;
   margin: 20px 0 10px;
-  color: #004d40;
+  color: #0b1d33;
 }
 
 .form-container label {
@@ -172,7 +172,7 @@ header {
   background-size: 18px;
   font-size: 14px;
   font-weight: 500;
-  color: #205241;
+  color: #0b1d33;
   appearance: none; /* Remove default browser arrow */
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -185,35 +185,35 @@ header {
   padding: 10px;
   background: #fff;
   font-size: 14px;
-  color: #205241;
+  color: #0b1d33;
 }
 
 .form-container select option:hover {
-  background: #86d29a;
-  color: #fff;
+  background: #a3c7ff;
+  color: #0b1d33;
 }
 
 .form-container select:hover {
-  border-color: #86d29a;
+  border-color: #a3c7ff;
 }
 
 .form-container select:focus {
   outline: none;
-  border-color: #86d29a;
-  box-shadow: #205241 0px 0px 10px;
+  border-color: #a3c7ff;
+  box-shadow: 0 0 10px rgba(26, 67, 121, 0.25);
 }
 
 .form-container input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #86d29a;
+  border: 1px solid #a3c7ff;
   border-radius: 8px;
   margin-bottom: 15px;
   font-size: 1rem;
 }
 
 .form-container input:focus {
-  border-color: #00bfa5;
+  border-color: #b7181a;
   outline: none;
 }
 
@@ -223,8 +223,8 @@ header {
   padding: 12px;
   margin: 10px 0;
   border-radius: 8px;
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
-  color: #004d40;
+  background: linear-gradient(100deg, #d7e8ff, #a3c7ff);
+  color: #0b1d33;
   font-weight: bold;
   border: none;
   transition: transform 0.3s ease;
@@ -233,7 +233,7 @@ header {
 
 .form-container button:hover {
   transform: scale(1.03);
-  background: linear-gradient(100deg, #d4efdc, #6fc88f);
+  background: linear-gradient(100deg, #a3c7ff, #7aa5d6);
 }
 
 
@@ -244,13 +244,13 @@ header {
   max-width: 700px;
   background: #fff;
   border-radius: 16px;
-  box-shadow: #205241 0px 0px 10px;
+  box-shadow: 0 0 15px rgba(26, 67, 121, 0.25);
 }
 
 .create-user-container h3 {
   text-align: center;
   margin: 20px 0 10px;
-  color: #004d40;
+  color: #0b1d33;
 }
 
 .create-user-container input,
@@ -260,18 +260,18 @@ header {
   padding: 12px;
   margin: 10px 0;
   border-radius: 8px;
-  border: 1px solid #86d29a;
+  border: 1px solid #a3c7ff;
   font-size: 1rem;
 }
 
 .create-user-container input:focus {
-  border-color: #00bfa5;
+  border-color: #b7181a;
   outline: none;
 }
 
 .create-user-container button {
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
-  color: #004d40;
+  background: linear-gradient(100deg, #d7e8ff, #a3c7ff);
+  color: #0b1d33;
   font-weight: bold;
   border: none;
   transition: transform 0.3s ease;
@@ -280,7 +280,7 @@ header {
 
 .create-user-container button:hover {
   transform: scale(1.03);
-  background: linear-gradient(100deg, #d4efdc, #6fc88f);
+  background: linear-gradient(100deg, #a3c7ff, #7aa5d6);
 }
 
 /* Table Styles */
@@ -288,14 +288,14 @@ header {
   margin: 40px auto;
   padding: 20px;
   max-width: 95%;
-  background: #e6f4ea;
+  background: #d7e8ff;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(32, 82, 65, 0.2);
+  box-shadow: 0 0 15px rgba(26, 67, 121, 0.2);
 }
 
 .recent-activity h3 {
   text-align: center;
-  color: #004d40;
+  color: #0b1d33;
   margin-bottom: 20px;
 }
 
@@ -344,26 +344,26 @@ header {
 .recent-activity th,
 .recent-activity td {
   padding: 12px 15px;
-  border-bottom: 1px solid #c4e3d0;
+  border-bottom: 1px solid #c6ddff;
 }
 
 .recent-activity th {
-  background: #86d29a;
-  color: #003b2e;
+  background: #a3c7ff;
+  color: #0b1d33;
   font-weight: bold;
 }
 
 .recent-activity tr:nth-child(even) {
-  background: #f1faf6;
+  background: #eef5ff;
 }
 
 .recent-activity tr:hover {
-  background: #d4edda;
+  background: #d7e8ff;
   transition: background 0.3s ease;
 }
 
 .recent-activity td {
-  color: #003b2e;
+  color: #0b1d33;
 }
 
 .recent-activity td:first-child {
@@ -371,14 +371,14 @@ header {
 }
 
 .recent-activity td:nth-child(4) { /* Amount column */
-  color: #00675b;
+  color: #1a4379;
   font-weight: bold;
 }
 
 .recent-activity td:nth-child(5) { /* Status column */
   text-transform: capitalize;
   font-weight: bold;
-  color: #004d40;
+  color: #0b1d33;
 }
 
 #chatWidget {
@@ -390,7 +390,7 @@ header {
 }
 
 #chatIcon {
-  background: #39f3a6;
+  background: #b7181a;
   color: #fff;
   width: 60px;
   height: 60px;

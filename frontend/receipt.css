@@ -308,7 +308,7 @@ footer {
 }
 
 .footer-container a {
-  color: #3c635f;
+  color: #a3c7ff;
   text-decoration: none;
 }
 
@@ -330,13 +330,13 @@ footer nav ul {
 
 .social-media a {
   margin: 0 10px;
-  color: #3c635f;
+  color: #a3c7ff;
   text-decoration: none;
 }
 
 .social-media a:hover {
   text-decoration: underline;
-  color: #6abab4;
+  color: #b7181a;
 }
 
 /* Mobile styles */
@@ -379,7 +379,7 @@ footer nav ul {
   .nav {
     width: 100%;
     display: none; /* hidden by default */
-    background: #e6f4ea;
+    background: #d7e8ff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
