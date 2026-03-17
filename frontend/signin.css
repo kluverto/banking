@@ -27,7 +27,7 @@ header {
   background: none;
   border: none;
   cursor: pointer;
-  color: #004d40;
+  color: #f5f8ff;
 }
 
 .nav {
@@ -106,7 +106,7 @@ main {
 .form-group label {
   font-size: 1.2rem;
   margin-bottom: 10px;
-  color: #004d40; /* dark green for labels */
+  color: #0b1d33; /* dark text for labels */
   font-weight: bold;
 }
 
@@ -114,24 +114,24 @@ main {
   background: white;
   width: 100%;
   padding: 7px 40px 7px 10px;
-  border: 3px solid #2c8467;
+  border: 3px solid #1a4379;
   border-radius: 5px;
   font-size: 1rem;
   transition: transform 0.3s ease;
 }
 
 .form-group input:hover {
-  border-color: #00bfa5;
+  border-color: #b7181a;
   transform: scale(1.02);
 }
 
 .form-group input:focus {
-  border-color: #00bfa5;
+  border-color: #b7181a;
   transform: scale(1.06);
 }
 
 .form-group input::selection {
-  background: #00bfa5;
+  background: #b7181a;
   color: white;
 }
 
@@ -144,7 +144,7 @@ main {
   background: white;
   width: 100%;
   padding: 7px 40px 7px 10px; /* extra space on right for icon */
-  border: 3px solid #2c8467;
+  border: 3px solid #1a4379;
   border-radius: 5px;
   font-size: 1rem;
   transition: transform 0.3s ease;
@@ -156,11 +156,11 @@ main {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #2c8467;
+  color: #1a4379;
 }
 
 .form-group a {
-  color: #00675b;
+  color: #1a4379;
   text-decoration: none;
   font-size: 0.9rem;
   margin-top: 10px;
@@ -169,7 +169,7 @@ main {
 
 .form-group a:hover {
   text-decoration: underline;
-  color: #079d89;
+  color: #b7181a;
 }
 
 .submit-group {
@@ -179,7 +179,7 @@ main {
 }
 
 .submit-btn {
-  background: #00bfa5;
+  background: #b7181a;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -190,7 +190,7 @@ main {
 }
 
 .submit-btn:hover {
-  background-color: #00897b;
+  background-color: #8d1316;
   transform: scale(1.05);
 }
 
@@ -210,7 +210,7 @@ footer {
 }
 
 .footer-container a {
-  color: #7ebcb6;
+  color: #a3c7ff;
   text-decoration: none;
 }
 
@@ -232,13 +232,13 @@ footer nav ul {
 
 .social-media a {
   margin: 0 10px;
-  color: #7ebcb6;
+  color: #a3c7ff;
   text-decoration: none;
 }
 
 .social-media a:hover {
   text-decoration: underline;
-  color: #6abab4;
+  color: #b7181a;
 }
 
 /* Mobile styles */
@@ -271,7 +271,7 @@ footer nav ul {
   .nav {
     width: 100%;
     display: none; /* hidden by default */
-    background: #e6f4ea;
+    background: #d7e8ff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
