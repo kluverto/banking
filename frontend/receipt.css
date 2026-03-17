@@ -17,9 +17,9 @@ body {
 
 /* Header */
 header {
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
+  background: linear-gradient(100deg, #1a4379, #0f2f55);
   width: 100%;
-  box-shadow: #004d40 0px -2px 10px;
+  box-shadow: 0 3px 14px rgba(26, 67, 121, 0.3);
   border-bottom-right-radius: 26px;
   border-bottom-left-radius: 26px;
 }
@@ -30,7 +30,7 @@ header {
   background: none;
   border: none;
   cursor: pointer;
-  color: #004d40;
+  color: #f5f8ff;
 }
 
 .nav {
@@ -64,7 +64,7 @@ header {
 .nav ul li a {
   position: relative;
   text-decoration: none;
-  color: #00675b;
+  color: #f5f8ff;
   font-weight: bold;
 }
 
@@ -73,7 +73,7 @@ header {
   position: absolute;
   width: 100%;
   height: 2px;
-  background: #00bfa5;
+  background: #b7181a;
   bottom: -5px;
   left: 0;
   transform: scaleX(0);
@@ -82,7 +82,7 @@ header {
 
 .nav ul li a:hover::after {
   transform: scaleX(1);
-  color: #00bfa5;
+  color: #b7181a;
 }
 
 /* ======================================
@@ -112,7 +112,7 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("images/evergreen_transparent.png") no-repeat center;
+  background: url("images/RIA_credit.png") no-repeat center;
   background-size: 350px;
   opacity: 0.035;
   pointer-events: none;
@@ -125,7 +125,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border-bottom: 3px solid #004d40;
+  border-bottom: 3px solid #0b1d33;
   padding-bottom: 20px;
   margin-bottom: 35px;
 }
@@ -133,7 +133,7 @@ main {
 .receipt-header h2 {
   font-size: 20px;
   letter-spacing: 1px;
-  color: #004d40;
+  color: #0b1d33;
 }
 
 .receipt-header p {
@@ -160,7 +160,7 @@ main {
 .document-title h3 {
   font-size: 18px;
   letter-spacing: 2px;
-  color: #003b2e;
+  color: #0b1d33;
   margin-bottom: 5px;
 }
 
@@ -198,15 +198,15 @@ main {
 
 /* Highlight Amount Section */
 .receipt-row:nth-child(7) {
-  border-top: 2px solid #004d40;
-  border-bottom: 2px solid #004d40;
+  border-top: 2px solid #0b1d33;
+  border-bottom: 2px solid #0b1d33;
   padding: 14px 0;
 }
 
 .receipt-row:nth-child(7) span:last-child {
   font-size: 18px;
   font-weight: bold;
-  color: #00796b;
+  color: #1a4379;
 }
 
 /* ======================================
@@ -293,10 +293,10 @@ main {
 }
 /* Footer */
 footer {
-    background: linear-gradient(100deg, #e6f4ea, #86d29a);
-    color: rgb(55, 127, 119);
+    background: linear-gradient(100deg, #1a4379, #0f2f55);
+    color: #f5f8ff;
     padding: 20px;
-    box-shadow: #004d40 0px -2px 10px;
+    box-shadow: 0 3px 14px rgba(26, 67, 121, 0.3);
     border-top-right-radius: 26px;
     border-top-left-radius: 26px;
     margin-top: 70px;

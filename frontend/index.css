@@ -7,8 +7,8 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: #fff; /* light, vibrant background */
-  color: #003b2e; /* dark green for text */
+  background: #f5f8ff;
+  color: #0b1d33;
   line-height: 1.5;
   font-size: 15px;
   max-width: 100%;
@@ -17,9 +17,9 @@ body {
 
 /* Header */
 header {
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
+  background: linear-gradient(100deg, #1a4379, #0f2f55);
   width: 100%;
-  box-shadow: #004d40 0px -2px 10px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.18);
   border-bottom-right-radius: 26px;
   border-bottom-left-radius: 26px;
 }
@@ -30,7 +30,7 @@ header {
   background: none;
   border: none;
   cursor: pointer;
-  color: #004d40;
+  color: #f5f8ff;
 }
 
 .nav {
@@ -65,7 +65,7 @@ header {
 .nav ul li a {
   position: relative;
   text-decoration: none;
-  color: #00675b;
+  color: #f5f8ff;
   font-weight: bold;
 }
 
@@ -74,7 +74,7 @@ header {
   position: absolute;
   width: 100%;
   height: 2px;
-  background: #00bfa5;
+  background: #b7181a;
   bottom: -5px;
   left: 0;
   transform: scaleX(0);
@@ -83,7 +83,7 @@ header {
 
 .nav ul li a:hover::after {
   transform: scaleX(1);
-  color: #00bfa5;
+  color: #b7181a;
 }
 
 /* Main content */
@@ -110,17 +110,17 @@ header {
   padding: 20px;
   margin: 20px auto;
   font-size: 1.1rem;
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);;
+  background: linear-gradient(100deg, #e5f1ff, #c6ddff);
   border-radius: 10px;
   width: 90%;
   max-width: 800px;
-  box-shadow: #205241 0px 0px 10px;
+  box-shadow: 0 0 15px rgba(26, 67, 121, 0.25);
   transition: transform 0.3s ease;
 }
 
 .welcome-message:hover {
   transform: scale(1.02);
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
+  background: linear-gradient(100deg, #d7e8ff, #a3c7ff);
   cursor: pointer;
 }
 
@@ -132,7 +132,7 @@ header {
   width: auto;
   text-align: center;
   margin: auto;
-  color: #004d40;
+  color: #0b1d33;
 }
 
 /* Image container */
@@ -191,18 +191,17 @@ header {
 
 .services a:hover::after {
   transform: scaleX(1);
-  color: #00bfa5;
+  color: #b7181a;
 }
 
 /* Footer */
 footer {
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
-  color: rgb(55, 127, 119);
+  background: linear-gradient(100deg, #1a4379, #0f2f55);
+  color: #f5f8ff;
   padding: 20px;
-  box-shadow: #004d40 0px -2px 10px;
+  box-shadow: 0 3px 14px rgba(26, 67, 121, 0.3);
   border-top-right-radius: 26px;
   border-top-left-radius: 26px;
-  width: 100%;
 }
 
 .footer-container {
@@ -211,7 +210,7 @@ footer {
 }
 
 .footer-container a {
-  color: #3c635f;
+  color: #7ebcb6;
   text-decoration: none;
 }
 
@@ -233,11 +232,12 @@ footer nav ul {
 
 .social-media a {
   margin: 0 10px;
-  color: #3c635f;
+  color: #7ebcb6;
   text-decoration: none;
 }
 
 .social-media a:hover {
+  text-decoration: underline;
   color: #6abab4;
 }
 

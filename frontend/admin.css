@@ -603,13 +603,12 @@ header {
 
 /* Footer */
 footer {
-  background: linear-gradient(100deg, #e6f4ea, #86d29a);
-  color: rgb(55, 127, 119);
+  background: linear-gradient(100deg, #1a4379, #0f2f55);
+  color: #f5f8ff;
   padding: 20px;
-  box-shadow: #004d40 0px -2px 10px;
-    border-top-right-radius: 26px;
-    border-top-left-radius: 26px;
-  margin-top: 50px;
+  box-shadow: 0 3px 14px rgba(26, 67, 121, 0.3);
+  border-top-right-radius: 26px;
+  border-top-left-radius: 26px;
 }
 
 .footer-container {
@@ -618,7 +617,7 @@ footer {
 }
 
 .footer-container a {
-  color: #3c635f;
+  color: #7ebcb6;
   text-decoration: none;
 }
 
@@ -640,11 +639,12 @@ footer nav ul {
 
 .social-media a {
   margin: 0 10px;
-  color: #3c635f;
+  color: #7ebcb6;
   text-decoration: none;
 }
 
 .social-media a:hover {
+  text-decoration: underline;
   color: #6abab4;
 }
 
