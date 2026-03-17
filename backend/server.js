@@ -85,8 +85,13 @@ const db = new Pool({
   ssl: {rejectUnauthorized: false},
   max: 3,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 10000,
 });
+
+  db.connect()
+    .then(() => console.log("✅ DB connected"))
+    .catch(err => console.error("❌ DB failed:", err
+  ));
 
 // GET chat history for a user
 app.get("/chat/:email", async (req, res) => {
