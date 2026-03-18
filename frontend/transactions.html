@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RIA Federal Credit Union - Transactions</title>
-  <link rel="stylesheet" href="userdashboard.css">
+  <link rel="stylesheet" href="transactions.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 </head>
 <body>
@@ -21,8 +21,8 @@
       <div class="nav">
         <ul>
           <li><a href="userdashboard.html">Dashboard</a></li>
-          <li><a href="user-transfer.html">Transfers</a></li>
-          <li><a href="settings.html">Settings</a></li>
+          <li><a href="transfer.html">Transfers</a></li>
+          <li><a href="">Settings</a></li>
           <li><a href="signin.html">Logout</a></li>
         </ul>
       </div>
@@ -32,7 +32,6 @@
   <!-- Main -->
   <main>
 
-    <!-- Page Header -->
     <section class="user-overview">
       <h2>Transaction History</h2>
       <p>View all your account activity.</p>
@@ -47,14 +46,12 @@
           <option value="credit">Credit</option>
           <option value="debit">Debit</option>
         </select>
-
         <select id="filterStatus">
           <option value="">All Status</option>
           <option value="completed">Completed</option>
           <option value="pending">Pending</option>
           <option value="failed">Failed</option>
         </select>
-
         <button onclick="applyFilters()">Apply Filter</button>
       </div>
     </section>
@@ -76,11 +73,11 @@
       </table>
     </section>
 
-    <!-- Chat Widget (unchanged) -->
+    <!-- Chat Widget -->
     <div id="chatWidget">
       <div id="chatIcon">💬<span id="newMsgBadge" style="display:none;">1</span></div>
       <div id="chatWindow">
-        <div id="chatHeader">Support Chat 
+        <div id="chatHeader">Support Chat
           <span id="closeChat" style="float:right;cursor:pointer;">✖</span>
         </div>
         <div id="messages"></div>
@@ -102,284 +99,159 @@
     </div>
   </footer>
 
-<script>
-const toggle = document.querySelector('.menu-toggle');
-const nav = document.querySelector('.nav');
-toggle.addEventListener('click', () => {
-  nav.classList.toggle('open');
-});
-</script>
+  <!-- ✅ Socket.IO MUST load before any script that uses `socket` -->
+  <script src="/socket.io/socket.io.js"></script>
 
-<script>
-// Get email from URL
-const params = new URLSearchParams(window.location.search);
-const email = params.get("email");
-
-let allTransactions = [];
-
-async function loadTransactions() {
-  try {
-    const res = await fetch("/admin/all-transactions"); // ✅ fixed URL
-    const data = await res.json();
-    if (data.success) {
-      allTransactions = data.transactions || [];
-      renderTransactions(allTransactions);
-    }
-  } catch (err) {
-    console.error("Error fetching transactions:", err);
-  }
-}
-
-// Initial load
-loadTransactions();
-
-function renderTransactions(transactions) {
-  const tbody = document.querySelector("#transactions tbody");
-  tbody.innerHTML = "";
-
-  if (transactions.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7">No transactions found</td></tr>`;
-    return;
-  }
-
-  transactions.forEach(tx => {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${tx.description}</td>
-      <td>${tx.type}</td>
-      <td>$${Number(tx.amount).toLocaleString()}</td>
-      <td>
-        <span class="status ${tx.status}">
-          ${tx.status}
-        </span>
-      </td>
-      <td><small>${new Date(tx.date).toLocaleString()}</small></td>
-      <td>
-        ${tx.status === "pending" ? `
-          <button class="approve-btn" data-id="${tx.id}">Approve</button>
-          <button class="reject-btn" data-id="${tx.id}">Reject</button>
-        ` : ""}
-      </td>
-    `;
-
-    tbody.appendChild(row);
-  });
-
-  // Attach event listeners for pending transactions
-  document.querySelectorAll(".approve-btn").forEach(btn => {
-    btn.addEventListener("click", () => updateTransaction(btn.dataset.id, "approve"));
-  });
-  document.querySelectorAll(".reject-btn").forEach(btn => {
-    btn.addEventListener("click", () => updateTransaction(btn.dataset.id, "reject"));
-  });
-}
-
-function applyFilters() {
-  const type = document.getElementById("filterType").value;
-  const status = document.getElementById("filterStatus").value;
-
-  let filtered = allTransactions;
-
-  if (type) filtered = filtered.filter(tx => tx.type === type);
-  if (status) filtered = filtered.filter(tx => tx.status === status);
-
-  renderTransactions(filtered);
-}
-
-async function updateTransaction(transactionId, action) {
-  try {
-    const res = await fetch("/admin/update-transaction", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ transactionId: Number(transactionId), action })
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      alert(`Transaction ${action}d successfully`);
-      loadTransactions(); // reload updated transactions
-    } else {
-      alert(`Failed to ${action}: ${data.message}`);
-    }
-  } catch (err) {
-    console.error(`Error ${action} transaction:`, err);
-    alert(`Error ${action} transaction. See console for details.`);
-  }
-}
-</script>
-
-
-<script>
-const tbody = document.querySelector("#transactions tbody");
-
-// Load all transactions
-async function loadTransactions() {
-  try {
-    const res = await fetch("/admin/all-transactions");
-    const data = await res.json();
-    if (!data.success) return;
-
-    tbody.innerHTML = "";
-
-    const pendingTx = data.transactions.filter(tx => tx.status === "pending");
-
-    if (pendingTx.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8">No pending transactions</td></tr>`;
-      return;
-    }
-
-    pendingTx.forEach(tx => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${tx.id}</td>
-        <td>${tx.email}</td>
-        <td>${tx.account_number}</td>
-        <td>$${Number(tx.amount).toLocaleString()}</td>
-        <td>${tx.type}</td>
-        <td>${tx.description}</td>
-        <td>${new Date(tx.date).toLocaleString()}</td>
-        <td>
-          <button class="approve-btn" data-id="${tx.id}">Approve</button>
-          <button class="reject-btn" data-id="${tx.id}">Reject</button>
-        </td>
-      `;
-      tbody.appendChild(row);
-    });
-
-    document.querySelectorAll(".approve-btn").forEach(btn => {
-      btn.addEventListener("click", () => updateTransaction(btn.dataset.id, "approve"));
-    });
-    document.querySelectorAll(".reject-btn").forEach(btn => {
-      btn.addEventListener("click", () => updateTransaction(btn.dataset.id, "reject"));
-    });
-
-  } catch (err) {
-    console.error("Error loading transactions:", err);
-  }
-}
-
-// Approve/Reject a transaction
-async function updateTransaction(id, action) {
-  try {
-    const res = await fetch("/admin/update-transaction", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ transactionId: id, action })
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      alert(`Transaction ${action}d successfully`);
-      loadTransactions(); // reload table
-    } else {
-      alert(`Failed: ${data.message}`);
-    }
-  } catch (err) {
-    console.error("Error updating transaction:", err);
-  }
-}
-
-// Initial load
-loadTransactions();
-
-// Real-time updates via Socket.IO
-socket.on("transactionUpdated", () => loadTransactions());
-</script>
-
-
-<script src="/socket.io/socket.io.js"></script>
   <script>
-  const socket = io();
-  const chatIcon = document.getElementById("chatIcon");
-  const chatWindow = document.getElementById("chatWindow");
-  const messagesDiv = document.getElementById("messages");
-  const input = document.getElementById("messageInput");
-  const sendBtn = document.getElementById("sendBtn");
-  const badge = document.getElementById("newMsgBadge");
-  const closeChat = document.getElementById("closeChat");
+    // ── Nav toggle ──
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.nav');
+    toggle.addEventListener('click', () => nav.classList.toggle('open'));
 
-  let chatOpen = false;
-  let unreadCount = 0;
+    // ── ✅ Get email from localStorage (not URL params — this is a user page) ──
+    const userEmail = localStorage.getItem("userEmail");
 
-    // Floating chat toggle
-  chatIcon.addEventListener("click", () => {
-chatOpen = !chatOpen;
-if (chatOpen) {
-  chatWindow.classList.add("open");
-  badge.style.display = "none";
-  unreadCount = 0;
-} else {
-  chatWindow.classList.remove("open");
-}
-});
+    if (!userEmail) {
+      alert("You are not logged in!");
+      window.location.href = "signin.html";
+    }
 
-//transaction dashboard update
-socket.on("transactionUpdated", (data) => {
-  // Reload dashboard automatically
-  location.reload();
-});
+    // ── Transactions ──
+    let allTransactions = [];
 
-// Close button inside chat
-closeChat.addEventListener("click", () => {
-  chatOpen = false;
-  chatWindow.classList.remove("open");
-});
+    async function loadTransactions() {
+      try {
+        // ✅ Use the user-specific endpoint, not the admin one
+        const res = await fetch(`/api/transactions/${encodeURIComponent(userEmail)}`);
+        const data = await res.json();
+        if (data.success) {
+          allTransactions = data.transactions || [];
+          renderTransactions(allTransactions);
+        }
+      } catch (err) {
+        console.error("Error fetching transactions:", err);
+      }
+    }
 
-  // Dynamically get user email from URL parameter
-  const userEmail = params.get("email"); 
+    function renderTransactions(transactions) {
+      const tbody = document.querySelector("#transactions tbody");
+      tbody.innerHTML = "";
 
-  async function loadHistory(email) {
-  const res = await fetch(`/chat/${encodeURIComponent(email)}`);
-  const data = await res.json();
-  if (data.success) {
-    messagesDiv.innerHTML = "";
-    data.messages.forEach(msg => {
+      if (transactions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:#7a8fa6;">No transactions found.</td></tr>`;
+        return;
+      }
+
+      transactions.forEach(tx => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${tx.description || "—"}</td>
+          <td>${tx.type}</td>
+          <td>$${Number(tx.amount).toLocaleString()}</td>
+          <td><span class="status ${tx.status}">${tx.status}</span></td>
+          <td><small>${new Date(tx.date).toLocaleString()}</small></td>
+        `;
+        row.style.cursor = "pointer";
+        if (tx.transaction_ref) {
+          row.addEventListener("click", () => {
+            window.location.href = `/receipt/${tx.transaction_ref}`;
+          });
+        }
+        tbody.appendChild(row);
+      });
+    }
+
+    function applyFilters() {
+      const type   = document.getElementById("filterType").value;
+      const status = document.getElementById("filterStatus").value;
+      let filtered = allTransactions;
+      if (type)   filtered = filtered.filter(tx => tx.type === type);
+      if (status) filtered = filtered.filter(tx => tx.status === status);
+      renderTransactions(filtered);
+    }
+
+    loadTransactions();
+
+    // ── Socket.IO ──
+    const socket = io();
+
+    // Reload transactions when admin approves/rejects
+    socket.on("transactionUpdated", () => loadTransactions());
+
+    // ── Chat ──
+    const chatIcon   = document.getElementById("chatIcon");
+    const chatWindow = document.getElementById("chatWindow");
+    const messagesDiv = document.getElementById("messages");
+    const input      = document.getElementById("messageInput");
+    const sendBtn    = document.getElementById("sendBtn");
+    const badge      = document.getElementById("newMsgBadge");
+    const closeChat  = document.getElementById("closeChat");
+
+    let chatOpen    = false;
+    let unreadCount = 0;
+
+    chatIcon.addEventListener("click", () => {
+      chatOpen = !chatOpen;
+      if (chatOpen) {
+        chatWindow.classList.add("open");
+        badge.style.display = "none";
+        unreadCount = 0;
+      } else {
+        chatWindow.classList.remove("open");
+      }
+    });
+
+    closeChat.addEventListener("click", () => {
+      chatOpen = false;
+      chatWindow.classList.remove("open");
+    });
+
+    async function loadHistory(email) {
+      const res  = await fetch(`/chat/${encodeURIComponent(email)}`);
+      const data = await res.json();
+      if (data.success) {
+        messagesDiv.innerHTML = "";
+        data.messages.forEach(msg => {
+          const p = document.createElement("p");
+          p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
+          p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
+          messagesDiv.appendChild(p);
+        });
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+    }
+
+    // ✅ userEmail from localStorage — no more "No email found in URL" alert
+    if (userEmail) {
+      loadHistory(userEmail);
+      socket.emit("joinRoom", { email: userEmail, role: "user" });
+    }
+
+    socket.on("chatMessage", (msg) => {
       const p = document.createElement("p");
       p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
       p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
       messagesDiv.appendChild(p);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      if (!chatOpen) {
+        unreadCount++;
+        badge.style.display = "flex";
+        badge.textContent = unreadCount;
+        chatIcon.classList.add("bounce");
+        setTimeout(() => chatIcon.classList.remove("bounce"), 4000);
+      }
     });
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
-}
 
+    sendBtn.addEventListener("click", () => {
+      const text = input.value.trim();
+      if (!text) return;
+      socket.emit("chatMessage", { text, sender: userEmail, receiver: "admin" });
+      input.value = "";
+    });
 
-  if (!userEmail) {
-    alert("No email found in URL. Cannot join chat.");
-  } else {
-    loadHistory(userEmail);
-    socket.emit("joinRoom", { email: userEmail, role: "user" });
-  }
-
-  // Receive messages
-  socket.on("chatMessage", (msg) => {
-    const p = document.createElement("p");
-    p.className = "message " + (msg.sender === "admin" ? "admin" : "user");
-    p.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text} <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>`;
-    messagesDiv.appendChild(p);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    if(!chatOpen){ unreadCount++; badge.style.display="flex"; badge.textContent=unreadCount;  chatIcon.classList.add("bounce"); 
-    setTimeout(() => {
-      chatIcon.classList.remove("bounce");
-    }, 4000); }
-  });
-
-  // Send messages
-  sendBtn.addEventListener("click", () => {
-    const text = input.value.trim();
-    if (!text) return;
-    socket.emit("chatMessage", {
-    text,
-    sender: userEmail,      
-    receiver: "admin"
-  });
-    input.value = "";
-  });
-
-  input.addEventListener("keypress", e => {
-    if (e.key === "Enter") sendBtn.click();
-  });
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") sendBtn.click();
+    });
   </script>
 
 </body>

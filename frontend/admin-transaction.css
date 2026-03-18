@@ -1,0 +1,312 @@
+/* =============================================
+   RIA Federal Credit Union — admin.css
+   Matches brand palette from styles.css
+   Primary:   Navy   #1e3a6e
+   Accent:    Red    #c0192b
+   Mid:       Steel  #2b5faa
+   Light:     Ice    #dce8f8 / #b3cef0
+   Dark text: #0b1826
+   ============================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f6fc;
+  color: #0b1826;
+  line-height: 1.5;
+  font-size: 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 30px 20px 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+main h2 {
+  color: #1e3a6e;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+  border-left: 4px solid #c0192b;
+  padding-left: 12px;
+}
+
+/* ── Header ─────────────────────────────────── */
+header {
+  background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
+  width: 100%;
+  box-shadow: 0 3px 16px rgba(14, 34, 70, 0.45);
+  border-bottom-right-radius: 26px;
+  border-bottom-left-radius: 26px;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #f0f5ff;
+}
+
+.nav { transition: max-height 0.3s ease; }
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.1em 1.2rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.hero-image img {
+  object-fit: cover;
+  width: 100%;
+  max-height: 250px;
+}
+
+/* ── Navigation ──────────────────────────────── */
+.nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.nav ul li a {
+  position: relative;
+  text-decoration: none;
+  color: #f0f5ff;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+.nav ul li a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #c0192b;
+  bottom: -5px;
+  left: 0;
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.nav ul li a:hover::after { transform: scaleX(1); }
+
+/* ── Filters Section ─────────────────────────── */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+  background: #fff;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(30, 58, 110, 0.15);
+  border-left: 4px solid #1e3a6e;
+}
+
+.filters select {
+  padding: 9px 36px 9px 12px;
+  border: 1px solid #b3cef0;
+  border-radius: 8px;
+  background: #fff url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 8px center;
+  background-size: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b1826;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  min-width: 150px;
+}
+
+.filters select:hover  { border-color: #2b5faa; }
+.filters select:focus  { outline: none; border-color: #2b5faa; box-shadow: 0 0 8px rgba(30, 58, 110, 0.2); }
+
+.filters button {
+  padding: 9px 22px;
+  border-radius: 8px;
+  background: linear-gradient(110deg, #1e3a6e 0%, #2b5faa 100%);
+  color: #f0f5ff;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.filters button:hover {
+  transform: scale(1.04);
+  background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
+}
+
+/* ── Transactions Table ───────────────────────── */
+section {
+  background: #dce8f8;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(30, 58, 110, 0.18);
+  overflow-x: auto;
+  padding: 20px;
+}
+
+table#transactions {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+  text-align: center;
+}
+
+table#transactions thead th {
+  background: #1e3a6e;
+  color: #f0f5ff;
+  font-weight: bold;
+  padding: 12px 14px;
+  white-space: nowrap;
+}
+
+table#transactions thead th:first-child { border-top-left-radius: 8px; }
+table#transactions thead th:last-child  { border-top-right-radius: 8px; }
+
+table#transactions tbody tr:nth-child(even) { background: #edf3fc; }
+table#transactions tbody tr:hover { background: #cdddf5; transition: background 0.25s ease; }
+
+table#transactions td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #b3cef0;
+  color: #0b1826;
+  vertical-align: middle;
+}
+
+/* Email column */
+table#transactions td:first-child { font-weight: 600; color: #1e3a6e; }
+
+/* Type column */
+table#transactions td:nth-child(3) { text-transform: capitalize; }
+
+/* Amount column */
+table#transactions td:nth-child(4) { font-weight: bold; color: #1e3a6e; }
+
+/* Status column — colour-coded */
+table#transactions td:nth-child(5) {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+/* Status cell colouring via JS-set id, fallback via text */
+td[id^="status-"] { font-weight: bold; text-transform: capitalize; }
+
+/* ── Action Buttons inside table ─────────────── */
+table#transactions td:last-child { white-space: nowrap; }
+
+table#transactions td button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin: 2px 3px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+table#transactions td button:first-of-type {
+  background: linear-gradient(110deg, #1e3a6e, #2b5faa);
+  color: #f0f5ff;
+}
+
+table#transactions td button:first-of-type:hover {
+  transform: scale(1.06);
+  background: linear-gradient(110deg, #2b5faa, #1e3a6e);
+}
+
+table#transactions td button:last-of-type {
+  background: linear-gradient(110deg, #c0192b, #8c0f1a);
+  color: #f0f5ff;
+}
+
+table#transactions td button:last-of-type:hover {
+  transform: scale(1.06);
+  opacity: 0.9;
+}
+
+/* ── Footer ──────────────────────────────────── */
+footer {
+  background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
+  color: #f0f5ff;
+  padding: 20px;
+  box-shadow: 0 -3px 14px rgba(14, 34, 70, 0.4);
+  border-top-right-radius: 26px;
+  border-top-left-radius: 26px;
+  margin-top: auto;
+}
+
+.footer-container { text-align: center; margin-bottom: 20px; }
+.footer-container h4 { margin-bottom: 6px; }
+.footer-container a { color: #b3cef0; text-decoration: none; }
+.footer-container a:hover { text-decoration: underline; color: #c0192b; }
+
+footer nav ul { list-style: none; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+footer nav ul li a { color: #b3cef0; text-decoration: none; font-size: 0.9rem; }
+footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
+
+.social-media { text-align: center; margin-top: 10px; }
+.social-media a { margin: 0 10px; color: #b3cef0; text-decoration: none; font-size: 1.2rem; }
+.social-media a:hover { color: #c0192b; }
+
+/* ── Mobile ──────────────────────────────────── */
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+
+  .menu-toggle { display: block; z-index: 1001; }
+
+  .nav {
+    width: 100%;
+    display: none;
+    background: #dce8f8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .nav.open { display: block; }
+
+  .nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    width: 100%;
+  }
+
+  main { padding: 20px 10px 40px; }
+
+  .filters { flex-direction: column; align-items: stretch; }
+  .filters select,
+  .filters button { width: 100%; }
+
+  table#transactions { font-size: 0.78rem; }
+
+  table#transactions th,
+  table#transactions td { padding: 7px 5px; white-space: normal; word-break: break-word; }
+
+  /* Hide date column on very small screens */
+  table#transactions th:nth-child(6),
+  table#transactions td:nth-child(6) { display: none; }
+}
