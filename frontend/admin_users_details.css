@@ -1,0 +1,247 @@
+/* =============================================
+   RIA Federal Credit Union — user-details.css
+   Brand palette consistent with admin.css
+   Primary:   Navy   #1e3a6e
+   Accent:    Red    #c0192b
+   Mid:       Steel  #2b5faa
+   Light:     Ice    #dce8f8 / #b3cef0
+   Dark text: #0b1826
+   ============================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f6fc;
+  color: #0b1826;
+  line-height: 1.5;
+  font-size: 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────── */
+header {
+  background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
+  width: 100%;
+  box-shadow: 0 3px 16px rgba(14, 34, 70, 0.45);
+  border-bottom-right-radius: 26px;
+  border-bottom-left-radius: 26px;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #f0f5ff;
+}
+
+.nav { transition: max-height 0.3s ease; }
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.1em 1.2rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.hero-image img {
+  object-fit: cover;
+  width: 100%;
+  max-height: 250px;
+}
+
+/* ── Navigation ──────────────────────────────── */
+.nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.nav ul li a {
+  position: relative;
+  text-decoration: none;
+  color: #f0f5ff;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+.nav ul li a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #c0192b;
+  bottom: -5px;
+  left: 0;
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.nav ul li a:hover::after,
+.nav ul li a.active::after {
+  transform: scaleX(1);
+}
+
+/* ── Page Heading ────────────────────────────── */
+h1 {
+  text-align: center;
+  color: #1e3a6e;
+  margin: 36px 0 4px;
+  font-size: 1.6rem;
+  border-left: none;
+  position: relative;
+}
+
+h1::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #c0192b;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+/* ── Form ────────────────────────────────────── */
+form {
+  max-width: 480px;
+  margin: 28px auto 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;                       /* gaps handled by input margin */
+  background: #fff;
+  padding: 32px 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 18px rgba(30, 58, 110, 0.18);
+  border-top: 4px solid #c0192b;
+}
+
+/* Group label + input pairs */
+form input {
+  width: 100%;
+  padding: 11px 14px;
+  margin-bottom: 14px;
+  border: 1px solid #b3cef0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #0b1826;
+  background: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input::placeholder { color: #8fa8c8; }
+
+form input:focus {
+  outline: none;
+  border-color: #2b5faa;
+  box-shadow: 0 0 8px rgba(30, 58, 110, 0.2);
+}
+
+/* Read-only account number field */
+form input[readonly] {
+  background: #edf3fc;
+  color: #4a607a;
+  cursor: not-allowed;
+  border-color: #b3cef0;
+}
+
+/* Date input styling */
+form input[type="date"] {
+  color: #0b1826;
+}
+
+/* Submit button */
+form button[type="submit"] {
+  width: 100%;
+  padding: 13px;
+  margin-top: 6px;
+  border-radius: 8px;
+  background: linear-gradient(110deg, #1e3a6e 0%, #2b5faa 100%);
+  color: #f0f5ff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+  transform: scale(1.03);
+  background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
+}
+
+/* ── Footer ──────────────────────────────────── */
+footer {
+  background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
+  color: #f0f5ff;
+  padding: 20px;
+  box-shadow: 0 -3px 14px rgba(14, 34, 70, 0.4);
+  border-top-right-radius: 26px;
+  border-top-left-radius: 26px;
+  margin-top: auto;
+}
+
+.footer-container { text-align: center; margin-bottom: 20px; }
+.footer-container h4 { margin-bottom: 6px; }
+.footer-container a { color: #b3cef0; text-decoration: none; }
+.footer-container a:hover { text-decoration: underline; color: #c0192b; }
+
+footer nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+footer nav ul li a { color: #b3cef0; text-decoration: none; font-size: 0.9rem; }
+footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
+
+.social-media { text-align: center; margin-top: 10px; }
+.social-media a { margin: 0 10px; color: #b3cef0; text-decoration: none; font-size: 1.2rem; }
+.social-media a:hover { color: #c0192b; }
+
+/* ── Mobile ──────────────────────────────────── */
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+
+  .menu-toggle { display: block; z-index: 1001; }
+
+  .nav {
+    width: 100%;
+    display: none;
+    background: #dce8f8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .nav.open { display: block; }
+
+  .nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    width: 100%;
+  }
+
+  form {
+    margin: 20px 16px 40px;
+    padding: 24px 18px;
+  }
+
+  h1 { font-size: 1.3rem; margin-top: 24px; }
+}

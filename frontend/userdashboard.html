@@ -63,8 +63,8 @@
       <h3>Quick Actions</h3>
       <div class="actions-grid">
         <a href="transfer.html" class="action-btn"><i class="fa fa-exchange-alt"></i> Transfer Funds</a>
-        <a href="payments.html" class="action-btn"><i class="fa fa-file-invoice"></i> Pay Bills</a>
-        <a href="accounts.html" class="action-btn"><i class="fa fa-university"></i> View Accounts</a>
+        <a href="" class="action-btn"><i class="fa fa-file-invoice"></i> Pay Bills</a>
+        <a href="transactions.html" class="action-btn"><i class="fa fa-university"></i> View Transaction History</a>
       </div>
     </section>
 
@@ -128,6 +128,8 @@
   </script>
   <script>
     const email = localStorage.getItem("userEmail");
+    const profilePic = document.getElementById("profilePic"); // ✅ moved to top
+
     if (!email) {
       alert("You are not logged in!");
       window.location.href = "signin.html";
@@ -142,101 +144,101 @@
             if (profile.profile_image) {
               profilePic.src = profile.profile_image;
             } else {
-              profilePic.src = "";
+              const cached = localStorage.getItem("profileImage");
+              if (cached) profilePic.src = cached;
             }
 
             // Fill profile info
             document.querySelector(".user-name").textContent =
               `${profile.firstname} ${profile.secondname}`;
             document.querySelector(".user-savings").textContent =
-              `$${profile.savings_balance}`;
+              `$${Number(profile.savings_balance).toLocaleString()}`;
             document.querySelector(".user-balance").textContent =
-              `$${profile.account_balance}`;
+              `$${Number(profile.account_balance).toLocaleString()}`;
             document.querySelector(".user-card").textContent =
-              `$${profile.card_balance}`;
+              `$${Number(profile.card_balance).toLocaleString()}`;
             document.querySelector(".user-number").textContent =
               `${profile.account_number}`;
 
             // Fill transactions table
             const tbody = document.querySelector("#transactions tbody");
-            tbody.innerHTML = ""; // clear old rows
-            if (Array.isArray(data.transactions) && data.transactions.length > 0) data.transactions.forEach(tx => {
-              const row = document.createElement("tr");
+            tbody.innerHTML = "";
 
-              row.innerHTML = `
-                <td>${tx.description}</td>
-                <td>${tx.type}</td>
-                <td>$${tx.amount}</td>
-                <td>${tx.status}</td>
-                <td><small>${new Date(tx.date).toLocaleString()}</small></td>
-              `;
-              // Make row clickable
-              row.style.cursor = "pointer";
-              row.addEventListener("click", () => {
-                window.location.href = `/receipt/${tx.transaction_ref}`;
+            if (Array.isArray(data.transactions) && data.transactions.length > 0) {
+              data.transactions.forEach(tx => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                  <td>${tx.description || "—"}</td>
+                  <td>${tx.type}</td>
+                  <td>$${Number(tx.amount).toLocaleString()}</td>
+                  <td>${tx.status}</td>
+                  <td><small>${new Date(tx.date).toLocaleString()}</small></td>
+                `;
+                row.style.cursor = "pointer";
+                if (tx.transaction_ref) {
+                  row.addEventListener("click", () => {
+                    window.location.href = `/receipt/${tx.transaction_ref}`;
+                  });
+                }
+                tbody.appendChild(row);
               });
-              tbody.appendChild(row);
-            });
-            function viewReceipt(ref) {
-              window.location.href = `/receipt/${ref}`;
+            } else {
+              tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#7a8fa6;padding:20px;">No transactions yet.</td></tr>`;
             }
 
-            loadTransactions();
-
           } else {
-            document.getElementById("profile").innerHTML =
-              `<p>Error: ${data.message}</p>`;
+            // ✅ fixed: was getElementById("profile") which doesn't exist
+            console.error("Dashboard error:", data.message);
+            alert("Failed to load dashboard: " + data.message);
           }
         })
         .catch(err => {
+          // ✅ fixed: was getElementById("profile") which doesn't exist
           console.error("Error fetching profile:", err);
-          document.getElementById("profile").innerHTML =
-            "<p>Failed to load profile data.</p>";
+          alert("Failed to load profile data. Please try again.");
         });
     }
-  const uploadInput = document.getElementById("profileUpload");
-  const profilePic = document.getElementById("profilePic");
 
-  uploadInput.addEventListener("change", async () => {
-    const file = uploadInput.files[0];
-    if (!file) return;
+    // Profile picture upload
+    const uploadInput = document.getElementById("profileUpload");
 
-    // Preview immediately
-    const reader = new FileReader();
-    reader.onload = () => {
-      profilePic.src = reader.result;
-    };
-    reader.readAsDataURL(file);
+    uploadInput.addEventListener("change", async () => {
+      const file = uploadInput.files[0];
+      if (!file) return;
 
-    // Send file to backend
-    const formData = new FormData();
-    formData.append("image", file);   // MUST match upload.single("image")
-    formData.append("email", email);  // email from URL or logged-in user
+      // Preview immediately
+      const reader = new FileReader();
+      reader.onload = () => { profilePic.src = reader.result; };
+      reader.readAsDataURL(file);
 
-    try {
-      const res = await fetch("/upload-profile-pic", {
-        method: "POST",
-        body: formData
-      });
-      const data = await res.json();
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("email", email);
 
-      if (!res.ok || !data.success) {
-      throw new Error(data.message || "Upload failed");
-    }
+      try {
+        const res = await fetch("/upload-profile-pic", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
 
-      // ✅ Cloudinary returns a full URL
-      profilePic.src = data.image;
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Upload failed");
+        }
+        
 
-      // Optional: cache it locally so refresh keeps it
-      localStorage.setItem("profileImage", data.image);
+        profilePic.src = data.image;
+        localStorage.setItem("profileImage", data.image);
 
-    } catch (err) {
-      console.error("Upload error:", err);
-      alert("Image upload failed");
-    }
-  });
+      } catch (err) {
+        console.error("Upload error:", err);
+        alert("Image upload failed");
+      }
+    });
+
+    // Load cached image on page load
     const savedImage = localStorage.getItem("profileImage");
-    if (savedImage) {
+    if (savedImage && profilePic) {
       profilePic.src = savedImage;
     }
   </script>

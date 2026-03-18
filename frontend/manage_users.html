@@ -3,27 +3,255 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Users | RIA Federal Credit Union Admin</title>
+  <title>Manage Users — RIA Federal Credit Union</title>
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background: #f4f4f4; }
-    tr:hover { background: #f9f9f9; cursor: pointer; }
+    /* ── Manage Users page extras ── */
+    .page-header {
+      padding: 30px 20px 10px;
+      text-align: center;
+    }
+    .page-header h2 { color: #1e3a6e; }
+    .page-header p  { color: #4a607a; margin-top: 4px; }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      max-width: 95%;
+      margin: 18px auto 0;
+      padding: 0 10px;
+    }
+
+    .toolbar input[type="text"] {
+      padding: 10px 14px;
+      border: 1px solid #b3cef0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      width: 260px;
+      transition: border-color 0.3s;
+    }
+    .toolbar input[type="text"]:focus { outline: none; border-color: #2b5faa; }
+
+    .btn-danger-outline {
+      padding: 9px 18px;
+      border: 2px solid #c0192b;
+      color: #c0192b;
+      background: transparent;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      letter-spacing: 0.03em;
+    }
+    .btn-danger-outline:hover { background: #c0192b; color: #fff; }
+
+    /* ── User Table ── */
+    .users-table-wrapper {
+      max-width: 95%;
+      margin: 20px auto 40px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 0 18px rgba(30,58,110,0.14);
+      overflow: hidden;
+    }
+
+    .users-table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .users-table-wrapper thead tr { background: #1e3a6e; }
+    .users-table-wrapper th {
+      color: #f0f5ff;
+      font-weight: 600;
+      padding: 13px 14px;
+      text-align: left;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .users-table-wrapper td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #dce8f8;
+      color: #0b1826;
+      vertical-align: middle;
+    }
+
+    .users-table-wrapper tr:last-child td { border-bottom: none; }
+    .users-table-wrapper tr:hover td { background: #f4f8ff; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .badge-active { background: #d1fae5; color: #065f46; }
+
+    /* action buttons inside table */
+    .action-group { display: flex; gap: 7px; flex-wrap: wrap; }
+
+    .btn-sm {
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.22s;
+      white-space: nowrap;
+    }
+    .btn-edit   { background: #dce8f8; color: #1e3a6e; }
+    .btn-edit:hover { background: #2b5faa; color: #fff; }
+
+    .btn-clear  { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+    .btn-clear:hover { background: #ffc107; color: #0b1826; }
+
+    .btn-delete { background: #fde8ea; color: #c0192b; border: 1px solid #f5b8be; }
+    .btn-delete:hover { background: #c0192b; color: #fff; }
+
+    /* ── Confirm Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(11,24,38,0.55);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 34px 30px 28px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 8px 40px rgba(30,58,110,0.3);
+      text-align: center;
+      animation: modalIn 0.28s ease;
+    }
+    @keyframes modalIn {
+      from { transform: scale(0.88) translateY(20px); opacity: 0; }
+      to   { transform: scale(1)    translateY(0);    opacity: 1; }
+    }
+
+    .modal-icon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin: 0 auto 16px;
+    }
+    .modal-icon.danger  { background: #fde8ea; color: #c0192b; }
+    .modal-icon.warning { background: #fff3cd; color: #856404; }
+
+    .modal-box h3 { color: #0b1826; font-size: 1.15rem; margin-bottom: 8px; }
+    .modal-box p  { color: #4a607a; font-size: 0.9rem; line-height: 1.55; }
+
+    .modal-user-info {
+      background: #f4f8ff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 14px 0;
+      font-size: 0.85rem;
+      color: #1e3a6e;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: center; }
+
+    .btn-cancel {
+      padding: 10px 22px;
+      border: 2px solid #b3cef0;
+      background: transparent;
+      color: #4a607a;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.22s;
+    }
+    .btn-cancel:hover { background: #dce8f8; }
+
+    .btn-confirm-delete {
+      padding: 10px 22px;
+      background: linear-gradient(110deg, #c0192b, #8c0f1a);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .btn-confirm-delete:hover { transform: scale(1.04); }
+
+    .btn-confirm-clear {
+      padding: 10px 22px;
+      background: linear-gradient(110deg, #ffc107, #e0a800);
+      color: #0b1826;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .btn-confirm-clear:hover { transform: scale(1.04); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 30px; left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: #1e3a6e;
+      color: #f0f5ff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      z-index: 20000;
+      opacity: 0;
+      transition: all 0.4s ease;
+      white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.success { background: #065f46; }
+    #toast.error   { background: #8c0f1a; }
+
+    /* loading row */
+    .loading-row td { text-align: center; padding: 30px; color: #7a8fa6; font-style: italic; }
+
+    @media (max-width: 768px) {
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .toolbar input[type="text"] { width: 100%; }
+      .users-table-wrapper th:nth-child(3),
+      .users-table-wrapper td:nth-child(3),
+      .users-table-wrapper th:nth-child(4),
+      .users-table-wrapper td:nth-child(4) { display: none; }
+    }
   </style>
 </head>
 <body>
+
   <!-- Header -->
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200">
+        <a href="index.html"><img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200"></a>
       </div>
+      <button class="menu-toggle">&#9776;</button>
       <div class="nav">
         <ul>
           <li><a href="admin.html">Dashboard</a></li>
-          <li><a href="users.html" class="active">Users</a></li>
+          <li><a href="manage_users.html">Users</a></li>
           <li><a href="admin-transaction.html">Transactions</a></li>
           <li><a href="reports.html">Reports</a></li>
           <li><a href="settings.html">Settings</a></li>
@@ -33,89 +261,310 @@
     </section>
   </header>
 
-  <!-- Main Content -->
-  <main>
-    <section class="user-list">
-      <h2>All Registered Users</h2>
-      <p>Below is the list of all users in the system.</p>
+  <!-- Page Header -->
+  <div class="page-header">
+    <h2><i class="fa fa-users" style="margin-right:8px;"></i>Manage Users</h2>
+    <p>View, edit, delete users and manage their transaction history.</p>
+  </div>
 
-      <table id="usersTable">
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Second Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Date of Birth</th>
-            <th>Account Balance</th>
-            <th>Savings Balance</th>
-            <th>Card Balance</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- User rows will be inserted dynamically via JS -->
-        </tbody>
-      </table>
-    </section>
-  </main>
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="🔍  Search by name or email…">
+    <button class="btn-danger-outline" id="clearAllTxBtn">
+      <i class="fa fa-trash-alt" style="margin-right:5px;"></i>Clear All Transactions
+    </button>
+  </div>
 
- <!-- Footer -->
+  <!-- Users Table -->
+  <div class="users-table-wrapper">
+    <table id="usersTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Account No.</th>
+          <th>Main Balance</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="usersTbody">
+        <tr class="loading-row"><td colspan="7">Loading users…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Confirm Delete Modal ── -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+      <div class="modal-icon danger"><i class="fa fa-user-slash"></i></div>
+      <h3>Delete User Account</h3>
+      <p>This will permanently remove the user, their profile, and <strong>all transaction history</strong>. This action cannot be undone.</p>
+      <div class="modal-user-info" id="deleteModalInfo"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="deleteCancelBtn">Cancel</button>
+        <button class="btn-confirm-delete" id="deleteConfirmBtn">
+          <i class="fa fa-trash" style="margin-right:5px;"></i>Yes, Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Confirm Clear Transactions Modal ── -->
+  <div class="modal-overlay" id="clearModal">
+    <div class="modal-box">
+      <div class="modal-icon warning"><i class="fa fa-clock-rotate-left"></i></div>
+      <h3>Clear Transaction History</h3>
+      <p>All transactions for this user will be permanently deleted. Account balances will not be affected.</p>
+      <div class="modal-user-info" id="clearModalInfo"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="clearCancelBtn">Cancel</button>
+        <button class="btn-confirm-clear" id="clearConfirmBtn">
+          <i class="fa fa-broom" style="margin-right:5px;"></i>Yes, Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Confirm Clear ALL Transactions Modal ── -->
+  <div class="modal-overlay" id="clearAllModal">
+    <div class="modal-box">
+      <div class="modal-icon danger"><i class="fa fa-database"></i></div>
+      <h3>Clear ALL Transactions</h3>
+      <p>This will permanently delete <strong>every transaction</strong> across all users in the system. This cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="clearAllCancelBtn">Cancel</button>
+        <button class="btn-confirm-delete" id="clearAllConfirmBtn">
+          <i class="fa fa-trash" style="margin-right:5px;"></i>Yes, Clear All
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <!-- Footer -->
   <footer>
-        <div class="footer-container">
-            <h4>Contact Us</h4>
-            <p id="email">Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a>
-            <p>&copy; 2025 RIA Federal Credit Union. All rights reserved.</p>
-            <nav>
-                <ul>
-                    <li><a href="">Privacy Policy</a></li>
-                    <li><a href="">Terms of Service</a></li>
-                    <li><a href="">Contact Us</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="social-media">
-            <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
-            <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
-            <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>        
-    </footer>
+    <div class="footer-container">
+      <h4>Contact Us</h4>
+      <p>Email: <a href="mailto:evergreen@support.com">evergreen@support.com</a></p>
+      <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
+      <nav><ul>
+        <li><a href="">Privacy Policy</a></li>
+        <li><a href="">Terms of Service</a></li>
+        <li><a href="">Contact Us</a></li>
+      </ul></nav>
+    </div>
+    <div class="social-media">
+      <a href="#"><i class="fa-brands fa-facebook"></i></a>
+      <a href="#"><i class="fa-brands fa-twitter"></i></a>
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+  </footer>
 
   <script>
-    // Fetch all users from backend API
+    // ── Nav toggle ──
+    document.querySelector('.menu-toggle').addEventListener('click', () => {
+      document.querySelector('.nav').classList.toggle('open');
+    });
+
+    // ── Toast helper ──
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `show ${type}`;
+      setTimeout(() => { t.className = ''; }, 3500);
+    }
+
+    // ── State ──
+    let allUsers = [];
+    let pendingAccount  = null;
+    let pendingUserName = null;
+
+    // ── Load users ──
     async function loadUsers() {
       try {
-        const response = await fetch("admindash/users"); // backend endpoint
-        const users = await response.json();
-
-        const tbody = document.querySelector("#usersTable tbody");
-        tbody.innerHTML = "";
-
-        users.forEach(user => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${user.firstname}</td>
-            <td>${user.secondname}</td>
-            <td>${user.email}</td>
-            <td>${user.phonenumber}</td>
-            <td>${user.dob}</td>
-            <td>$${user.account_balance.toLocaleString()}</td>
-            <td>$${user.savings_balance.toLocaleString()}</td>
-            <td>$${user.card_balance.toLocaleString()}</td>
-          `;
-          // Click row to go to details page
-            row.addEventListener("click", () => {
-              window.location.href = `/admin_users_details.html?account=${user.account_number}`;
-            });
-          tbody.appendChild(row);
-        });
-      } catch (error) {
-        console.error("Error loading users:", error);
+        const res  = await fetch('/admindash/users');
+        const rows = await res.json();
+        allUsers   = rows;
+        renderTable(allUsers);
+      } catch (err) {
+        console.error('Failed to load users:', err);
+        document.getElementById('usersTbody').innerHTML =
+          '<tr class="loading-row"><td colspan="7">Failed to load users.</td></tr>';
       }
     }
 
-    // Load users on page load
-    window.onload = loadUsers;
+    function renderTable(users) {
+      const tbody = document.getElementById('usersTbody');
+      if (!users.length) {
+        tbody.innerHTML = '<tr class="loading-row"><td colspan="7">No users found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = users.map((u, i) => `
+        <tr id="row-${u.account_number}">
+          <td>${i + 1}</td>
+          <td><strong>${u.firstname} ${u.secondname}</strong></td>
+          <td>${u.email}</td>
+          <td><code>${u.account_number}</code></td>
+          <td>$${Number(u.account_balance || 0).toLocaleString()}</td>
+          <td><span class="badge badge-active">Active</span></td>
+          <td>
+            <div class="action-group">
+              <button class="btn-sm btn-edit"
+                onclick="window.location.href='admin_users_details.html?account=${u.account_number}'">
+                <i class="fa fa-pen"></i> Edit
+              </button>
+              <button class="btn-sm btn-clear"
+                onclick="openClearModal('${u.account_number}', '${u.firstname} ${u.secondname}', '${u.email}')">
+                <i class="fa fa-clock-rotate-left"></i> Clear Tx
+              </button>
+              <button class="btn-sm btn-delete"
+                onclick="openDeleteModal('${u.account_number}', '${u.firstname} ${u.secondname}', '${u.email}')">
+                <i class="fa fa-trash"></i> Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Search ──
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      const filtered = allUsers.filter(u =>
+        `${u.firstname} ${u.secondname}`.toLowerCase().includes(q) ||
+        u.email.toLowerCase().includes(q) ||
+        String(u.account_number).includes(q)
+      );
+      renderTable(filtered);
+    });
+
+
+    // ════════════════════════════════
+    // DELETE USER
+    // ════════════════════════════════
+    function openDeleteModal(account, name, email) {
+      pendingAccount  = account;
+      pendingUserName = name;
+      document.getElementById('deleteModalInfo').innerHTML =
+        `<i class="fa fa-user" style="margin-right:6px;"></i>${name}<br>
+         <small style="color:#4a607a;">${email} &nbsp;·&nbsp; Acc: ${account}</small>`;
+      document.getElementById('deleteModal').classList.add('active');
+    }
+
+    document.getElementById('deleteCancelBtn').addEventListener('click', () => {
+      document.getElementById('deleteModal').classList.remove('active');
+      pendingAccount = null;
+    });
+
+    document.getElementById('deleteConfirmBtn').addEventListener('click', async () => {
+      if (!pendingAccount) return;
+      document.getElementById('deleteModal').classList.remove('active');
+
+      try {
+        const res  = await fetch(`/admin/user/${pendingAccount}`, { method: 'DELETE' });
+        const data = await res.json();
+
+        if (data.success) {
+          // Remove row from DOM
+          const row = document.getElementById(`row-${pendingAccount}`);
+          if (row) row.remove();
+          allUsers = allUsers.filter(u => u.account_number != pendingAccount);
+          showToast(`✅ User "${pendingUserName}" deleted successfully.`, 'success');
+        } else {
+          showToast(`❌ ${data.message}`, 'error');
+        }
+      } catch (err) {
+        console.error('Delete error:', err);
+        showToast('❌ Server error during deletion.', 'error');
+      }
+
+      pendingAccount = null;
+    });
+
+
+    // ════════════════════════════════
+    // CLEAR USER TRANSACTIONS
+    // ════════════════════════════════
+    function openClearModal(account, name, email) {
+      pendingAccount  = account;
+      pendingUserName = name;
+      document.getElementById('clearModalInfo').innerHTML =
+        `<i class="fa fa-user" style="margin-right:6px;"></i>${name}<br>
+         <small style="color:#4a607a;">${email} &nbsp;·&nbsp; Acc: ${account}</small>`;
+      document.getElementById('clearModal').classList.add('active');
+    }
+
+    document.getElementById('clearCancelBtn').addEventListener('click', () => {
+      document.getElementById('clearModal').classList.remove('active');
+      pendingAccount = null;
+    });
+
+    document.getElementById('clearConfirmBtn').addEventListener('click', async () => {
+      if (!pendingAccount) return;
+      document.getElementById('clearModal').classList.remove('active');
+
+      try {
+        const res  = await fetch(`/admin/transactions/${pendingAccount}`, { method: 'DELETE' });
+        const data = await res.json();
+
+        if (data.success) {
+          showToast(`✅ ${data.message}`, 'success');
+        } else {
+          showToast(`❌ ${data.message}`, 'error');
+        }
+      } catch (err) {
+        console.error('Clear tx error:', err);
+        showToast('❌ Server error while clearing transactions.', 'error');
+      }
+
+      pendingAccount = null;
+    });
+
+
+    // ════════════════════════════════
+    // CLEAR ALL TRANSACTIONS
+    // ════════════════════════════════
+    document.getElementById('clearAllTxBtn').addEventListener('click', () => {
+      document.getElementById('clearAllModal').classList.add('active');
+    });
+
+    document.getElementById('clearAllCancelBtn').addEventListener('click', () => {
+      document.getElementById('clearAllModal').classList.remove('active');
+    });
+
+    document.getElementById('clearAllConfirmBtn').addEventListener('click', async () => {
+      document.getElementById('clearAllModal').classList.remove('active');
+
+      try {
+        const res  = await fetch('/admin/transactions', { method: 'DELETE' });
+        const data = await res.json();
+
+        if (data.success) {
+          showToast(`✅ ${data.message}`, 'success');
+        } else {
+          showToast(`❌ ${data.message}`, 'error');
+        }
+      } catch (err) {
+        console.error('Clear all error:', err);
+        showToast('❌ Server error.', 'error');
+      }
+    });
+
+    // ── Close modals on overlay click ──
+    ['deleteModal','clearModal','clearAllModal'].forEach(id => {
+      document.getElementById(id).addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+    });
+
+    // ── Init ──
+    loadUsers();
   </script>
 </body>
 </html>

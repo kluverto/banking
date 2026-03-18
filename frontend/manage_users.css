@@ -1,0 +1,262 @@
+/* =============================================
+   RIA Federal Credit Union — manage-users.css
+   Brand palette consistent with admin.css
+   Primary:   Navy   #1e3a6e
+   Accent:    Red    #c0192b
+   Mid:       Steel  #2b5faa
+   Light:     Ice    #dce8f8 / #b3cef0
+   Dark text: #0b1826
+   ============================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f6fc;
+  color: #0b1826;
+  line-height: 1.5;
+  font-size: 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 30px 20px 50px;
+  max-width: 1300px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Header ─────────────────────────────────── */
+header {
+  background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
+  width: 100%;
+  box-shadow: 0 3px 16px rgba(14, 34, 70, 0.45);
+  border-bottom-right-radius: 26px;
+  border-bottom-left-radius: 26px;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #f0f5ff;
+}
+
+.nav { transition: max-height 0.3s ease; }
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.1em 1.2rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.hero-image img {
+  object-fit: cover;
+  width: 100%;
+  max-height: 250px;
+}
+
+/* ── Navigation ──────────────────────────────── */
+.nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.nav ul li a {
+  position: relative;
+  text-decoration: none;
+  color: #f0f5ff;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+.nav ul li a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #c0192b;
+  bottom: -5px;
+  left: 0;
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.nav ul li a:hover::after,
+.nav ul li a.active::after {
+  transform: scaleX(1);
+}
+
+/* ── User List Section ───────────────────────── */
+.user-list {
+  background: #dce8f8;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(30, 58, 110, 0.18);
+  padding: 24px 20px;
+}
+
+.user-list h2 {
+  color: #1e3a6e;
+  font-size: 1.4rem;
+  border-left: 4px solid #c0192b;
+  padding-left: 12px;
+  margin-bottom: 6px;
+}
+
+.user-list > p {
+  color: #4a607a;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  padding-left: 16px;
+}
+
+/* ── Users Table ─────────────────────────────── */
+table#usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  text-align: left;
+  margin-top: 0;
+}
+
+table#usersTable thead th {
+  background: #1e3a6e;
+  color: #f0f5ff;
+  font-weight: bold;
+  padding: 12px 14px;
+  white-space: nowrap;
+  border: none;
+}
+
+table#usersTable thead th:first-child { border-top-left-radius: 8px; }
+table#usersTable thead th:last-child  { border-top-right-radius: 8px; }
+
+table#usersTable tbody tr {
+  transition: background 0.25s ease;
+  cursor: pointer;
+}
+
+table#usersTable tbody tr:nth-child(even) { background: #edf3fc; }
+
+table#usersTable tbody tr:hover { background: #cdddf5; }
+
+table#usersTable td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #b3cef0;
+  border-left: none;
+  border-right: none;
+  color: #0b1826;
+  vertical-align: middle;
+}
+
+/* Name columns */
+table#usersTable td:nth-child(1),
+table#usersTable td:nth-child(2) {
+  font-weight: 600;
+  color: #1e3a6e;
+}
+
+/* Balance columns — right-aligned, navy bold */
+table#usersTable td:nth-child(6),
+table#usersTable td:nth-child(7),
+table#usersTable td:nth-child(8) {
+  font-weight: bold;
+  color: #1e3a6e;
+  text-align: right;
+}
+
+table#usersTable thead th:nth-child(6),
+table#usersTable thead th:nth-child(7),
+table#usersTable thead th:nth-child(8) {
+  text-align: right;
+}
+
+/* ── Footer ──────────────────────────────────── */
+footer {
+  background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
+  color: #f0f5ff;
+  padding: 20px;
+  box-shadow: 0 -3px 14px rgba(14, 34, 70, 0.4);
+  border-top-right-radius: 26px;
+  border-top-left-radius: 26px;
+  margin-top: auto;
+}
+
+.footer-container { text-align: center; margin-bottom: 20px; }
+.footer-container h4 { margin-bottom: 6px; }
+.footer-container a { color: #b3cef0; text-decoration: none; }
+.footer-container a:hover { text-decoration: underline; color: #c0192b; }
+
+footer nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+footer nav ul li a { color: #b3cef0; text-decoration: none; font-size: 0.9rem; }
+footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
+
+.social-media { text-align: center; margin-top: 10px; }
+.social-media a { margin: 0 10px; color: #b3cef0; text-decoration: none; font-size: 1.2rem; }
+.social-media a:hover { color: #c0192b; }
+
+/* ── Mobile ──────────────────────────────────── */
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+
+  .menu-toggle { display: block; z-index: 1001; }
+
+  .nav {
+    width: 100%;
+    display: none;
+    background: #dce8f8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .nav.open { display: block; }
+
+  .nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    width: 100%;
+  }
+
+  main { padding: 20px 10px 40px; }
+
+  .user-list { padding: 14px 8px; }
+
+  table#usersTable { font-size: 0.78rem; }
+
+  table#usersTable th,
+  table#usersTable td {
+    padding: 7px 6px;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* Hide DOB and card balance on small screens */
+  table#usersTable th:nth-child(5),
+  table#usersTable td:nth-child(5),
+  table#usersTable th:nth-child(8),
+  table#usersTable td:nth-child(8) { display: none; }
+}

@@ -239,6 +239,7 @@ app.get("/dashboard/:email", async (req, res) => {
       .json({ success: false, message: "Server error" });
   }
 });
+
 //Frontend route for user transaction
 app.get("/api/transactions/:email", async (req, res) => {
   const { email } = req.params;
@@ -515,6 +516,111 @@ app.get("/admin/user/email/:email", async (req, res) => {
   }
 });
 
+// ── DELETE USER (removes from users + user_profile + transactions) ──
+app.delete("/admin/user/:account", async (req, res) => {
+  const client = await db.connect(); // use a transaction for atomicity
+  try {
+    const accountNumber = req.params.account;
+ 
+    // 1. Find the user's email first (needed to delete from `users` table)
+    const profileResult = await client.query(
+      "SELECT email FROM user_profile WHERE account_number = $1",
+      [accountNumber]
+    );
+ 
+    if (profileResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+ 
+    const email = profileResult.rows[0].email;
+ 
+    await client.query("BEGIN");
+ 
+    // 2. Delete messages
+    await client.query(
+      "DELETE FROM messages WHERE sender = $1 OR receiver = $1",
+      [email]
+    );
+ 
+    // 3. Delete transactions
+    await client.query(
+      "DELETE FROM transactions WHERE email = $1",
+      [email]
+    );
+ 
+    // 4. Delete user_profile
+    await client.query(
+      "DELETE FROM user_profile WHERE account_number = $1",
+      [accountNumber]
+    );
+ 
+    // 5. Delete from users table
+    await client.query(
+      "DELETE FROM users WHERE email = $1",
+      [email]
+    );
+ 
+    await client.query("COMMIT");
+ 
+    res.json({ success: true, message: "User and all associated data deleted successfully" });
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.error("Error deleting user:", err);
+    res.status(500).json({ success: false, message: "Server error during deletion" });
+  } finally {
+    client.release();
+  }
+});
+ 
+ 
+// ── CLEAR TRANSACTION HISTORY FOR A USER ──
+app.delete("/admin/transactions/:account", async (req, res) => {
+  try {
+    const accountNumber = req.params.account;
+ 
+    // Verify user exists
+    const userResult = await db.query(
+      "SELECT email FROM user_profile WHERE account_number = $1",
+      [accountNumber]
+    );
+ 
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+ 
+    const email = userResult.rows[0].email;
+ 
+    // Delete all transactions for this user
+    const deleteResult = await db.query(
+      "DELETE FROM transactions WHERE email = $1 RETURNING id",
+      [email]
+    );
+ 
+    res.json({
+      success: true,
+      message: `Cleared ${deleteResult.rowCount} transaction(s) for ${email}`
+    });
+  } catch (err) {
+    console.error("Error clearing transactions:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+ 
+ 
+// ── CLEAR ALL TRANSACTIONS (global — use with caution) ──
+app.delete("/admin/transactions", async (req, res) => {
+  try {
+    const result = await db.query("DELETE FROM transactions RETURNING id");
+    res.json({
+      success: true,
+      message: `All ${result.rowCount} transactions cleared`
+    });
+  } catch (err) {
+    console.error("Error clearing all transactions:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 // Admin get recent transactions
 app.get("/admin/recent-transactions", async (req, res) => {
   try {
@@ -566,82 +672,60 @@ app.get("/admin/all-transactions", async (req, res) => {
 // Admin update transaction status
 app.post("/admin/update-transaction", async (req, res) => {
   const { transactionId, action } = req.body;
-
+ 
   try {
-    // 1️⃣ Get transaction
-    const txResult = await db.query(
-      "SELECT * FROM transactions WHERE id = $1",
-      [transactionId]
-    );
-
-    if (txResult.rows.length === 0) {
+    const txResult = await db.query("SELECT * FROM transactions WHERE id=$1", [transactionId]);
+ 
+    if (txResult.rows.length === 0)
       return res.status(404).json({ success: false, message: "Transaction not found" });
-    }
-
+ 
     const transaction = txResult.rows[0];
-
-    if (transaction.status !== "pending") {
+ 
+    if (transaction.status !== "pending")
       return res.json({ success: false, message: "Transaction already processed" });
-    }
-
-    // 2️⃣ Update status
+ 
     const newStatus = action === "approve" ? "completed" : "failed";
-
-    await db.query(
-      "UPDATE transactions SET status = $1 WHERE id = $2",
-      [newStatus, transactionId]
-    );
-
-    // 3️⃣ If approved → update user balance
-        if (action === "approve") {
-          if (transaction.type === "credit") {
-            await db.query(
-              "UPDATE users_profile SET account_balance = account_balance + $1 WHERE email = $2",
-              [transaction.amount, transaction.email]
-            );
-          }
-        if (action === "approve") {
-
-          let column = "account_balance"; // default
-
-          if (transaction.description.includes("Savings")) {
-            column = "savings_balance";
-          }
-
-          if (transaction.description.includes("Card")) {
-            column = "card_balance";
-          }
-
-          if (transaction.type === "credit") {
-            await db.query(
-              `UPDATE user_profile 
-              SET ${column} = ${column} + $1 
-              WHERE email = $2`,
-              [transaction.amount, transaction.email]
-            );
-          }
-
-          if (transaction.type === "debit") {
-            await db.query(
-              `UPDATE user_profile 
-              SET ${column} = ${column} - $1 
-              WHERE email = $2`,
-              [transaction.amount, transaction.email]
-            );
-          }
+ 
+    await db.query("UPDATE transactions SET status=$1 WHERE id=$2", [newStatus, transactionId]);
+ 
+    if (action === "approve") {
+      // ✅ Use saved from_account to pick the correct balance column
+      let column = "account_balance"; // default fallback
+      if (transaction.from_account === "savings") column = "savings_balance";
+      if (transaction.from_account === "card")    column = "card_balance";
+ 
+      if (transaction.type === "debit") {
+        // Check funds before deducting
+        const userResult = await db.query(
+          `SELECT ${column} FROM user_profile WHERE email=$1`, [transaction.email]
+        );
+        const currentBalance = parseFloat(userResult.rows[0][column]);
+ 
+        if (currentBalance < parseFloat(transaction.amount)) {
+          await db.query("UPDATE transactions SET status='failed' WHERE id=$1", [transactionId]);
+          io.emit("transactionUpdated", { id: transactionId, status: "failed" });
+          return res.json({ success: false, message: `Insufficient funds in ${column.replace("_", " ")}` });
         }
+ 
+        await db.query(
+          `UPDATE user_profile SET ${column} = ${column} - $1 WHERE email=$2`,
+          [transaction.amount, transaction.email]
+        );
       }
-
-    // 4️⃣ Emit real-time update
-    io.emit("transactionUpdated", {
-      id: transactionId,
-      status: newStatus
-    });
-
+ 
+      if (transaction.type === "credit") {
+        await db.query(
+          `UPDATE user_profile SET ${column} = ${column} + $1 WHERE email=$2`,
+          [transaction.amount, transaction.email]
+        );
+      }
+    }
+ 
+    io.emit("transactionUpdated", { id: transactionId, status: newStatus });
     res.json({ success: true });
-
+ 
   } catch (err) {
-    console.error(err);
+    console.error("Update transaction error:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
@@ -727,8 +811,8 @@ app.post("/transfer", async (req, res) => {
     // Insert transaction record
     await db.query(
       `INSERT INTO transactions
-       (transaction_ref, email, account_number, type, amount, status, description, recipient_bank, recipient_account, recipient_name, date)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())`,
+       (transaction_ref, email, account_number, type, amount, status, description, recipient_bank, recipient_account, recipient_name, from_account, date)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())`,
       [
         transactionRef,
         email,
@@ -739,7 +823,8 @@ app.post("/transfer", async (req, res) => {
         description,
         recipientBank,
         recipientAccount,
-        recipientName
+        recipientName,
+        fromAccount
       ]
     );
 
