@@ -730,6 +730,43 @@ app.post("/admin/update-transaction", async (req, res) => {
   }
 });
 
+// Admin update transaction date
+app.put("/admin/transaction/date/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { date } = req.body;
+ 
+    if (!date) {
+      return res.status(400).json({ success: false, message: "Date is required" });
+    }
+ 
+    // Validate it's a real date
+    const parsedDate = new Date(date);
+    if (isNaN(parsedDate.getTime())) {
+      return res.status(400).json({ success: false, message: "Invalid date format" });
+    }
+ 
+    const result = await db.query(
+      `UPDATE transactions SET date = $1 WHERE id = $2 RETURNING id, date`,
+      [parsedDate.toISOString(), id]
+    );
+ 
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "Transaction not found" });
+    }
+ 
+    res.json({
+      success: true,
+      message: "Transaction date updated successfully",
+      transaction: result.rows[0]
+    });
+ 
+  } catch (err) {
+    console.error("Error updating transaction date:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 // Generate Transaction reference
 function generateTransactionRef() {
   const random = Math.floor(100000 + Math.random() * 900000);

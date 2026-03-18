@@ -1,18 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - All Transactions</title>
-<link rel="stylesheet" href="admin-transaction.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Transactions — RIA Federal Credit Union</title>
+  <link rel="stylesheet" href="admin-transaction.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <style>
+    .page-header { padding: 30px 20px 10px; text-align: center; }
+    .page-header h2 { color: #1e3a6e; }
+    .page-header p  { color: #4a607a; margin-top: 4px; }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      max-width: 97%;
+      margin: 16px auto 0;
+      padding: 0 10px;
+    }
+
+    .toolbar-filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .toolbar select,
+    .toolbar input[type="text"] {
+      padding: 9px 13px;
+      border: 1px solid #b3cef0;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      background: #fff;
+      color: #0b1826;
+      transition: border-color 0.3s;
+    }
+    .toolbar select:focus,
+    .toolbar input[type="text"]:focus { outline: none; border-color: #2b5faa; }
+
+    .btn-primary {
+      padding: 9px 18px;
+      background: linear-gradient(110deg, #1e3a6e, #2b5faa);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-primary:hover { transform: scale(1.03); background: linear-gradient(110deg, #c0192b, #8c0f1a); }
+
+    /* ── Table ── */
+    .tx-table-wrapper {
+      max-width: 97%;
+      margin: 20px auto 40px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 0 18px rgba(30,58,110,0.13);
+      overflow-x: auto;
+    }
+
+    .tx-table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      min-width: 800px;
+    }
+
+    .tx-table-wrapper thead tr { background: #1e3a6e; }
+    .tx-table-wrapper th {
+      color: #f0f5ff;
+      font-weight: 600;
+      padding: 13px 12px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .tx-table-wrapper td {
+      padding: 11px 12px;
+      border-bottom: 1px solid #dce8f8;
+      color: #0b1826;
+      vertical-align: middle;
+    }
+
+    .tx-table-wrapper tr:last-child td { border-bottom: none; }
+    .tx-table-wrapper tr:hover td { background: #f4f8ff; }
+
+    /* status badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+    .badge.completed { background: #d1fae5; color: #065f46; }
+    .badge.pending   { background: #fff3cd; color: #856404; }
+    .badge.failed    { background: #fde8ea; color: #c0192b; }
+    .badge.success   { background: #d1fae5; color: #065f46; }
+
+    /* action buttons */
+    .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .btn-sm {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-approve { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .btn-approve:hover { background: #065f46; color: #fff; }
+
+    .btn-reject { background: #fde8ea; color: #c0192b; border: 1px solid #f5b8be; }
+    .btn-reject:hover { background: #c0192b; color: #fff; }
+
+    .btn-date { background: #dce8f8; color: #1e3a6e; border: 1px solid #b3cef0; }
+    .btn-date:hover { background: #1e3a6e; color: #fff; }
+
+    /* ── Date Edit Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(11,24,38,0.55);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 34px 30px 28px;
+      max-width: 440px;
+      width: 92%;
+      box-shadow: 0 8px 40px rgba(30,58,110,0.28);
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { transform: scale(0.88) translateY(20px); opacity: 0; }
+      to   { transform: scale(1)    translateY(0);    opacity: 1; }
+    }
+
+    .modal-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 14px;
+      background: #dce8f8; color: #1e3a6e;
+    }
+
+    .modal-box h3 { color: #0b1826; font-size: 1.1rem; margin-bottom: 6px; text-align: center; }
+    .modal-box p  { color: #4a607a; font-size: 0.87rem; text-align: center; margin-bottom: 18px; }
+
+    .tx-info-box {
+      background: #f4f8ff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      font-size: 0.83rem;
+      color: #1e3a6e;
+    }
+    .tx-info-box span { display: block; margin-bottom: 3px; }
+    .tx-info-box strong { color: #0b1826; }
+
+    .date-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+
+    .date-fields label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #2b3e5a;
+      margin-bottom: 5px;
+    }
+
+    .date-fields input {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid #b3cef0;
+      border-radius: 7px;
+      font-size: 0.88rem;
+      color: #0b1826;
+      transition: border-color 0.3s;
+    }
+    .date-fields input:focus { outline: none; border-color: #2b5faa; }
+
+    /* quick preset buttons */
+    .presets { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+    .preset-btn {
+      padding: 5px 11px;
+      border: 1px solid #b3cef0;
+      background: #f4f8ff;
+      color: #1e3a6e;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .preset-btn:hover { background: #1e3a6e; color: #fff; border-color: #1e3a6e; }
+
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    .btn-cancel {
+      padding: 10px 20px;
+      border: 2px solid #b3cef0;
+      background: transparent;
+      color: #4a607a;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-cancel:hover { background: #dce8f8; }
+
+    .btn-save {
+      padding: 10px 22px;
+      background: linear-gradient(110deg, #1e3a6e, #2b5faa);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .btn-save:hover { transform: scale(1.04); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 30px; left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      padding: 11px 22px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      z-index: 20000;
+      opacity: 0;
+      transition: all 0.4s ease;
+      white-space: nowrap;
+      color: #fff;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.success { background: #065f46; }
+    #toast.error   { background: #8c0f1a; }
+
+    .empty-row td { text-align: center; padding: 28px; color: #7a8fa6; font-style: italic; }
+
+    @media (max-width: 768px) {
+      .date-fields { grid-template-columns: 1fr; }
+      .toolbar-filters { flex-direction: column; align-items: stretch; }
+    }
+  </style>
 </head>
 <body>
 
+  <!-- Header -->
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <a href ="index.html"><img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200"></a>
+        <a href="index.html"><img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200"></a>
       </div>
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
@@ -22,151 +276,340 @@
           <li><a href="admin-transaction.html">Transactions</a></li>
           <li><a href="reports.html">Reports</a></li>
           <li><a href="settings.html">Settings</a></li>
-          <li class="logout"><a href="signin.html">Logout</a></li>
+          <li><a href="signin.html">Logout</a></li>
         </ul>
       </div>
     </section>
   </header>
 
-<main>
-  <h2>Admin Panel - All Transactions</h2>
-<section class="filters">
-  <select id="filterType">
-    <option value="">All Types</option>
-    <option value="credit">Credit</option>
-    <option value="debit">Debit</option>
-  </select>
+  <!-- Page Header -->
+  <div class="page-header">
+    <h2><i class="fa fa-clock-rotate-left" style="margin-right:8px;"></i>Transaction Management</h2>
+    <p>Approve, reject, and edit transaction dates across all accounts.</p>
+  </div>
 
-  <select id="filterStatus">
-    <option value="">All Status</option>
-    <option value="completed">Completed</option>
-    <option value="pending">Pending</option>
-    <option value="failed">Failed</option>
-  </select>
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-filters">
+      <input type="text" id="searchInput" placeholder="🔍  Search email or description…" style="width:220px;">
+      <select id="filterType">
+        <option value="">All Types</option>
+        <option value="credit">Credit</option>
+        <option value="debit">Debit</option>
+      </select>
+      <select id="filterStatus">
+        <option value="">All Status</option>
+        <option value="completed">Completed</option>
+        <option value="pending">Pending</option>
+        <option value="failed">Failed</option>
+      </select>
+      <button class="btn-primary" onclick="applyFilters()">
+        <i class="fa fa-filter"></i> Filter
+      </button>
+    </div>
+  </div>
 
-  <button onclick="applyFilters()">Apply Filter</button>
-</section>
+  <!-- Transactions Table -->
+  <div class="tx-table-wrapper">
+    <table id="txTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>Account No.</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="txTbody">
+        <tr class="empty-row"><td colspan="9">Loading transactions…</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-<section>
-<table id="transactions">
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Description</th>
-      <th>Type</th>
-      <th>Amount</th>
-      <th>Status</th>
-      <th>Date</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-</section>
+  <!-- ── Date Edit Modal ── -->
+  <div class="modal-overlay" id="dateModal">
+    <div class="modal-box">
+      <div class="modal-icon"><i class="fa fa-calendar-pen"></i></div>
+      <h3>Edit Transaction Date</h3>
+      <p>Set a new date and time for this transaction.</p>
 
-</main>
-<!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <h4>Contact Us</h4>
-            <p id="email">Email: <a href="mailto:riareserve@support.com">riareserve@support.com</a>
-            <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
-            <nav>
-                <ul>
-                    <li><a href="">Privacy Policy</a></li>
-                    <li><a href="">Terms of Service</a></li>
-                    <li><a href="">Contact Us</a></li>
-                </ul>
-            </nav>
+      <div class="tx-info-box" id="modalTxInfo"></div>
+
+      <!-- Quick presets -->
+      <div class="presets">
+        <span style="font-size:0.8rem;font-weight:700;color:#4a607a;align-self:center;">Quick set:</span>
+        <button class="preset-btn" onclick="setPreset(0)">Today</button>
+        <button class="preset-btn" onclick="setPreset(-1)">Yesterday</button>
+        <button class="preset-btn" onclick="setPreset(-7)">7 days ago</button>
+        <button class="preset-btn" onclick="setPreset(-30)">30 days ago</button>
+        <button class="preset-btn" onclick="setPreset(-90)">90 days ago</button>
+      </div>
+
+      <!-- Date & Time inputs -->
+      <div class="date-fields">
+        <div>
+          <label for="dateInput">Date</label>
+          <input type="date" id="dateInput">
         </div>
-        <div class="social-media">
-            <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
-            <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
-            <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>    
-    </footer>
-<script>
-let allTransactions = [];
+        <div>
+          <label for="timeInput">Time</label>
+          <input type="time" id="timeInput" step="1">
+        </div>
+      </div>
 
-fetch("/admin/all-transactions")
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      allTransactions = data.transactions;
-      renderTransactions(allTransactions);
+      <div class="modal-actions">
+        <button class="btn-cancel" id="dateCancelBtn">Cancel</button>
+        <button class="btn-save" id="dateSaveBtn">
+          <i class="fa fa-floppy-disk" style="margin-right:5px;"></i>Save Date
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <h4>Contact Us</h4>
+      <p>Email: <a href="mailto:riareserve@support.com">riareserve@support.com</a></p>
+      <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
+      <nav><ul>
+        <li><a href="">Privacy Policy</a></li>
+        <li><a href="">Terms of Service</a></li>
+        <li><a href="">Contact Us</a></li>
+      </ul></nav>
+    </div>
+    <div class="social-media">
+      <a href="#"><i class="fa-brands fa-facebook"></i></a>
+      <a href="#"><i class="fa-brands fa-twitter"></i></a>
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+  </footer>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // ── Nav toggle ──
+    document.querySelector('.menu-toggle').addEventListener('click', () => {
+      document.querySelector('.nav').classList.toggle('open');
+    });
+
+    // ── Toast ──
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `show ${type}`;
+      setTimeout(() => { t.className = ''; }, 3500);
     }
-  })
-  .catch(err => console.error(err));
 
-function renderTransactions(transactions) {
-  const tbody = document.querySelector("#transactions tbody");
-  tbody.innerHTML = "";
+    // ── State ──
+    let allTransactions = [];
+    let pendingTxId     = null;
+    let pendingTxRef    = null;
 
-  transactions.forEach(tx => {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${tx.email}</td>
-      <td>${tx.description}</td>
-      <td>${tx.type}</td>
-      <td>$${tx.amount}</td>
-      <td id="status-${tx.id}">${tx.status}</td>
-      <td>${new Date(tx.date).toLocaleString()}</td>
-      <td>
-        ${
-          tx.status === "pending"
-            ? `
-              <button onclick="updateTransaction(${tx.id}, 'approve')">Approve</button>
-              <button onclick="updateTransaction(${tx.id}, 'reject')">Reject</button>
-            `
-            : "-"
+    // ── Load transactions ──
+    async function loadTransactions() {
+      try {
+        const res  = await fetch('/admin/all-transactions');
+        const data = await res.json();
+        if (data.success) {
+          allTransactions = data.transactions || [];
+          renderTable(allTransactions);
         }
-      </td>
-    `;
+      } catch (err) {
+        console.error('Failed to load transactions:', err);
+        document.getElementById('txTbody').innerHTML =
+          '<tr class="empty-row"><td colspan="9">Failed to load transactions.</td></tr>';
+      }
+    }
 
-    tbody.appendChild(row);
-  });
-}
+    function renderTable(transactions) {
+      const tbody = document.getElementById('txTbody');
+      if (!transactions.length) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="9">No transactions found.</td></tr>';
+        return;
+      }
 
+      tbody.innerHTML = transactions.map(tx => `
+        <tr id="tx-row-${tx.id}">
+          <td><code>${tx.id}</code></td>
+          <td>${tx.email}</td>
+          <td><code>${tx.account_number}</code></td>
+          <td><strong>${tx.type}</strong></td>
+          <td>$${Number(tx.amount).toLocaleString()}</td>
+          <td><span class="badge ${tx.status}">${tx.status}</span></td>
+          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${tx.description || ''}">${tx.description || '—'}</td>
+          <td id="date-cell-${tx.id}"><small>${new Date(tx.date).toLocaleString()}</small></td>
+          <td>
+            <div class="action-group">
+              ${tx.status === 'pending' ? `
+                <button class="btn-sm btn-approve" onclick="updateStatus(${tx.id}, 'approve')">
+                  <i class="fa fa-check"></i> Approve
+                </button>
+                <button class="btn-sm btn-reject" onclick="updateStatus(${tx.id}, 'reject')">
+                  <i class="fa fa-xmark"></i> Reject
+                </button>
+              ` : ''}
+              <button class="btn-sm btn-date" onclick="openDateModal(${tx.id}, '${tx.date}', '${tx.email}', '${tx.description || ''}')">
+                <i class="fa fa-calendar"></i> Date
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
 
-function applyFilters() {
-  const type = document.getElementById("filterType").value;
-  const status = document.getElementById("filterStatus").value;
+    // ── Filters & search ──
+    function applyFilters() {
+      const q      = document.getElementById('searchInput').value.toLowerCase();
+      const type   = document.getElementById('filterType').value;
+      const status = document.getElementById('filterStatus').value;
 
-  let filtered = allTransactions;
+      let filtered = allTransactions;
+      if (q)      filtered = filtered.filter(tx => tx.email.toLowerCase().includes(q) || (tx.description || '').toLowerCase().includes(q));
+      if (type)   filtered = filtered.filter(tx => tx.type === type);
+      if (status) filtered = filtered.filter(tx => tx.status === status);
+      renderTable(filtered);
+    }
 
-  if (type) {
-    filtered = filtered.filter(tx => tx.type === type);
-  }
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('filterType').addEventListener('change', applyFilters);
+    document.getElementById('filterStatus').addEventListener('change', applyFilters);
 
-  if (status) {
-    filtered = filtered.filter(tx => tx.status === status);
-  }
+    // ── Approve / Reject ──
+    async function updateStatus(txId, action) {
+      try {
+        const res  = await fetch('/admin/update-transaction', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ transactionId: txId, action })
+        });
+        const data = await res.json();
 
-  renderTransactions(filtered);
-}
-</script>
+        if (data.success) {
+          showToast(`✅ Transaction ${action === 'approve' ? 'approved' : 'rejected'} successfully.`, 'success');
+          loadTransactions();
+        } else {
+          showToast(`❌ ${data.message}`, 'error');
+        }
+      } catch (err) {
+        showToast('❌ Server error.', 'error');
+      }
+    }
 
-<script>
-    async function updateTransaction(id, action) {
-  const res = await fetch("/admin/update-transaction", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      transactionId: id,
-      action
-    })
-  });
+    // ════════════════════════════════
+    // DATE EDIT MODAL
+    // ════════════════════════════════
+    function openDateModal(txId, currentDate, email, description) {
+      pendingTxId  = txId;
+      pendingTxRef = currentDate;
 
-  const data = await res.json();
+      // Fill tx info box
+      document.getElementById('modalTxInfo').innerHTML = `
+        <span><i class="fa fa-hashtag" style="margin-right:5px;"></i><strong>ID:</strong> ${txId}</span>
+        <span><i class="fa fa-envelope" style="margin-right:5px;"></i><strong>Email:</strong> ${email}</span>
+        <span><i class="fa fa-note-sticky" style="margin-right:5px;"></i><strong>Description:</strong> ${description || '—'}</span>
+        <span><i class="fa fa-calendar" style="margin-right:5px;"></i><strong>Current date:</strong> ${new Date(currentDate).toLocaleString()}</span>
+      `;
 
-  if (!data.success) {
-    alert(data.message);
-  }
-}
+      // Pre-fill inputs with current date
+      const d = new Date(currentDate);
+      document.getElementById('dateInput').value = d.toISOString().split('T')[0];
+      document.getElementById('timeInput').value = d.toTimeString().slice(0, 8);
 
+      document.getElementById('dateModal').classList.add('active');
+    }
 
-</script>
+    // Quick preset buttons
+    function setPreset(daysOffset) {
+      const d = new Date();
+      d.setDate(d.getDate() + daysOffset);
+      document.getElementById('dateInput').value = d.toISOString().split('T')[0];
+      // Keep time as current time
+      const now = new Date();
+      document.getElementById('timeInput').value =
+        String(now.getHours()).padStart(2,'0') + ':' +
+        String(now.getMinutes()).padStart(2,'0') + ':' +
+        String(now.getSeconds()).padStart(2,'0');
+    }
+
+    document.getElementById('dateCancelBtn').addEventListener('click', () => {
+      document.getElementById('dateModal').classList.remove('active');
+      pendingTxId = null;
+    });
+
+    document.getElementById('dateSaveBtn').addEventListener('click', async () => {
+      if (!pendingTxId) return;
+
+      const dateVal = document.getElementById('dateInput').value;
+      const timeVal = document.getElementById('timeInput').value || '00:00:00';
+
+      if (!dateVal) {
+        showToast('⚠️ Please select a date.', 'error');
+        return;
+      }
+
+      const combinedDate = new Date(`${dateVal}T${timeVal}`);
+
+      if (isNaN(combinedDate.getTime())) {
+        showToast('⚠️ Invalid date or time.', 'error');
+        return;
+      }
+
+      document.getElementById('dateModal').classList.remove('active');
+
+      try {
+        const res  = await fetch(`/admin/transaction/date/${pendingTxId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ date: combinedDate.toISOString() })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          // Update the date cell in the table without full reload
+          const dateCell = document.getElementById(`date-cell-${pendingTxId}`);
+          if (dateCell) {
+            dateCell.innerHTML = `<small>${combinedDate.toLocaleString()}</small>`;
+          }
+
+          // Also update local allTransactions array
+          const tx = allTransactions.find(t => t.id === pendingTxId);
+          if (tx) tx.date = combinedDate.toISOString();
+
+          showToast('✅ Transaction date updated successfully.', 'success');
+        } else {
+          showToast(`❌ ${data.message}`, 'error');
+        }
+      } catch (err) {
+        console.error('Date update error:', err);
+        showToast('❌ Server error while updating date.', 'error');
+      }
+
+      pendingTxId = null;
+    });
+
+    // Close modal on overlay click
+    document.getElementById('dateModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+        pendingTxId = null;
+      }
+    });
+
+    // ── Socket: live updates ──
+    const socket = io();
+    socket.on('transactionUpdated', () => loadTransactions());
+
+    // ── Init ──
+    loadTransactions();
+  </script>
 </body>
 </html>
