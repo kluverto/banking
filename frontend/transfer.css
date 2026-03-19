@@ -1,5 +1,5 @@
-/* =============================================
-   RIA Federal Credit Union — userdashboard.css
+﻿/* =============================================
+   ApexTrust Bank â€” userdashboard.css
    User-facing Transactions / Dashboard pages
    Primary:   Navy   #1e3a6e
    Accent:    Red    #c0192b
@@ -36,7 +36,7 @@ main {
   gap: 24px;
 }
 
-/* ── Header ─────────────────────────────────── */
+/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 header {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   width: 100%;
@@ -71,7 +71,7 @@ header {
   max-height: 250px;
 }
 
-/* ── Navigation ──────────────────────────────── */
+/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .nav ul {
   list-style: none;
   display: flex;
@@ -103,7 +103,7 @@ header {
 .nav ul li a:hover::after,
 .nav ul li a.active::after { transform: scaleX(1); }
 
-/* ── User Overview ───────────────────────────── */
+/* â”€â”€ User Overview â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .user-overview {
   background: #fff;
   border-radius: 14px;
@@ -142,7 +142,7 @@ header {
   margin-bottom: 24px;
 }
 
-/* ── Profile Picture ─────────────────────────── */
+/* â”€â”€ Profile Picture â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .profile-pic-wrapper {
   position: relative;
   width: 100px;
@@ -183,7 +183,7 @@ header {
 
 .profile-pic-wrapper:hover .edit-icon { background: #1e3a6e; }
 
-/* ── Balance Cards ───────────────────────────── */
+/* â”€â”€ Balance Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -227,7 +227,7 @@ header {
   color: #0b1826;
 }
 
-/* ── Filters / Quick Actions ─────────────────── */
+/* â”€â”€ Filters / Quick Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .quick-actions {
   background: #fff;
   border-radius: 14px;
@@ -314,7 +314,7 @@ header {
   box-shadow: 0 5px 14px rgba(192, 25, 43, 0.28);
 }
 
-/* ── Transactions Table Section ──────────────── */
+/* â”€â”€ Transactions Table Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .recent-trans {
   background: #dce8f8;
   border-radius: 12px;
@@ -371,10 +371,10 @@ table#transactions td:nth-child(2) { text-transform: capitalize; }
 /* Amount */
 table#transactions td:nth-child(3) { font-weight: bold; color: #1e3a6e; }
 
-/* Date — muted */
+/* Date â€” muted */
 table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
 
-/* ── Status Badge ────────────────────────────── */
+/* â”€â”€ Status Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .status {
   display: inline-block;
   padding: 3px 10px;
@@ -400,7 +400,7 @@ table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
   color: #8c0f1a;
 }
 
-/* ── Chat Widget ──────────────────────────────── */
+/* â”€â”€ Chat Widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 #chatWidget {
   position: fixed;
   bottom: 20px;
@@ -565,7 +565,7 @@ table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
 
 #sendBtn:hover { background: #1e3a6e; transform: scale(1.05); }
 
-/* ── Footer ──────────────────────────────────── */
+/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 footer {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   color: #f0f5ff;
@@ -582,7 +582,7 @@ footer {
 .footer-container a:hover { text-decoration: underline; color: #c0192b; }
 
 
-/* ── Transfer Page — Sender Info Card ───────── */
+/* â”€â”€ Transfer Page â€” Sender Info Card â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .transfer-user-info {
   background: #fff;
   border-radius: 14px;
@@ -624,7 +624,7 @@ footer {
   color: #1e3a6e;
 }
 
-/* ── Transfer Page — Form ─────────────────── */
+/* â”€â”€ Transfer Page â€” Form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .transfer-form-container {
   margin-top: 22px;
 }
@@ -682,7 +682,7 @@ footer {
 
 .form-group select:hover { border-color: #2b5faa; }
 
-/* Submit button — reuses .action-btn but needs full width */
+/* Submit button â€” reuses .action-btn but needs full width */
 .transfer-form-container .action-btn {
   width: 100%;
   justify-content: center;
@@ -702,7 +702,7 @@ footer {
 }
 
 #transferMessage p { padding: 10px 14px; border-radius: 8px; }
-/* ── Mobile ──────────────────────────────────── */
+/* â”€â”€ Mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 768px) {
   body { font-size: 13px; }
 
@@ -756,3 +756,4 @@ footer {
   .transfer-form-container .action-btn { font-size: 0.9rem; }
 
 }
+

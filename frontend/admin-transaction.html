@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Transactions — RIA Federal Credit Union</title>
+  <title>Admin Transactions â€” ApexTrust Bank</title>
   <link rel="stylesheet" href="admin-transaction.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <style>
@@ -11,7 +11,7 @@
     .page-header h2 { color: #1e3a6e; }
     .page-header p  { color: #4a607a; margin-top: 4px; }
 
-    /* ── Toolbar ── */
+    /* â”€â”€ Toolbar â”€â”€ */
     .toolbar {
       display: flex;
       align-items: center;
@@ -51,7 +51,7 @@
     }
     .btn-primary:hover { transform: scale(1.03); background: linear-gradient(110deg, #c0192b, #8c0f1a); }
 
-    /* ── Table ── */
+    /* â”€â”€ Table â”€â”€ */
     .tx-table-wrapper {
       max-width: 97%;
       margin: 20px auto 40px;
@@ -123,7 +123,7 @@
     .btn-date { background: #dce8f8; color: #1e3a6e; border: 1px solid #b3cef0; }
     .btn-date:hover { background: #1e3a6e; color: #fff; }
 
-    /* ── Date Edit Modal ── */
+    /* â”€â”€ Date Edit Modal â”€â”€ */
     .modal-overlay {
       display: none;
       position: fixed; inset: 0;
@@ -233,7 +233,7 @@
     }
     .btn-save:hover { transform: scale(1.04); }
 
-    /* ── Toast ── */
+    /* â”€â”€ Toast â”€â”€ */
     #toast {
       position: fixed;
       bottom: 30px; left: 50%;
@@ -266,7 +266,7 @@
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <a href="index.html"><img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200"></a>
+        <a href="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="200" height="200"></a>
       </div>
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
@@ -291,7 +291,7 @@
   <!-- Toolbar -->
   <div class="toolbar">
     <div class="toolbar-filters">
-      <input type="text" id="searchInput" placeholder="🔍  Search email or description…" style="width:220px;">
+      <input type="text" id="searchInput" placeholder="ðŸ”  Search email or descriptionâ€¦" style="width:220px;">
       <select id="filterType">
         <option value="">All Types</option>
         <option value="credit">Credit</option>
@@ -326,12 +326,12 @@
         </tr>
       </thead>
       <tbody id="txTbody">
-        <tr class="empty-row"><td colspan="9">Loading transactions…</td></tr>
+        <tr class="empty-row"><td colspan="9">Loading transactionsâ€¦</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ── Date Edit Modal ── -->
+  <!-- â”€â”€ Date Edit Modal â”€â”€ -->
   <div class="modal-overlay" id="dateModal">
     <div class="modal-box">
       <div class="modal-icon"><i class="fa fa-calendar-pen"></i></div>
@@ -378,8 +378,8 @@
   <footer>
     <div class="footer-container">
       <h4>Contact Us</h4>
-      <p>Email: <a href="mailto:riareserve@support.com">riareserve@support.com</a></p>
-      <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
+      <p>Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+      <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
       <nav><ul>
         <li><a href="">Privacy Policy</a></li>
         <li><a href="">Terms of Service</a></li>
@@ -396,12 +396,12 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    // ── Nav toggle ──
+    // â”€â”€ Nav toggle â”€â”€
     document.querySelector('.menu-toggle').addEventListener('click', () => {
       document.querySelector('.nav').classList.toggle('open');
     });
 
-    // ── Toast ──
+    // â”€â”€ Toast â”€â”€
     function showToast(msg, type = 'success') {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -409,12 +409,12 @@
       setTimeout(() => { t.className = ''; }, 3500);
     }
 
-    // ── State ──
+    // â”€â”€ State â”€â”€
     let allTransactions = [];
     let pendingTxId     = null;
     let pendingTxRef    = null;
 
-    // ── Load transactions ──
+    // â”€â”€ Load transactions â”€â”€
     async function loadTransactions() {
       try {
         const res  = await fetch('/admin/all-transactions');
@@ -445,7 +445,7 @@
           <td><strong>${tx.type}</strong></td>
           <td>$${Number(tx.amount).toLocaleString()}</td>
           <td><span class="badge ${tx.status}">${tx.status}</span></td>
-          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${tx.description || ''}">${tx.description || '—'}</td>
+          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${tx.description || ''}">${tx.description || 'â€”'}</td>
           <td id="date-cell-${tx.id}"><small>${new Date(tx.date).toLocaleString()}</small></td>
           <td>
             <div class="action-group">
@@ -466,7 +466,7 @@
       `).join('');
     }
 
-    // ── Filters & search ──
+    // â”€â”€ Filters & search â”€â”€
     function applyFilters() {
       const q      = document.getElementById('searchInput').value.toLowerCase();
       const type   = document.getElementById('filterType').value;
@@ -483,7 +483,7 @@
     document.getElementById('filterType').addEventListener('change', applyFilters);
     document.getElementById('filterStatus').addEventListener('change', applyFilters);
 
-    // ── Approve / Reject ──
+    // â”€â”€ Approve / Reject â”€â”€
     async function updateStatus(txId, action) {
       try {
         const res  = await fetch('/admin/update-transaction', {
@@ -494,19 +494,19 @@
         const data = await res.json();
 
         if (data.success) {
-          showToast(`✅ Transaction ${action === 'approve' ? 'approved' : 'rejected'} successfully.`, 'success');
+          showToast(`âœ… Transaction ${action === 'approve' ? 'approved' : 'rejected'} successfully.`, 'success');
           loadTransactions();
         } else {
-          showToast(`❌ ${data.message}`, 'error');
+          showToast(`âŒ ${data.message}`, 'error');
         }
       } catch (err) {
-        showToast('❌ Server error.', 'error');
+        showToast('âŒ Server error.', 'error');
       }
     }
 
-    // ════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // DATE EDIT MODAL
-    // ════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function openDateModal(txId, currentDate, email, description) {
       pendingTxId  = txId;
       pendingTxRef = currentDate;
@@ -515,7 +515,7 @@
       document.getElementById('modalTxInfo').innerHTML = `
         <span><i class="fa fa-hashtag" style="margin-right:5px;"></i><strong>ID:</strong> ${txId}</span>
         <span><i class="fa fa-envelope" style="margin-right:5px;"></i><strong>Email:</strong> ${email}</span>
-        <span><i class="fa fa-note-sticky" style="margin-right:5px;"></i><strong>Description:</strong> ${description || '—'}</span>
+        <span><i class="fa fa-note-sticky" style="margin-right:5px;"></i><strong>Description:</strong> ${description || 'â€”'}</span>
         <span><i class="fa fa-calendar" style="margin-right:5px;"></i><strong>Current date:</strong> ${new Date(currentDate).toLocaleString()}</span>
       `;
 
@@ -552,14 +552,14 @@
       const timeVal = document.getElementById('timeInput').value || '00:00:00';
 
       if (!dateVal) {
-        showToast('⚠️ Please select a date.', 'error');
+        showToast('âš ï¸ Please select a date.', 'error');
         return;
       }
 
       const combinedDate = new Date(`${dateVal}T${timeVal}`);
 
       if (isNaN(combinedDate.getTime())) {
-        showToast('⚠️ Invalid date or time.', 'error');
+        showToast('âš ï¸ Invalid date or time.', 'error');
         return;
       }
 
@@ -584,13 +584,13 @@
           const tx = allTransactions.find(t => t.id === pendingTxId);
           if (tx) tx.date = combinedDate.toISOString();
 
-          showToast('✅ Transaction date updated successfully.', 'success');
+          showToast('âœ… Transaction date updated successfully.', 'success');
         } else {
-          showToast(`❌ ${data.message}`, 'error');
+          showToast(`âŒ ${data.message}`, 'error');
         }
       } catch (err) {
         console.error('Date update error:', err);
-        showToast('❌ Server error while updating date.', 'error');
+        showToast('âŒ Server error while updating date.', 'error');
       }
 
       pendingTxId = null;
@@ -604,12 +604,14 @@
       }
     });
 
-    // ── Socket: live updates ──
+    // â”€â”€ Socket: live updates â”€â”€
     const socket = io();
     socket.on('transactionUpdated', () => loadTransactions());
 
-    // ── Init ──
+    // â”€â”€ Init â”€â”€
     loadTransactions();
   </script>
 </body>
 </html>
+
+

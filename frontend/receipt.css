@@ -1,4 +1,4 @@
-/* ======================================
+﻿/* ======================================
    RESET
 ====================================== */
 * {
@@ -112,7 +112,7 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("images/RIA_credit.png") no-repeat center;
+  background: url("images/Apextrust.png") no-repeat center;
   background-size: 350px;
   opacity: 0.035;
   pointer-events: none;

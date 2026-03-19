@@ -1,5 +1,5 @@
-/* =============================================
-   RIA Federal Credit Union — admin.css
+﻿/* =============================================
+   ApexTrust Bank â€” admin.css
    Matches brand palette from styles.css
    Primary:   Navy   #1e3a6e
    Accent:    Red    #c0192b
@@ -41,7 +41,7 @@ main h2 {
   padding-left: 12px;
 }
 
-/* ── Header ─────────────────────────────────── */
+/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 header {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   width: 100%;
@@ -76,7 +76,7 @@ header {
   max-height: 250px;
 }
 
-/* ── Navigation ──────────────────────────────── */
+/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .nav ul {
   list-style: none;
   display: flex;
@@ -107,7 +107,7 @@ header {
 
 .nav ul li a:hover::after { transform: scaleX(1); }
 
-/* ── Filters Section ─────────────────────────── */
+/* â”€â”€ Filters Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -159,7 +159,7 @@ header {
   background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
 }
 
-/* ── Transactions Table ───────────────────────── */
+/* â”€â”€ Transactions Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 section {
   background: #dce8f8;
   border-radius: 12px;
@@ -205,7 +205,7 @@ table#transactions td:nth-child(3) { text-transform: capitalize; }
 /* Amount column */
 table#transactions td:nth-child(4) { font-weight: bold; color: #1e3a6e; }
 
-/* Status column — colour-coded */
+/* Status column â€” colour-coded */
 table#transactions td:nth-child(5) {
   font-weight: bold;
   text-transform: capitalize;
@@ -214,7 +214,7 @@ table#transactions td:nth-child(5) {
 /* Status cell colouring via JS-set id, fallback via text */
 td[id^="status-"] { font-weight: bold; text-transform: capitalize; }
 
-/* ── Action Buttons inside table ─────────────── */
+/* â”€â”€ Action Buttons inside table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 table#transactions td:last-child { white-space: nowrap; }
 
 table#transactions td button {
@@ -248,7 +248,7 @@ table#transactions td button:last-of-type:hover {
   opacity: 0.9;
 }
 
-/* ── Footer ──────────────────────────────────── */
+/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 footer {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   color: #f0f5ff;
@@ -272,7 +272,7 @@ footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
 .social-media a { margin: 0 10px; color: #b3cef0; text-decoration: none; font-size: 1.2rem; }
 .social-media a:hover { color: #c0192b; }
 
-/* ── Mobile ──────────────────────────────────── */
+/* â”€â”€ Mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 768px) {
   body { font-size: 13px; }
 
@@ -310,3 +310,4 @@ footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
   table#transactions th:nth-child(6),
   table#transactions td:nth-child(6) { display: none; }
 }
+

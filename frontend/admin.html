@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RIA Federal Credit Union Admin</title>
+  <title>ApexTrust Bank Admin</title>
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <a href ="index.html"><img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200"></a>
+        <a href ="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="200" height="200"></a>
       </div>
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
@@ -33,7 +33,7 @@
   <main>
     <section class="admin-overview">
       <h2>Welcome, Admin</h2>
-      <p>Quick overview of the bank’s system status.</p>
+      <p>Quick overview of the bankâ€™s system status.</p>
 
       <div class="cards-container">
         <a href="manage_users.html"><div class="card">
@@ -131,9 +131,9 @@
       </table>
     </section>
     <div id="chatWidget">
-      <div id="chatIcon">💬<span id="newMsgBadge" style="display:none;">1</span></div>
+      <div id="chatIcon">ðŸ’¬<span id="newMsgBadge" style="display:none;">1</span></div>
       <div id="chatWindow">
-        <div id="chatHeader">Support Chat <span id="closeChat" style="float:right;cursor:pointer;">✖</span></div>
+        <div id="chatHeader">Support Chat <span id="closeChat" style="float:right;cursor:pointer;">âœ–</span></div>
         <div id="userSelectContainer">
           <select id="userSelect">
             <option value="">-- Select a user --</option>
@@ -153,8 +153,8 @@
   <footer>
       <div class="footer-container">
           <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:riareserve@support.com">riareserve@support.com</a>
-          <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
+          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
+          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
           <nav>
               <ul>
                   <li><a href="">Privacy Policy</a></li>
@@ -208,10 +208,10 @@
           const data = await res.json();
 
           if (data.success) {
-            accountNumber = data.user.account_number; // ✅ store account number
+            accountNumber = data.user.account_number; // âœ… store account number
             console.log("Fetched account number:", accountNumber);
           } else {
-            alert("❌ " + data.message);
+            alert("âŒ " + data.message);
           }
         } catch (err) {
           console.error("Error fetching account number:", err);
@@ -235,7 +235,7 @@
         const formData = Object.fromEntries(new FormData(e.target).entries());
 
         if (!accountNumber) {
-          alert("⚠ Please enter a valid email first, account not found.");
+          alert("âš  Please enter a valid email first, account not found.");
           return;
         }
 
@@ -247,10 +247,10 @@
 
         const data = await res.json();
         if (data.success) {
-          alert("✅ Transaction successful: " + data.message);
+          alert("âœ… Transaction successful: " + data.message);
           window.location.href="admin.html"
         } else {
-          alert("❌ Error: " + data.message);
+          alert("âŒ Error: " + data.message);
         }
       });
 
@@ -275,14 +275,14 @@
         const data = await res.json();
 
         if (data.success) {
-          alert("✅ User created successfully");
+          alert("âœ… User created successfully");
           e.target.reset(); // Clear form
         } else {
-          alert("❌ Error: " + data.message);
+          alert("âŒ Error: " + data.message);
         }
       } catch (err) {
         console.error("Error creating user:", err);
-        alert("❌ Server error");
+        alert("âŒ Server error");
       }
     });
 
@@ -439,3 +439,6 @@
 
 </body>
 </html>
+
+
+

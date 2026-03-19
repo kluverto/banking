@@ -1,5 +1,5 @@
-/* =============================================
-   RIA Federal Credit Union — manage-users.css
+﻿/* =============================================
+   ApexTrust Bank â€” manage-users.css
    Brand palette consistent with admin.css
    Primary:   Navy   #1e3a6e
    Accent:    Red    #c0192b
@@ -33,7 +33,7 @@ main {
   width: 100%;
 }
 
-/* ── Header ─────────────────────────────────── */
+/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 header {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   width: 100%;
@@ -68,7 +68,7 @@ header {
   max-height: 250px;
 }
 
-/* ── Navigation ──────────────────────────────── */
+/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .nav ul {
   list-style: none;
   display: flex;
@@ -102,7 +102,7 @@ header {
   transform: scaleX(1);
 }
 
-/* ── User List Section ───────────────────────── */
+/* â”€â”€ User List Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .user-list {
   background: #dce8f8;
   border-radius: 12px;
@@ -125,7 +125,7 @@ header {
   padding-left: 16px;
 }
 
-/* ── Users Table ─────────────────────────────── */
+/* â”€â”€ Users Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 table#usersTable {
   width: 100%;
   border-collapse: collapse;
@@ -171,7 +171,7 @@ table#usersTable td:nth-child(2) {
   color: #1e3a6e;
 }
 
-/* Balance columns — right-aligned, navy bold */
+/* Balance columns â€” right-aligned, navy bold */
 table#usersTable td:nth-child(6),
 table#usersTable td:nth-child(7),
 table#usersTable td:nth-child(8) {
@@ -186,7 +186,7 @@ table#usersTable thead th:nth-child(8) {
   text-align: right;
 }
 
-/* ── Footer ──────────────────────────────────── */
+/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 footer {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   color: #f0f5ff;
@@ -218,7 +218,7 @@ footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
 .social-media a { margin: 0 10px; color: #b3cef0; text-decoration: none; font-size: 1.2rem; }
 .social-media a:hover { color: #c0192b; }
 
-/* ── Mobile ──────────────────────────────────── */
+/* â”€â”€ Mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 768px) {
   body { font-size: 13px; }
 
@@ -260,3 +260,4 @@ footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
   table#usersTable th:nth-child(8),
   table#usersTable td:nth-child(8) { display: none; }
 }
+
