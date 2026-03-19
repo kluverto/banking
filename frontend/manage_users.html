@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Users — RIA Federal Credit Union</title>
+  <title>Manage Users â€” ApexTrust Bank</title>
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ── Manage Users page extras ── */
+    /* â”€â”€ Manage Users page extras â”€â”€ */
     .page-header {
       padding: 30px 20px 10px;
       text-align: center;
@@ -51,7 +51,7 @@
     }
     .btn-danger-outline:hover { background: #c0192b; color: #fff; }
 
-    /* ── User Table ── */
+    /* â”€â”€ User Table â”€â”€ */
     .users-table-wrapper {
       max-width: 95%;
       margin: 20px auto 40px;
@@ -118,7 +118,7 @@
     .btn-delete { background: #fde8ea; color: #c0192b; border: 1px solid #f5b8be; }
     .btn-delete:hover { background: #c0192b; color: #fff; }
 
-    /* ── Confirm Modal ── */
+    /* â”€â”€ Confirm Modal â”€â”€ */
     .modal-overlay {
       display: none;
       position: fixed; inset: 0;
@@ -206,7 +206,7 @@
     }
     .btn-confirm-clear:hover { transform: scale(1.04); }
 
-    /* ── Toast ── */
+    /* â”€â”€ Toast â”€â”€ */
     #toast {
       position: fixed;
       bottom: 30px; left: 50%;
@@ -245,7 +245,7 @@
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <a href="index.html"><img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200"></a>
+        <a href="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="200" height="200"></a>
       </div>
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
@@ -269,7 +269,7 @@
 
   <!-- Toolbar -->
   <div class="toolbar">
-    <input type="text" id="searchInput" placeholder="🔍  Search by name or email…">
+    <input type="text" id="searchInput" placeholder="ðŸ”  Search by name or emailâ€¦">
     <button class="btn-danger-outline" id="clearAllTxBtn">
       <i class="fa fa-trash-alt" style="margin-right:5px;"></i>Clear All Transactions
     </button>
@@ -290,12 +290,12 @@
         </tr>
       </thead>
       <tbody id="usersTbody">
-        <tr class="loading-row"><td colspan="7">Loading users…</td></tr>
+        <tr class="loading-row"><td colspan="7">Loading usersâ€¦</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ── Confirm Delete Modal ── -->
+  <!-- â”€â”€ Confirm Delete Modal â”€â”€ -->
   <div class="modal-overlay" id="deleteModal">
     <div class="modal-box">
       <div class="modal-icon danger"><i class="fa fa-user-slash"></i></div>
@@ -311,7 +311,7 @@
     </div>
   </div>
 
-  <!-- ── Confirm Clear Transactions Modal ── -->
+  <!-- â”€â”€ Confirm Clear Transactions Modal â”€â”€ -->
   <div class="modal-overlay" id="clearModal">
     <div class="modal-box">
       <div class="modal-icon warning"><i class="fa fa-clock-rotate-left"></i></div>
@@ -327,7 +327,7 @@
     </div>
   </div>
 
-  <!-- ── Confirm Clear ALL Transactions Modal ── -->
+  <!-- â”€â”€ Confirm Clear ALL Transactions Modal â”€â”€ -->
   <div class="modal-overlay" id="clearAllModal">
     <div class="modal-box">
       <div class="modal-icon danger"><i class="fa fa-database"></i></div>
@@ -349,8 +349,8 @@
   <footer>
       <div class="footer-container">
           <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:riareserve@support.com">riareserve@support.com</a>
-          <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
+          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
+          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
           <nav>
               <ul>
                   <li><a href="">Privacy Policy</a></li>
@@ -368,12 +368,12 @@
   </footer>
 
   <script>
-    // ── Nav toggle ──
+    // â”€â”€ Nav toggle â”€â”€
     document.querySelector('.menu-toggle').addEventListener('click', () => {
       document.querySelector('.nav').classList.toggle('open');
     });
 
-    // ── Toast helper ──
+    // â”€â”€ Toast helper â”€â”€
     function showToast(msg, type = 'success') {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -381,12 +381,12 @@
       setTimeout(() => { t.className = ''; }, 3500);
     }
 
-    // ── State ──
+    // â”€â”€ State â”€â”€
     let allUsers = [];
     let pendingAccount  = null;
     let pendingUserName = null;
 
-    // ── Load users ──
+    // â”€â”€ Load users â”€â”€
     async function loadUsers() {
       try {
         const res  = await fetch('/admindash/users');
@@ -435,7 +435,7 @@
       `).join('');
     }
 
-    // ── Search ──
+    // â”€â”€ Search â”€â”€
     document.getElementById('searchInput').addEventListener('input', function() {
       const q = this.value.toLowerCase();
       const filtered = allUsers.filter(u =>
@@ -447,15 +447,15 @@
     });
 
 
-    // ════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // DELETE USER
-    // ════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function openDeleteModal(account, name, email) {
       pendingAccount  = account;
       pendingUserName = name;
       document.getElementById('deleteModalInfo').innerHTML =
         `<i class="fa fa-user" style="margin-right:6px;"></i>${name}<br>
-         <small style="color:#4a607a;">${email} &nbsp;·&nbsp; Acc: ${account}</small>`;
+         <small style="color:#4a607a;">${email} &nbsp;Â·&nbsp; Acc: ${account}</small>`;
       document.getElementById('deleteModal').classList.add('active');
     }
 
@@ -477,28 +477,28 @@
           const row = document.getElementById(`row-${pendingAccount}`);
           if (row) row.remove();
           allUsers = allUsers.filter(u => u.account_number != pendingAccount);
-          showToast(`✅ User "${pendingUserName}" deleted successfully.`, 'success');
+          showToast(`âœ… User "${pendingUserName}" deleted successfully.`, 'success');
         } else {
-          showToast(`❌ ${data.message}`, 'error');
+          showToast(`âŒ ${data.message}`, 'error');
         }
       } catch (err) {
         console.error('Delete error:', err);
-        showToast('❌ Server error during deletion.', 'error');
+        showToast('âŒ Server error during deletion.', 'error');
       }
 
       pendingAccount = null;
     });
 
 
-    // ════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // CLEAR USER TRANSACTIONS
-    // ════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function openClearModal(account, name, email) {
       pendingAccount  = account;
       pendingUserName = name;
       document.getElementById('clearModalInfo').innerHTML =
         `<i class="fa fa-user" style="margin-right:6px;"></i>${name}<br>
-         <small style="color:#4a607a;">${email} &nbsp;·&nbsp; Acc: ${account}</small>`;
+         <small style="color:#4a607a;">${email} &nbsp;Â·&nbsp; Acc: ${account}</small>`;
       document.getElementById('clearModal').classList.add('active');
     }
 
@@ -516,22 +516,22 @@
         const data = await res.json();
 
         if (data.success) {
-          showToast(`✅ ${data.message}`, 'success');
+          showToast(`âœ… ${data.message}`, 'success');
         } else {
-          showToast(`❌ ${data.message}`, 'error');
+          showToast(`âŒ ${data.message}`, 'error');
         }
       } catch (err) {
         console.error('Clear tx error:', err);
-        showToast('❌ Server error while clearing transactions.', 'error');
+        showToast('âŒ Server error while clearing transactions.', 'error');
       }
 
       pendingAccount = null;
     });
 
 
-    // ════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // CLEAR ALL TRANSACTIONS
-    // ════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     document.getElementById('clearAllTxBtn').addEventListener('click', () => {
       document.getElementById('clearAllModal').classList.add('active');
     });
@@ -548,25 +548,27 @@
         const data = await res.json();
 
         if (data.success) {
-          showToast(`✅ ${data.message}`, 'success');
+          showToast(`âœ… ${data.message}`, 'success');
         } else {
-          showToast(`❌ ${data.message}`, 'error');
+          showToast(`âŒ ${data.message}`, 'error');
         }
       } catch (err) {
         console.error('Clear all error:', err);
-        showToast('❌ Server error.', 'error');
+        showToast('âŒ Server error.', 'error');
       }
     });
 
-    // ── Close modals on overlay click ──
+    // â”€â”€ Close modals on overlay click â”€â”€
     ['deleteModal','clearModal','clearAllModal'].forEach(id => {
       document.getElementById(id).addEventListener('click', function(e) {
         if (e.target === this) this.classList.remove('active');
       });
     });
 
-    // ── Init ──
+    // â”€â”€ Init â”€â”€
     loadUsers();
   </script>
 </body>
 </html>
+
+

@@ -1,5 +1,5 @@
-/* =============================================
-   RIA Federal Credit Union — Brand Color System
+﻿/* =============================================
+   ApexTrust Bank â€” Brand Color System
    Primary:   Navy   #1e3a6e  (deep logo blue)
    Accent:    Red    #c0192b  (logo crimson)
    Mid:       Steel  #2b5faa  (lighter navy)
@@ -22,7 +22,7 @@ body {
   font-size: 15px;
 }
 
-/* ── Header ─────────────────────────────────── */
+/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 header {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   width: 100%;
@@ -57,7 +57,7 @@ header {
   max-height: 250px;
 }
 
-/* ── Navigation ──────────────────────────────── */
+/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .nav ul {
   list-style: none;
   display: flex;
@@ -88,7 +88,7 @@ header {
 
 .nav ul li a:hover::after { transform: scaleX(1); }
 
-/* ── Overview / Cards ────────────────────────── */
+/* â”€â”€ Overview / Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .admin-overview {
   padding: 40px 20px;
   text-align: center;
@@ -126,7 +126,7 @@ header {
 .card h3 { margin-bottom: 8px; color: #1e3a6e; }
 .card p  { font-size: 1.2rem; font-weight: bold; color: #0b1826; }
 
-/* ── Form Container ──────────────────────────── */
+/* â”€â”€ Form Container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .form-container {
   max-width: 700px;
   margin: 0 auto;
@@ -198,7 +198,7 @@ header {
   background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
 }
 
-/* ── Create-User Container ───────────────────── */
+/* â”€â”€ Create-User Container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .create-user-container {
   margin: 40px auto;
   padding: 30px;
@@ -237,7 +237,7 @@ header {
   background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
 }
 
-/* ── Table / Recent Activity ─────────────────── */
+/* â”€â”€ Table / Recent Activity â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .recent-activity {
   margin: 40px auto;
   padding: 20px;
@@ -279,7 +279,7 @@ header {
   .recent-activity td:nth-child(5), .recent-activity th:nth-child(5) { display: none; }
 }
 
-/* ── Chat Widget ──────────────────────────────── */
+/* â”€â”€ Chat Widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 #chatWidget { position: fixed; bottom: 20px; right: 20px; font-family: Arial, sans-serif; z-index: 9999; }
 
 #chatIcon {
@@ -364,7 +364,7 @@ header {
 #sendBtn { width: 50px; margin: 5px; border-radius: 30px; background: #c0192b; color: #fff; border: none; cursor: pointer; font-weight: bold; transition: background 0.3s; }
 #sendBtn:hover { background: #1e3a6e; }
 
-/* ── Footer ──────────────────────────────────── */
+/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 footer {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   color: #f0f5ff;
@@ -384,7 +384,7 @@ footer nav ul { list-style: none; display: flex; justify-content: center; gap: 2
 .social-media a { margin: 0 10px; color: #b3cef0; text-decoration: none; }
 .social-media a:hover { text-decoration: underline; color: #c0192b; }
 
-/* ── Mobile ──────────────────────────────────── */
+/* â”€â”€ Mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 768px) {
   .menu-toggle { display: block; z-index: 1001; }
   header { width: 100%; }
@@ -397,3 +397,4 @@ footer nav ul { list-style: none; display: flex; justify-content: center; gap: 2
   .recent-activity { width: 100%; }
   .recent-activity table { width: 100%; border-collapse: collapse; font-size: 0.95rem; text-align: center; }
 }
+

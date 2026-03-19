@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RIA Federal Credit Union - Transactions</title>
+  <title>ApexTrust Bank - Transactions</title>
   <link rel="stylesheet" href="transactions.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 </head>
@@ -14,7 +14,7 @@
     <section class="nav-bar">
       <div class="hero-image">
         <a href="index.html">
-          <img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200">
+          <img src="images/Apextrust.png" alt="ApexTrust Bank" width="200" height="200">
         </a>
       </div>
       <button class="menu-toggle">&#9776;</button>
@@ -75,10 +75,10 @@
 
     <!-- Chat Widget -->
     <div id="chatWidget">
-      <div id="chatIcon">💬<span id="newMsgBadge" style="display:none;">1</span></div>
+      <div id="chatIcon">ðŸ’¬<span id="newMsgBadge" style="display:none;">1</span></div>
       <div id="chatWindow">
         <div id="chatHeader">Support Chat
-          <span id="closeChat" style="float:right;cursor:pointer;">✖</span>
+          <span id="closeChat" style="float:right;cursor:pointer;">âœ–</span>
         </div>
         <div id="messages"></div>
         <div id="inputContainer">
@@ -93,8 +93,8 @@
     <footer>
         <div class="footer-container">
             <h4>Contact Us</h4>
-            <p id="email">Email: <a href="mailto:riareserve@support.com">riareserve@support.com</a>
-            <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
+            <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
+            <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
             <nav>
                 <ul>
                     <li><a href="">Privacy Policy</a></li>
@@ -111,16 +111,16 @@
         </div>    
     </footer>
 
-  <!-- ✅ Socket.IO MUST load before any script that uses `socket` -->
+  <!-- âœ… Socket.IO MUST load before any script that uses `socket` -->
   <script src="/socket.io/socket.io.js"></script>
 
   <script>
-    // ── Nav toggle ──
+    // â”€â”€ Nav toggle â”€â”€
     const toggle = document.querySelector('.menu-toggle');
     const nav = document.querySelector('.nav');
     toggle.addEventListener('click', () => nav.classList.toggle('open'));
 
-    // ── ✅ Get email from localStorage (not URL params — this is a user page) ──
+    // â”€â”€ âœ… Get email from localStorage (not URL params â€” this is a user page) â”€â”€
     const userEmail = localStorage.getItem("userEmail");
 
     if (!userEmail) {
@@ -128,12 +128,12 @@
       window.location.href = "signin.html";
     }
 
-    // ── Transactions ──
+    // â”€â”€ Transactions â”€â”€
     let allTransactions = [];
 
     async function loadTransactions() {
       try {
-        // ✅ Use the user-specific endpoint, not the admin one
+        // âœ… Use the user-specific endpoint, not the admin one
         const res = await fetch(`/api/transactions/${encodeURIComponent(userEmail)}`);
         const data = await res.json();
         if (data.success) {
@@ -157,7 +157,7 @@
       transactions.forEach(tx => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${tx.description || "—"}</td>
+          <td>${tx.description || "â€”"}</td>
           <td>${tx.type}</td>
           <td>$${Number(tx.amount).toLocaleString()}</td>
           <td><span class="status ${tx.status}">${tx.status}</span></td>
@@ -184,13 +184,13 @@
 
     loadTransactions();
 
-    // ── Socket.IO ──
+    // â”€â”€ Socket.IO â”€â”€
     const socket = io();
 
     // Reload transactions when admin approves/rejects
     socket.on("transactionUpdated", () => loadTransactions());
 
-    // ── Chat ──
+    // â”€â”€ Chat â”€â”€
     const chatIcon   = document.getElementById("chatIcon");
     const chatWindow = document.getElementById("chatWindow");
     const messagesDiv = document.getElementById("messages");
@@ -233,7 +233,7 @@
       }
     }
 
-    // ✅ userEmail from localStorage — no more "No email found in URL" alert
+    // âœ… userEmail from localStorage â€” no more "No email found in URL" alert
     if (userEmail) {
       loadHistory(userEmail);
       socket.emit("joinRoom", { email: userEmail, role: "user" });
@@ -268,3 +268,5 @@
 
 </body>
 </html>
+
+

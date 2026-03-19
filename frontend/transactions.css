@@ -1,5 +1,5 @@
-/* =============================================
-   RIA Federal Credit Union — userdashboard.css
+﻿/* =============================================
+   ApexTrust Bank â€” userdashboard.css
    User-facing Transactions / Dashboard pages
    Primary:   Navy   #1e3a6e
    Accent:    Red    #c0192b
@@ -36,7 +36,7 @@ main {
   gap: 24px;
 }
 
-/* ── Header ─────────────────────────────────── */
+/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 header {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   width: 100%;
@@ -71,7 +71,7 @@ header {
   max-height: 250px;
 }
 
-/* ── Navigation ──────────────────────────────── */
+/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .nav ul {
   list-style: none;
   display: flex;
@@ -103,7 +103,7 @@ header {
 .nav ul li a:hover::after,
 .nav ul li a.active::after { transform: scaleX(1); }
 
-/* ── User Overview ───────────────────────────── */
+/* â”€â”€ User Overview â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .user-overview {
   background: #fff;
   border-radius: 14px;
@@ -120,7 +120,7 @@ header {
 
 .user-overview p { color: #4a607a; font-size: 0.92rem; }
 
-/* ── Filters / Quick Actions ─────────────────── */
+/* â”€â”€ Filters / Quick Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .quick-actions {
   background: #fff;
   border-radius: 14px;
@@ -182,7 +182,7 @@ header {
   background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
 }
 
-/* ── Transactions Table Section ──────────────── */
+/* â”€â”€ Transactions Table Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .recent-trans {
   background: #dce8f8;
   border-radius: 12px;
@@ -239,10 +239,10 @@ table#transactions td:nth-child(2) { text-transform: capitalize; }
 /* Amount */
 table#transactions td:nth-child(3) { font-weight: bold; color: #1e3a6e; }
 
-/* Date — muted */
+/* Date â€” muted */
 table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
 
-/* ── Status Badge ────────────────────────────── */
+/* â”€â”€ Status Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .status {
   display: inline-block;
   padding: 3px 10px;
@@ -268,7 +268,7 @@ table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
   color: #8c0f1a;
 }
 
-/* ── Chat Widget ──────────────────────────────── */
+/* â”€â”€ Chat Widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 #chatWidget {
   position: fixed;
   bottom: 20px;
@@ -433,7 +433,7 @@ table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
 
 #sendBtn:hover { background: #1e3a6e; transform: scale(1.05); }
 
-/* ── Footer ──────────────────────────────────── */
+/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 footer {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   color: #f0f5ff;
@@ -449,7 +449,7 @@ footer {
 .footer-container a { color: #b3cef0; text-decoration: none; }
 .footer-container a:hover { text-decoration: underline; color: #c0192b; }
 
-/* ── Mobile ──────────────────────────────────── */
+/* â”€â”€ Mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 768px) {
   body { font-size: 13px; }
 
@@ -494,3 +494,4 @@ footer {
     right: 10px;
   }
 }
+

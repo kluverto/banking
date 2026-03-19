@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RIA Federal Credit Union - User Dashboard</title>
+  <title>ApexTrust Bank - User Dashboard</title>
   <link rel="stylesheet" href="userdashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 </head>
@@ -12,7 +12,7 @@
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <a href ="index.html"><img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200"></a>
+        <a href ="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="200" height="200"></a>
       </div>
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
@@ -86,9 +86,9 @@
       </table>
     </section>
     <div id="chatWidget">
-      <div id="chatIcon">💬<span id="newMsgBadge" style="display:none;">1</span></div>
+      <div id="chatIcon">ðŸ’¬<span id="newMsgBadge" style="display:none;">1</span></div>
       <div id="chatWindow">
-        <div id="chatHeader">Support Chat <span id="closeChat" style="float:right;cursor:pointer;">✖</span></div>
+        <div id="chatHeader">Support Chat <span id="closeChat" style="float:right;cursor:pointer;">âœ–</span></div>
         <div id="messages"></div>
         <div id="inputContainer">
         <input type="text" id="messageInput" placeholder="Type a message" />
@@ -102,8 +102,8 @@
   <footer>
       <div class="footer-container">
           <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:riareserve@support.com">riareserve@support.com</a>
-          <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
+          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
+          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
           <nav>
               <ul>
                   <li><a href="">Privacy Policy</a></li>
@@ -128,7 +128,7 @@
   </script>
   <script>
     const email = localStorage.getItem("userEmail");
-    const profilePic = document.getElementById("profilePic"); // ✅ moved to top
+    const profilePic = document.getElementById("profilePic"); // âœ… moved to top
 
     if (!email) {
       alert("You are not logged in!");
@@ -168,7 +168,7 @@
               data.transactions.forEach(tx => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                  <td>${tx.description || "—"}</td>
+                  <td>${tx.description || "â€”"}</td>
                   <td>${tx.type}</td>
                   <td>$${Number(tx.amount).toLocaleString()}</td>
                   <td>${tx.status}</td>
@@ -187,13 +187,13 @@
             }
 
           } else {
-            // ✅ fixed: was getElementById("profile") which doesn't exist
+            // âœ… fixed: was getElementById("profile") which doesn't exist
             console.error("Dashboard error:", data.message);
             alert("Failed to load dashboard: " + data.message);
           }
         })
         .catch(err => {
-          // ✅ fixed: was getElementById("profile") which doesn't exist
+          // âœ… fixed: was getElementById("profile") which doesn't exist
           console.error("Error fetching profile:", err);
           alert("Failed to load profile data. Please try again.");
         });
@@ -339,3 +339,6 @@ closeChat.addEventListener("click", () => {
 
 </body>
 </html>
+
+
+

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RIA Federal Credit Union - User Dashboard</title>
+  <title>ApexTrust Bank - User Dashboard</title>
   <link rel="stylesheet" href="transfer.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 </head>
@@ -12,7 +12,7 @@
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <a href ="index.html"><img src="images/RIA_credit.png" alt="RIA Federal Credit Union" width="200" height="200"></a>
+        <a href ="index.html"><img src="images/Apextrust.png" alt="ApexTrust" width="200" height="200"></a>
       </div>
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
@@ -97,8 +97,8 @@
   <footer>
       <div class="footer-container">
           <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:riareserve@support.com">riareserve@support.com</a>
-          <p>&copy; 2026 RIA Federal Credit Union. All rights reserved.</p>
+          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
+          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
           <nav>
               <ul>
                   <li><a href="">Privacy Policy</a></li>
@@ -139,7 +139,7 @@
   const savingsBalance = document.getElementById("savingsBalance");
   const cardBalance = document.getElementById("cardBalance");
 
-  // 🔹 FETCH USER DATA FROM DATABASE
+  // ðŸ”¹ FETCH USER DATA FROM DATABASE
   async function loadUser() {
     if (!email) {
       alert("No user email found in URL");
@@ -170,7 +170,7 @@
 
   loadUser();
 
-  // 🔹 HANDLE TRANSFER
+  // ðŸ”¹ HANDLE TRANSFER
 transferForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -231,3 +231,5 @@ transferForm.addEventListener("submit", async (e) => {
 
 </body>
 </html>
+
+
