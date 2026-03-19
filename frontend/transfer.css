@@ -1,0 +1,758 @@
+/* =============================================
+   RIA Federal Credit Union — userdashboard.css
+   User-facing Transactions / Dashboard pages
+   Primary:   Navy   #1e3a6e
+   Accent:    Red    #c0192b
+   Mid:       Steel  #2b5faa
+   Light:     Ice    #dce8f8 / #b3cef0
+   Dark text: #0b1826
+   ============================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f6fc;
+  color: #0b1826;
+  line-height: 1.5;
+  font-size: 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 30px 20px 50px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Header ─────────────────────────────────── */
+header {
+  background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
+  width: 100%;
+  box-shadow: 0 3px 16px rgba(14, 34, 70, 0.45);
+  border-bottom-right-radius: 26px;
+  border-bottom-left-radius: 26px;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #f0f5ff;
+}
+
+.nav { transition: max-height 0.3s ease; }
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.1em 1.2rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.hero-image img {
+  object-fit: cover;
+  width: 100%;
+  max-height: 250px;
+}
+
+/* ── Navigation ──────────────────────────────── */
+.nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.nav ul li a {
+  position: relative;
+  text-decoration: none;
+  color: #f0f5ff;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+.nav ul li a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #c0192b;
+  bottom: -5px;
+  left: 0;
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.nav ul li a:hover::after,
+.nav ul li a.active::after { transform: scaleX(1); }
+
+/* ── User Overview ───────────────────────────── */
+.user-overview {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 24px;
+  box-shadow: 0 0 14px rgba(30, 58, 110, 0.14);
+  border-left: 5px solid #1e3a6e;
+  text-align: center;
+}
+
+.user-overview h2 {
+  color: #1e3a6e;
+  font-size: 1.35rem;
+  display: inline;
+}
+
+.user-overview h2.user-name {
+  color: #c0192b;
+  font-size: 1.35rem;
+  display: inline;
+  margin-left: 6px;
+}
+
+.user-overview h2.user-number {
+  display: block;
+  font-size: 0.9rem;
+  color: #7a8fa6;
+  font-weight: 500;
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+}
+
+.user-overview > p {
+  color: #4a607a;
+  font-size: 0.92rem;
+  margin-top: 6px;
+  margin-bottom: 24px;
+}
+
+/* ── Profile Picture ─────────────────────────── */
+.profile-pic-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 16px;
+  cursor: pointer;
+}
+
+.profile-pic-wrapper label { cursor: pointer; }
+
+#profilePic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #1e3a6e;
+  box-shadow: 0 0 0 4px #b3cef0;
+  display: block;
+  background: #dce8f8;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: #c0192b;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: background 0.3s ease;
+}
+
+.profile-pic-wrapper:hover .edit-icon { background: #1e3a6e; }
+
+/* ── Balance Cards ───────────────────────────── */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.card {
+  background: linear-gradient(120deg, #dce8f8 0%, #b3cef0 100%);
+  padding: 22px 18px;
+  border-radius: 16px;
+  box-shadow: 0 0 14px rgba(30, 58, 110, 0.2);
+  border-top: 3px solid #c0192b;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(30, 58, 110, 0.28);
+}
+
+.card i {
+  font-size: 1.8rem;
+  color: #1e3a6e;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.card h3 {
+  color: #1e3a6e;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.card p {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #0b1826;
+}
+
+/* ── Filters / Quick Actions ─────────────────── */
+.quick-actions {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 0 14px rgba(30, 58, 110, 0.14);
+  border-left: 5px solid #c0192b;
+}
+
+.quick-actions h3 {
+  color: #1e3a6e;
+  margin-bottom: 14px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.actions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.actions-grid select {
+  padding: 9px 36px 9px 12px;
+  border: 1px solid #b3cef0;
+  border-radius: 8px;
+  background: #fff url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 8px center;
+  background-size: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b1826;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  min-width: 150px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.actions-grid select:hover  { border-color: #2b5faa; }
+.actions-grid select:focus  { outline: none; border-color: #2b5faa; box-shadow: 0 0 8px rgba(30,58,110,0.2); }
+
+.actions-grid button {
+  padding: 9px 22px;
+  border-radius: 8px;
+  background: linear-gradient(110deg, #1e3a6e 0%, #2b5faa 100%);
+  color: #f0f5ff;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.actions-grid button:hover {
+  transform: scale(1.04);
+  background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
+}
+
+/* Action link buttons (dashboard page) */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 10px;
+  background: linear-gradient(110deg, #1e3a6e 0%, #2b5faa 100%);
+  color: #f0f5ff;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 3px 10px rgba(30, 58, 110, 0.2);
+}
+
+.action-btn i { font-size: 15px; }
+
+.action-btn:hover {
+  transform: scale(1.04);
+  background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
+  box-shadow: 0 5px 14px rgba(192, 25, 43, 0.28);
+}
+
+/* ── Transactions Table Section ──────────────── */
+.recent-trans {
+  background: #dce8f8;
+  border-radius: 12px;
+  padding: 22px 20px;
+  box-shadow: 0 0 15px rgba(30, 58, 110, 0.18);
+  overflow-x: auto;
+}
+
+.recent-trans h3 {
+  color: #1e3a6e;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-left: 4px solid #c0192b;
+  padding-left: 10px;
+}
+
+table#transactions {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+  text-align: center;
+}
+
+table#transactions thead th {
+  background: #1e3a6e;
+  color: #f0f5ff;
+  font-weight: bold;
+  padding: 12px 14px;
+  white-space: nowrap;
+  border: none;
+}
+
+table#transactions thead th:first-child { border-top-left-radius: 8px; }
+table#transactions thead th:last-child  { border-top-right-radius: 8px; }
+
+table#transactions tbody tr:nth-child(even) { background: #edf3fc; }
+table#transactions tbody tr:hover { background: #cdddf5; transition: background 0.25s ease; cursor: pointer; }
+
+table#transactions td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #b3cef0;
+  color: #0b1826;
+  vertical-align: middle;
+}
+
+/* Description */
+table#transactions td:nth-child(1) { text-align: left; }
+
+/* Type */
+table#transactions td:nth-child(2) { text-transform: capitalize; }
+
+/* Amount */
+table#transactions td:nth-child(3) { font-weight: bold; color: #1e3a6e; }
+
+/* Date — muted */
+table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
+
+/* ── Status Badge ────────────────────────────── */
+.status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: capitalize;
+  letter-spacing: 0.03em;
+}
+
+.status.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.failed {
+  background: #fde8ea;
+  color: #8c0f1a;
+}
+
+/* ── Chat Widget ──────────────────────────────── */
+#chatWidget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: Arial, sans-serif;
+  z-index: 9999;
+}
+
+#chatIcon {
+  background: #c0192b;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: pulse 2s infinite;
+  transition: transform 0.3s ease;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(192, 25, 43, 0.7); }
+  70%  { box-shadow: 0 0 0 15px rgba(192, 25, 43, 0);   }
+  100% { box-shadow: 0 0 0 0   rgba(192, 25, 43, 0);   }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+#chatIcon.bounce { animation: bounce 1s ease infinite; }
+#chatIcon:hover  { transform: rotate(360deg); transition: transform 0.6s ease; }
+
+#newMsgBadge {
+  position: absolute;
+  top: 5px; right: 5px;
+  background: #8c0f1a;
+  color: white;
+  border-radius: 50%;
+  width: 18px; height: 18px;
+  font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+#chatWindow {
+  position: fixed;
+  bottom: 70px; right: 20px;
+  width: 380px; height: 520px;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  overflow: hidden;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  font-size: 13px;
+}
+
+#chatWindow.open {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+#chatHeader {
+  background: linear-gradient(110deg, #1e3a6e, #2b5faa);
+  color: #f0f5ff;
+  padding: 12px 14px;
+  font-weight: bold;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+#chatHeader #closeChat { float: right; cursor: pointer; opacity: 0.8; }
+#chatHeader #closeChat:hover { opacity: 1; }
+
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f0f4fb;
+}
+
+#messages .message {
+  padding: 8px 12px;
+  border-radius: 15px;
+  max-width: 78%;
+  font-weight: bold;
+  font-size: 12px;
+  word-wrap: break-word;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+#messages .message.admin {
+  background: #dce8f8;
+  align-self: flex-start;
+  color: #1e3a6e;
+  border-top-left-radius: 0;
+}
+
+#messages .message.user {
+  background: #fde8ea;
+  align-self: flex-end;
+  color: #8c0f1a;
+  border-top-right-radius: 0;
+}
+
+#messages .message small {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  color: #777;
+  font-weight: normal;
+}
+
+#inputContainer {
+  display: flex;
+  padding: 8px;
+  gap: 6px;
+  flex-shrink: 0;
+  border-top: 1px solid #b3cef0;
+  background: #fff;
+}
+
+#messageInput {
+  flex: 1;
+  padding: 8px 14px;
+  border-radius: 30px;
+  border: 1px solid #b3cef0;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+#messageInput:focus { border-color: #2b5faa; }
+
+#sendBtn {
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: #c0192b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#sendBtn:hover { background: #1e3a6e; transform: scale(1.05); }
+
+/* ── Footer ──────────────────────────────────── */
+footer {
+  background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
+  color: #f0f5ff;
+  padding: 20px;
+  box-shadow: 0 -3px 14px rgba(14, 34, 70, 0.4);
+  border-top-right-radius: 26px;
+  border-top-left-radius: 26px;
+  margin-top: auto;
+}
+
+.footer-container { text-align: center; }
+.footer-container h4 { margin-bottom: 6px; }
+.footer-container a { color: #b3cef0; text-decoration: none; }
+.footer-container a:hover { text-decoration: underline; color: #c0192b; }
+
+
+/* ── Transfer Page — Sender Info Card ───────── */
+.transfer-user-info {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 0 14px rgba(30, 58, 110, 0.14);
+  border-left: 5px solid #1e3a6e;
+}
+
+.transfer-user-info h3 {
+  color: #1e3a6e;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #dce8f8;
+  padding-bottom: 8px;
+}
+
+.transfer-user-info p {
+  color: #0b1826;
+  font-size: 0.93rem;
+  padding: 5px 0;
+  border-bottom: 1px solid #edf3fc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transfer-user-info p:last-child { border-bottom: none; }
+
+.transfer-user-info p strong {
+  color: #4a607a;
+  font-weight: 600;
+  min-width: 140px;
+}
+
+.transfer-user-info span {
+  font-weight: bold;
+  color: #1e3a6e;
+}
+
+/* ── Transfer Page — Form ─────────────────── */
+.transfer-form-container {
+  margin-top: 22px;
+}
+
+.transfer-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #2b3e5a;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #b3cef0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #0b1826;
+  background: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group select {
+  background: #fff url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 10px center;
+  background-size: 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.form-group input::placeholder { color: #8fa8c8; }
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2b5faa;
+  box-shadow: 0 0 8px rgba(30, 58, 110, 0.2);
+}
+
+.form-group select:hover { border-color: #2b5faa; }
+
+/* Submit button — reuses .action-btn but needs full width */
+.transfer-form-container .action-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 6px;
+  padding: 13px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* Transfer result message */
+#transferMessage {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+#transferMessage p { padding: 10px 14px; border-radius: 8px; }
+/* ── Mobile ──────────────────────────────────── */
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+
+  .menu-toggle { display: block; z-index: 1001; }
+
+  .nav {
+    width: 100%;
+    display: none;
+    background: #dce8f8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .nav.open { display: block; }
+
+  .nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    width: 100%;
+  }
+
+  main { padding: 16px 10px 40px; gap: 16px; }
+
+  .cards-container { grid-template-columns: 1fr; }
+
+  .actions-grid { flex-direction: column; }
+  .actions-grid select,
+  .actions-grid button,
+  .action-btn { width: 100%; justify-content: center; }
+
+  table#transactions { font-size: 0.78rem; }
+
+  table#transactions th,
+  table#transactions td { padding: 7px 5px; white-space: normal; word-break: break-word; }
+
+  /* Hide date on very small screens */
+  table#transactions th:nth-child(5),
+  table#transactions td:nth-child(5) { display: none; }
+
+  #chatWindow {
+    width: 85%;
+    height: 60%;
+    bottom: 80px;
+    right: 10px;
+  }
+
+  /* Transfer page mobile */
+  .transfer-user-info { padding: 14px 14px; }
+  .transfer-user-info p { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .transfer-form-container .action-btn { font-size: 0.9rem; }
+
+}
