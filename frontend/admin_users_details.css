@@ -1,5 +1,5 @@
 ﻿/* =============================================
-   ApexTrust Bank â€” user-details.css
+   RIA Federal Credit Union — user-details.css
    Brand palette consistent with admin.css
    Primary:   Navy   #1e3a6e
    Accent:    Red    #c0192b
@@ -25,7 +25,7 @@ body {
   flex-direction: column;
 }
 
-/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Header ─────────────────────────────────── */
 header {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   width: 100%;
@@ -60,7 +60,7 @@ header {
   max-height: 250px;
 }
 
-/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Navigation ──────────────────────────────── */
 .nav ul {
   list-style: none;
   display: flex;
@@ -94,7 +94,7 @@ header {
   transform: scaleX(1);
 }
 
-/* â”€â”€ Page Heading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Page Heading ────────────────────────────── */
 h1 {
   text-align: center;
   color: #1e3a6e;
@@ -114,7 +114,7 @@ h1::after {
   border-radius: 2px;
 }
 
-/* â”€â”€ Form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Form ────────────────────────────────────── */
 form {
   max-width: 480px;
   margin: 28px auto 50px;
@@ -183,7 +183,7 @@ form button[type="submit"]:hover {
   background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
 }
 
-/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Footer ──────────────────────────────────── */
 footer {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   color: #f0f5ff;
@@ -215,7 +215,7 @@ footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
 .social-media a { margin: 0 10px; color: #b3cef0; text-decoration: none; font-size: 1.2rem; }
 .social-media a:hover { color: #c0192b; }
 
-/* â”€â”€ Mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Mobile ──────────────────────────────────── */
 @media (max-width: 768px) {
   body { font-size: 13px; }
 
@@ -245,4 +245,3 @@ footer nav ul li a:hover { color: #c0192b; text-decoration: underline; }
 
   h1 { font-size: 1.3rem; margin-top: 24px; }
 }
-

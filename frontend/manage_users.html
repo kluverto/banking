@@ -269,7 +269,7 @@
 
   <!-- Toolbar -->
   <div class="toolbar">
-    <input type="text" id="searchInput" placeholder="ðŸ”  Search by name or emailâ€¦">
+    <input type="text" id="searchInput" placeholder="🔍  Search by name or email">
     <button class="btn-danger-outline" id="clearAllTxBtn">
       <i class="fa fa-trash-alt" style="margin-right:5px;"></i>Clear All Transactions
     </button>
@@ -295,7 +295,7 @@
     </table>
   </div>
 
-  <!-- â”€â”€ Confirm Delete Modal â”€â”€ -->
+  <!-- Confirm Delete Modal -->
   <div class="modal-overlay" id="deleteModal">
     <div class="modal-box">
       <div class="modal-icon danger"><i class="fa fa-user-slash"></i></div>
@@ -311,7 +311,7 @@
     </div>
   </div>
 
-  <!-- â”€â”€ Confirm Clear Transactions Modal â”€â”€ -->
+  <!-- Confirm Clear Transactions Modal -->
   <div class="modal-overlay" id="clearModal">
     <div class="modal-box">
       <div class="modal-icon warning"><i class="fa fa-clock-rotate-left"></i></div>
@@ -327,7 +327,7 @@
     </div>
   </div>
 
-  <!-- â”€â”€ Confirm Clear ALL Transactions Modal â”€â”€ -->
+  <!-- Confirm Clear ALL Transactions Modal -->
   <div class="modal-overlay" id="clearAllModal">
     <div class="modal-box">
       <div class="modal-icon danger"><i class="fa fa-database"></i></div>
@@ -368,12 +368,12 @@
   </footer>
 
   <script>
-    // â”€â”€ Nav toggle â”€â”€
+    //Nav toggle
     document.querySelector('.menu-toggle').addEventListener('click', () => {
       document.querySelector('.nav').classList.toggle('open');
     });
 
-    // â”€â”€ Toast helper â”€â”€
+    //Toast helper
     function showToast(msg, type = 'success') {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -381,7 +381,7 @@
       setTimeout(() => { t.className = ''; }, 3500);
     }
 
-    // â”€â”€ State â”€â”€
+    //State
     let allUsers = [];
     let pendingAccount  = null;
     let pendingUserName = null;
