@@ -272,11 +272,20 @@ app.get("/admin/stats", async (req, res) => {
        FROM user_profile`
     );
 
+    const txResult = await db.query(
+      `SELECT 
+         COUNT(*) FILTER (WHERE date::date = CURRENT_DATE) AS today_count,
+         COUNT(*) FILTER (WHERE status = 'pending') AS pending_count
+       FROM transactions`
+    );
+
     const stats = result.rows[0];
     return res.json({
       success: true,
       total_users: Number(stats.total_users),
-      total_balance: Number(stats.total_balance)
+      total_balance: Number(stats.total_balance),
+      today_count:   Number(txResult.rows[0].today_count),
+      pending_count: Number(txResult.rows[0].pending_count)
     });
   } catch (err) {
     console.error("Error fetching admin stats:", err);
@@ -516,7 +525,7 @@ app.get("/admin/user/email/:email", async (req, res) => {
   }
 });
 
-// â”€â”€ DELETE USER (removes from users + user_profile + transactions) â”€â”€
+// DELETE USER (removes from users + user_profile + transactions)
 app.delete("/admin/user/:account", async (req, res) => {
   const client = await db.connect(); // use a transaction for atomicity
   try {
@@ -573,7 +582,7 @@ app.delete("/admin/user/:account", async (req, res) => {
 });
  
  
-// â”€â”€ CLEAR TRANSACTION HISTORY FOR A USER â”€â”€
+// CLEAR TRANSACTION HISTORY FOR A USER
 app.delete("/admin/transactions/:account", async (req, res) => {
   try {
     const accountNumber = req.params.account;
@@ -607,7 +616,7 @@ app.delete("/admin/transactions/:account", async (req, res) => {
 });
  
  
-// â”€â”€ CLEAR ALL TRANSACTIONS (global â€” use with caution) â”€â”€
+// CLEAR ALL TRANSACTIONS (global —use with caution)
 app.delete("/admin/transactions", async (req, res) => {
   try {
     const result = await db.query("DELETE FROM transactions RETURNING id");

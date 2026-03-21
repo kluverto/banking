@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Transactions â€” ApexTrust Bank</title>
   <link rel="stylesheet" href="admin-transaction.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">\r\n  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     .page-header { padding: 30px 20px 10px; text-align: center; }
     .page-header h2 { color: #1e3a6e; }
@@ -291,7 +291,7 @@
   <!-- Toolbar -->
   <div class="toolbar">
     <div class="toolbar-filters">
-      <input type="text" id="searchInput" placeholder="ðŸ”  Search email or descriptionâ€¦" style="width:220px;">
+      <input type="text" id="searchInput" placeholder="🔍 Search email or descriptionâ€¦" style="width:220px;">
       <select id="filterType">
         <option value="">All Types</option>
         <option value="credit">Credit</option>
@@ -396,12 +396,12 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    // â”€â”€ Nav toggle â”€â”€
+    //Nav toggle
     document.querySelector('.menu-toggle').addEventListener('click', () => {
       document.querySelector('.nav').classList.toggle('open');
     });
 
-    // â”€â”€ Toast â”€â”€
+    //Toast
     function showToast(msg, type = 'success') {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -409,19 +409,29 @@
       setTimeout(() => { t.className = ''; }, 3500);
     }
 
-    // â”€â”€ State â”€â”€
+    //]State
     let allTransactions = [];
     let pendingTxId     = null;
     let pendingTxRef    = null;
 
-    // â”€â”€ Load transactions â”€â”€
+    // Auto-apply filter if arriving from dashboard pending card
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get("filter");
+    if (filterParam) {
+      const statusSelect = document.getElementById("filterStatus");
+      if (statusSelect) {
+        statusSelect.value = filterParam; // sets dropdown to "pending"
+      }
+    }
+
+    // Load transactions
     async function loadTransactions() {
       try {
         const res  = await fetch('/admin/all-transactions');
         const data = await res.json();
         if (data.success) {
           allTransactions = data.transactions || [];
-          renderTable(allTransactions);
+          applyFilters();
         }
       } catch (err) {
         console.error('Failed to load transactions:', err);
@@ -604,14 +614,15 @@
       }
     });
 
-    // â”€â”€ Socket: live updates â”€â”€
+    //Socket: live updates
     const socket = io();
     socket.on('transactionUpdated', () => loadTransactions());
 
-    // â”€â”€ Init â”€â”€
+    //Init
     loadTransactions();
   </script>
 </body>
 </html>
+
 
 
