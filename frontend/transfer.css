@@ -1,6 +1,6 @@
 ﻿/* =============================================
-   ApexTrust Bank â€” userdashboard.css
-   User-facing Transactions / Dashboard pages
+   RIA Federal Credit Union — userdashboard.css
+   User-facing Dashboard / Transfer / Transactions
    Primary:   Navy   #1e3a6e
    Accent:    Red    #c0192b
    Mid:       Steel  #2b5faa
@@ -36,7 +36,7 @@ main {
   gap: 24px;
 }
 
-/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Header ─────────────────────────────────── */
 header {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   width: 100%;
@@ -71,7 +71,7 @@ header {
   max-height: 250px;
 }
 
-/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Navigation ──────────────────────────────── */
 .nav ul {
   list-style: none;
   display: flex;
@@ -103,7 +103,7 @@ header {
 .nav ul li a:hover::after,
 .nav ul li a.active::after { transform: scaleX(1); }
 
-/* â”€â”€ User Overview â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── User Overview ───────────────────────────── */
 .user-overview {
   background: #fff;
   border-radius: 14px;
@@ -142,7 +142,7 @@ header {
   margin-bottom: 24px;
 }
 
-/* â”€â”€ Profile Picture â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Profile Picture ─────────────────────────── */
 .profile-pic-wrapper {
   position: relative;
   width: 100px;
@@ -183,7 +183,7 @@ header {
 
 .profile-pic-wrapper:hover .edit-icon { background: #1e3a6e; }
 
-/* â”€â”€ Balance Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Balance Cards ───────────────────────────── */
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -227,7 +227,7 @@ header {
   color: #0b1826;
 }
 
-/* â”€â”€ Filters / Quick Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Filters / Quick Actions ─────────────────── */
 .quick-actions {
   background: #fff;
   border-radius: 14px;
@@ -289,7 +289,7 @@ header {
   background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
 }
 
-/* Action link buttons (dashboard page) */
+/* Action link buttons */
 .action-btn {
   display: inline-flex;
   align-items: center;
@@ -314,7 +314,7 @@ header {
   box-shadow: 0 5px 14px rgba(192, 25, 43, 0.28);
 }
 
-/* â”€â”€ Transactions Table Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Transactions Table ───────────────────────── */
 .recent-trans {
   background: #dce8f8;
   border-radius: 12px;
@@ -362,19 +362,12 @@ table#transactions td {
   vertical-align: middle;
 }
 
-/* Description */
 table#transactions td:nth-child(1) { text-align: left; }
-
-/* Type */
 table#transactions td:nth-child(2) { text-transform: capitalize; }
-
-/* Amount */
 table#transactions td:nth-child(3) { font-weight: bold; color: #1e3a6e; }
-
-/* Date â€” muted */
 table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
 
-/* â”€â”€ Status Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Status Badge ────────────────────────────── */
 .status {
   display: inline-block;
   padding: 3px 10px;
@@ -385,22 +378,368 @@ table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
   letter-spacing: 0.03em;
 }
 
-.status.completed {
-  background: #d4edda;
-  color: #155724;
+.status.completed { background: #d4edda; color: #155724; }
+.status.pending   { background: #fff3cd; color: #856404; }
+.status.failed    { background: #fde8ea; color: #8c0f1a; }
+
+/* ── Transfer Page ───────────────────────────── */
+.form-section {
+  width: 100%;
 }
 
-.status.pending {
-  background: #fff3cd;
-  color: #856404;
+.form-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 0 18px rgba(30, 58, 110, 0.14);
+  border-top: 4px solid #1e3a6e;
 }
 
-.status.failed {
-  background: #fde8ea;
-  color: #8c0f1a;
+.form-container h3 {
+  color: #1e3a6e;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #dce8f8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* â”€â”€ Chat Widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.form-container h3::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background: #c0192b;
+  border-radius: 2px;
+}
+
+.form-container label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #2b3e5a;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.form-container input,
+.form-container select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #b3cef0;
+  border-radius: 9px;
+  font-size: 0.95rem;
+  color: #0b1826;
+  background: #fff;
+  margin-bottom: 18px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container select {
+  background: #fff url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 10px center;
+  background-size: 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.form-container input::placeholder { color: #8fa8c8; }
+
+.form-container input:focus,
+.form-container select:focus {
+  outline: none;
+  border-color: #2b5faa;
+  box-shadow: 0 0 0 3px rgba(43, 95, 170, 0.12);
+}
+
+.form-container select:hover { border-color: #2b5faa; }
+
+.form-container button[type="submit"],
+.form-container #submitTransferBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(110deg, #1e3a6e 0%, #2b5faa 100%);
+  color: #f0f5ff;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: transform 0.25s ease, background 0.3s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 14px rgba(30, 58, 110, 0.25);
+  margin-top: 4px;
+}
+
+.form-container button[type="submit"]:hover,
+.form-container #submitTransferBtn:hover {
+  transform: scale(1.02);
+  background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
+  box-shadow: 0 6px 18px rgba(192, 25, 43, 0.3);
+}
+
+.form-container button[type="submit"]:disabled,
+.form-container #submitTransferBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── OTP Modal ───────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 24, 38, 0.65);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px 30px 28px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 12px 60px rgba(30, 58, 110, 0.3);
+  text-align: center;
+  animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.85) translateY(30px); opacity: 0; }
+  to   { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+
+.modal-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #dce8f8 0%, #b3cef0 100%);
+  color: #1e3a6e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.9rem;
+  margin: 0 auto 18px;
+  box-shadow: 0 4px 14px rgba(30, 58, 110, 0.18);
+}
+
+.modal-box h3 {
+  color: #0b1826;
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.modal-sub {
+  color: #4a607a;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+
+.modal-sub strong { color: #1e3a6e; }
+
+/* Transfer summary inside modal */
+.transfer-summary {
+  background: #f4f8ff;
+  border: 1px solid #dce8f8;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.transfer-summary .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #e8f0fb;
+  font-size: 0.85rem;
+  color: #4a607a;
+}
+
+.transfer-summary .row:last-child { border-bottom: none; }
+
+.transfer-summary .row strong {
+  color: #0b1826;
+  font-weight: 700;
+}
+
+/* OTP digit inputs */
+.otp-inputs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.otp-digit {
+  width: 50px;
+  height: 58px;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  border: 2px solid #b3cef0;
+  border-radius: 12px;
+  color: #1e3a6e;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  outline: none;
+  caret-color: transparent;
+}
+
+.otp-digit:focus {
+  border-color: #1e3a6e;
+  box-shadow: 0 0 0 3px rgba(30, 58, 110, 0.14);
+}
+
+.otp-digit.filled {
+  border-color: #2b5faa;
+  background: #f0f6ff;
+}
+
+.otp-digit.error {
+  border-color: #c0192b;
+  background: #fff5f5;
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60%  { transform: translateX(-6px); }
+  40%, 80%  { transform: translateX(6px); }
+}
+
+/* Timer */
+.otp-timer {
+  font-size: 0.83rem;
+  color: #7a8fa6;
+  margin-bottom: 16px;
+}
+
+.otp-timer span {
+  font-weight: 700;
+  color: #c0192b;
+}
+
+/* Error message */
+.otp-error {
+  color: #c0192b;
+  font-size: 0.83rem;
+  font-weight: 600;
+  min-height: 22px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Verify button */
+.btn-verify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(110deg, #1e3a6e 0%, #2b5faa 100%);
+  color: #fff;
+  border: none;
+  border-radius: 11px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: transform 0.25s ease, background 0.3s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 14px rgba(30, 58, 110, 0.25);
+  margin-bottom: 14px;
+}
+
+.btn-verify:hover:not(:disabled) {
+  transform: scale(1.02);
+  background: linear-gradient(110deg, #c0192b 0%, #8c0f1a 100%);
+  box-shadow: 0 6px 18px rgba(192, 25, 43, 0.3);
+}
+
+.btn-verify:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Resend button */
+.btn-resend {
+  background: none;
+  border: none;
+  color: #2b5faa;
+  font-size: 0.87rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+.btn-resend:hover:not(:disabled) { color: #c0192b; }
+
+.btn-resend:disabled {
+  color: #b0b8c4;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* Cancel link */
+.btn-cancel-otp {
+  display: block;
+  margin: 14px auto 0;
+  background: none;
+  border: none;
+  color: #7a8fa6;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.btn-cancel-otp:hover { color: #c0192b; }
+
+/* Loading spinner */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Chat Widget ──────────────────────────────── */
 #chatWidget {
   position: fixed;
   bottom: 20px;
@@ -565,7 +904,7 @@ table#transactions td:nth-child(5) { color: #4a607a; font-size: 0.88rem; }
 
 #sendBtn:hover { background: #1e3a6e; transform: scale(1.05); }
 
-/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Footer ──────────────────────────────────── */
 footer {
   background: linear-gradient(110deg, #1e3a6e 0%, #0e2246 100%);
   color: #f0f5ff;
@@ -581,128 +920,7 @@ footer {
 .footer-container a { color: #b3cef0; text-decoration: none; }
 .footer-container a:hover { text-decoration: underline; color: #c0192b; }
 
-
-/* â”€â”€ Transfer Page â€” Sender Info Card â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.transfer-user-info {
-  background: #fff;
-  border-radius: 14px;
-  padding: 20px 24px;
-  box-shadow: 0 0 14px rgba(30, 58, 110, 0.14);
-  border-left: 5px solid #1e3a6e;
-}
-
-.transfer-user-info h3 {
-  color: #1e3a6e;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 12px;
-  border-bottom: 2px solid #dce8f8;
-  padding-bottom: 8px;
-}
-
-.transfer-user-info p {
-  color: #0b1826;
-  font-size: 0.93rem;
-  padding: 5px 0;
-  border-bottom: 1px solid #edf3fc;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.transfer-user-info p:last-child { border-bottom: none; }
-
-.transfer-user-info p strong {
-  color: #4a607a;
-  font-weight: 600;
-  min-width: 140px;
-}
-
-.transfer-user-info span {
-  font-weight: bold;
-  color: #1e3a6e;
-}
-
-/* â”€â”€ Transfer Page â€” Form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.transfer-form-container {
-  margin-top: 22px;
-}
-
-.transfer-form-container form {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  font-weight: 600;
-  font-size: 0.88rem;
-  color: #2b3e5a;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 11px 14px;
-  border: 1px solid #b3cef0;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  color: #0b1826;
-  background: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-group select {
-  background: #fff url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 10px center;
-  background-size: 18px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  cursor: pointer;
-}
-
-.form-group input::placeholder { color: #8fa8c8; }
-
-.form-group input:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: #2b5faa;
-  box-shadow: 0 0 8px rgba(30, 58, 110, 0.2);
-}
-
-.form-group select:hover { border-color: #2b5faa; }
-
-/* Submit button â€” reuses .action-btn but needs full width */
-.transfer-form-container .action-btn {
-  width: 100%;
-  justify-content: center;
-  margin-top: 6px;
-  padding: 13px;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-}
-
-/* Transfer result message */
-#transferMessage {
-  margin-top: 14px;
-  text-align: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-#transferMessage p { padding: 10px 14px; border-radius: 8px; }
-/* â”€â”€ Mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Mobile ──────────────────────────────────── */
 @media (max-width: 768px) {
   body { font-size: 13px; }
 
@@ -739,7 +957,6 @@ footer {
   table#transactions th,
   table#transactions td { padding: 7px 5px; white-space: normal; word-break: break-word; }
 
-  /* Hide date on very small screens */
   table#transactions th:nth-child(5),
   table#transactions td:nth-child(5) { display: none; }
 
@@ -750,10 +967,18 @@ footer {
     right: 10px;
   }
 
-  /* Transfer page mobile */
-  .transfer-user-info { padding: 14px 14px; }
-  .transfer-user-info p { flex-direction: column; align-items: flex-start; gap: 2px; }
-  .transfer-form-container .action-btn { font-size: 0.9rem; }
+  /* OTP modal mobile */
+  .modal-box { padding: 28px 18px 22px; }
 
+  .otp-digit {
+    width: 42px;
+    height: 50px;
+    font-size: 1.3rem;
+    border-radius: 9px;
+  }
+
+  .otp-inputs { gap: 7px; }
+
+  /* Form mobile */
+  .form-container { padding: 22px 16px; }
 }
-
