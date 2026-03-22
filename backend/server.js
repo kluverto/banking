@@ -20,6 +20,7 @@ const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
+const nodemailer = require("nodemailer");
 
 //middleware
 app.use(bodyparser.json());
@@ -89,9 +90,61 @@ const db = new Pool({
 });
 
   db.connect()
-    .then(() => console.log("âœ… DB connected"))
-    .catch(err => console.error("âŒ DB failed:", err
+    .then(() => console.log("DB connected"))
+    .catch(err => console.error("DB failed:", err
   ));
+
+//email transporter config using nodemailer):
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+const otpStore = {};
+ 
+// ── Generate and send OTP ──
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+ 
+async function sendOTPEmail(email, otp, firstname) {
+  await transporter.sendMail({
+    from: `"ApexTrust Bank" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "Your Transfer Verification Code",
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:30px;background:#f4f8ff;border-radius:12px;">
+        <div style="text-align:center;margin-bottom:24px;">
+          <h2 style="color:#1e3a6e;margin:0;">ApexTrust Bank</h2>
+          <p style="color:#4a607a;font-size:13px;margin:4px 0 0;">Security Verification</p>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 12px rgba(30,58,110,0.1);">
+          <p style="color:#0b1826;font-size:15px;">Hello <strong>${firstname}</strong>,</p>
+          <p style="color:#4a607a;font-size:14px;line-height:1.6;">
+            You requested a transfer from your account. Use the verification code below to complete it.
+          </p>
+          <div style="text-align:center;margin:28px 0;">
+            <span style="display:inline-block;background:#1e3a6e;color:#fff;font-size:32px;font-weight:bold;letter-spacing:10px;padding:16px 32px;border-radius:10px;">
+              ${otp}
+            </span>
+          </div>
+          <p style="color:#c0192b;font-size:13px;text-align:center;font-weight:600;">
+            ⏱ This code expires in 5 minutes.
+          </p>
+          <p style="color:#7a8fa6;font-size:12px;margin-top:20px;line-height:1.6;">
+            If you did not initiate this transfer, please contact support immediately and do not share this code with anyone.
+          </p>
+        </div>
+        <p style="text-align:center;color:#b0b8c4;font-size:11px;margin-top:20px;">
+          &copy; 2026 ApexTrust Bank. All rights reserved.
+        </p>
+      </div>
+    `,
+  });
+}
 
 // GET chat history for a user
 app.get("/chat/:email", async (req, res) => {
@@ -784,126 +837,205 @@ function generateTransactionRef() {
 
 
 // USER TRANSFER ROUTE
-app.post("/transfer", async (req, res) => {
-  console.log(req.body);
+app.post("/transfer/initiate", async (req, res) => {
   try {
     const { email, fromAccount, recipientBank, recipientAccount, recipientName, amount, description } = req.body;
     const amt = parseFloat(amount);
-    
 
-    if (!email || !fromAccount || !recipientBank || !recipientAccount || !amt || !recipientName || !description) {
+    // 1. Basic validation first
+    if (!email || !fromAccount || !recipientBank || !recipientAccount || !amt || !recipientName || !description)
       return res.status(400).json({ success: false, message: "All fields required" });
-    }
 
-    if (amt <= 0) {
+    if (amt <= 0)
       return res.status(400).json({ success: false, message: "Invalid amount" });
-    }
 
-    // Map frontend account type to DB column
+    // 2. Map account type
     let targetColumn;
-    if (fromAccount === "main") targetColumn = "account_balance";
+    if (fromAccount === "main")    targetColumn = "account_balance";
     if (fromAccount === "savings") targetColumn = "savings_balance";
-    if (fromAccount === "card") targetColumn = "card_balance";
+    if (fromAccount === "card")    targetColumn = "card_balance";
 
-    if (!targetColumn) {
+    if (!targetColumn)
       return res.status(400).json({ success: false, message: "Invalid account type" });
-    }
 
-    // Get user profile and current balance
+    // 3. ✅ Fetch user FIRST before using any user properties
     const userResult = await db.query(
-      `SELECT account_number, ${targetColumn} FROM user_profile WHERE email=$1`,
+      `SELECT up.account_number, up.firstname, up.${targetColumn}, u.email AS verified_email
+       FROM user_profile up
+       JOIN users u ON u.email = up.email
+       WHERE up.email = $1`,
       [email]
     );
 
-    if (userResult.rows.length === 0) {
+    if (userResult.rows.length === 0)
       return res.status(404).json({ success: false, message: "User not found" });
-    }
 
+    // 4. ✅ Declare user HERE before anything tries to use it
     const user = userResult.rows[0];
-    const currentBalance = parseFloat(user[targetColumn]);
+    const verifiedEmail = user.verified_email;
+    const currentBalance = parseFloat(user[targetColumn]); // ✅ safe now
 
-    // Count previous completed transactions
+    // 5. Check funds
     const txCountResult = await db.query(
       "SELECT COUNT(*) FROM transactions WHERE email=$1 AND status='completed'",
       [email]
     );
     const completedTxCount = parseInt(txCountResult.rows[0].count);
+    const wouldBeCompleted = completedTxCount < 4;
 
-    //Generate transaction reference
-    const transactionRef = generateTransactionRef();
+    if (wouldBeCompleted && currentBalance < amt)
+      return res.status(400).json({ success: false, message: "Insufficient funds" });
 
-    // Determine transaction status
-    let status = "completed";
-    if (completedTxCount >= 4) {
-      status = "pending"; // require admin approval
-    }
+    // 6. Generate and store OTP
+    const otp = generateOTP();
+    const expiresAt = Date.now() + 5 * 60 * 1000;
 
-    let newBalance = null;
-
-    // Deduct balance only if transaction is auto-completed
-    if (status === "completed") {
-      if (currentBalance < amt) {
-        return res.status(400).json({ success: false, message: "Insufficient funds" });
+    otpStore[verifiedEmail] = {
+      otp,
+      expiresAt,
+      transferData: {
+        email: verifiedEmail,
+        fromAccount, recipientBank, recipientAccount, recipientName,
+        amount: amt, description
       }
+    };
 
-      newBalance = currentBalance - amt;
+    // 7. Send OTP email
+    await sendOTPEmail(verifiedEmail, otp, user.firstname);
 
-      await db.query(
-        `UPDATE user_profile SET ${targetColumn}=$1 WHERE email=$2`,
-        [newBalance, email]
-      );
-    }
-
-    // Insert transaction record
-    await db.query(
-      `INSERT INTO transactions
-       (transaction_ref, email, account_number, type, amount, status, description, recipient_bank, recipient_account, recipient_name, from_account, date)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())`,
-      [
-        transactionRef,
-        email,
-        user.account_number,
-        "debit",
-        amt,
-        status,
-        description,
-        recipientBank,
-        recipientAccount,
-        recipientName,
-        fromAccount
-      ]
-    );
-
-    // Emit real-time update to dashboard
-    io.emit("transactionUpdated", { email, newBalance, status });
-
-    // Notify admin if pending
-    if (status === "pending") {
-      io.emit("transactionPending", {
-        email,
-        amount: amt,
-        fromAccount,
-        recipientBank,
-        recipientAccount,
-      });
-    }
-
-    res.json({
-      success: true,
-      message: status === "completed"
-        ? "Transfer successful"
-        : "Transfer pending. Please contact admin for help and support",
-      newBalance,
-      transactionRef
-    });
-
+    res.json({ success: true, message: "OTP sent to your email address" });
 
   } catch (err) {
-    console.error("Transfer error:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("Transfer initiate error:", err);
+    res.status(500).json({ success: false, message: "Server error: " + err.message });
   }
 });
 
+app.post("/transfer/verify", async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+ 
+    if (!email || !otp)
+      return res.status(400).json({ success: false, message: "Email and OTP required" });
+ 
+    const stored = otpStore[email];
+ 
+    // Check OTP exists
+    if (!stored)
+      return res.status(400).json({ success: false, message: "No pending transfer found. Please start again." });
+ 
+    // Check expiry
+    if (Date.now() > stored.expiresAt) {
+      delete otpStore[email];
+      return res.status(400).json({ success: false, message: "OTP has expired. Please try again." });
+    }
+ 
+    // Check OTP matches
+    if (stored.otp !== otp.toString().trim())
+      return res.status(400).json({ success: false, message: "Incorrect OTP. Please try again." });
+ 
+    // OTP is valid — process the transfer
+    const { email: txEmail, fromAccount, recipientBank, recipientAccount, recipientName, amount, description } = stored.transferData;
+    const amt = parseFloat(amount);
+ 
+    let targetColumn;
+    if (fromAccount === "main")    targetColumn = "account_balance";
+    if (fromAccount === "savings") targetColumn = "savings_balance";
+    if (fromAccount === "card")    targetColumn = "card_balance";
+ 
+    const userResult = await db.query(
+      `SELECT account_number, ${targetColumn} FROM user_profile WHERE email = $1`,
+      [txEmail]
+    );
+ 
+    const user = userResult.rows[0];
+    const currentBalance = parseFloat(user[targetColumn]);
+ 
+    const txCountResult = await db.query(
+      "SELECT COUNT(*) FROM transactions WHERE email=$1 AND status='completed'",
+      [txEmail]
+    );
+    const completedTxCount = parseInt(txCountResult.rows[0].count);
+ 
+    const transactionRef = generateTransactionRef();
+    let status = completedTxCount >= 4 ? "pending" : "completed";
+    let newBalance = null;
+ 
+    if (status === "completed") {
+      if (currentBalance < amt) {
+        delete otpStore[email];
+        return res.status(400).json({ success: false, message: "Insufficient funds" });
+      }
+      newBalance = currentBalance - amt;
+      await db.query(
+        `UPDATE user_profile SET ${targetColumn} = $1 WHERE email = $2`,
+        [newBalance, txEmail]
+      );
+    }
+ 
+    await db.query(
+      `INSERT INTO transactions
+       (transaction_ref, email, account_number, type, amount, status, description,
+        recipient_bank, recipient_account, recipient_name, from_account, date)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,NOW())`,
+      [transactionRef, txEmail, user.account_number, "debit", amt, status,
+       description, recipientBank, recipientAccount, recipientName, fromAccount]
+    );
+ 
+    // Clear OTP after successful use
+    delete otpStore[email];
+ 
+    io.emit("transactionUpdated", { email: txEmail, newBalance, status });
+ 
+    if (status === "pending") {
+      io.emit("transactionPending", { email: txEmail, amount: amt, fromAccount, recipientBank, recipientAccount });
+    }
+ 
+    res.json({
+      success: true,
+      message: status === "completed" ? "Transfer successful" : "Transfer pending. Please contact admin for help and support",
+      newBalance,
+      transactionRef
+    });
+ 
+  } catch (err) {
+    console.error("Transfer verify error:", err);
+    res.status(500).json({ success: false, message: "Server error: " + err.message });
+  }
+});
+ 
+// ── Resend OTP ──
+app.post("/transfer/resend-otp", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // ✅ Fetch verified email from DB
+    const userResult = await db.query(
+      "SELECT u.email AS verified_email, up.firstname FROM users u JOIN user_profile up ON up.email = u.email WHERE u.email = $1",
+      [email]
+    );
+
+    if (userResult.rows.length === 0)
+      return res.status(404).json({ success: false, message: "User not found" });
+
+    const { verified_email, firstname } = userResult.rows[0];
+    const stored = otpStore[verified_email];
+
+    if (!stored)
+      return res.status(400).json({ success: false, message: "No pending transfer. Please start again." });
+
+    const otp = generateOTP();
+    stored.otp = otp;
+    stored.expiresAt = Date.now() + 5 * 60 * 1000;
+
+    await sendOTPEmail(verified_email, otp, firstname);
+
+    res.json({ success: true, message: "A new OTP has been sent to your registered email." });
+  } catch (err) {
+    console.error("Resend OTP error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 
 app.get("/receipt/:ref", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "receipt.html"));

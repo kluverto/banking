@@ -3,22 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexTrust Bank - User Dashboard</title>
+  <title>ApexTrust Bank - Transfer</title>
   <link rel="stylesheet" href="transfer.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">\r\n  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <style>
+    /* ── OTP Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(11, 24, 38, 0.6);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 36px 30px 28px;
+      max-width: 420px;
+      width: 92%;
+      box-shadow: 0 10px 50px rgba(30, 58, 110, 0.28);
+      text-align: center;
+      animation: modalIn 0.28s ease;
+    }
+    @keyframes modalIn {
+      from { transform: scale(0.88) translateY(24px); opacity: 0; }
+      to   { transform: scale(1)    translateY(0);    opacity: 1; }
+    }
+
+    .modal-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: #dce8f8;
+      color: #1e3a6e;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 16px;
+    }
+
+    .modal-box h3 { color: #0b1826; font-size: 1.2rem; margin-bottom: 6px; }
+    .modal-box .modal-sub {
+      color: #4a607a; font-size: 0.88rem;
+      line-height: 1.6; margin-bottom: 24px;
+    }
+    .modal-box .modal-sub strong { color: #1e3a6e; }
+
+    /* OTP input boxes */
+    .otp-inputs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .otp-inputs input {
+      width: 48px; height: 56px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      border: 2px solid #b3cef0;
+      border-radius: 10px;
+      color: #1e3a6e;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .otp-inputs input:focus {
+      border-color: #1e3a6e;
+      box-shadow: 0 0 0 3px rgba(30,58,110,0.12);
+    }
+    .otp-inputs input.filled { border-color: #2b5faa; background: #f0f6ff; }
+    .otp-inputs input.error  { border-color: #c0192b; background: #fff5f5; animation: shake 0.4s ease; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60%  { transform: translateX(-6px); }
+      40%,80%  { transform: translateX(6px); }
+    }
+
+    /* timer */
+    .otp-timer {
+      font-size: 0.82rem;
+      color: #7a8fa6;
+      margin-bottom: 20px;
+    }
+    .otp-timer span { font-weight: 700; color: #c0192b; }
+
+    .otp-error {
+      color: #c0192b;
+      font-size: 0.83rem;
+      font-weight: 600;
+      min-height: 20px;
+      margin-bottom: 14px;
+    }
+
+    .btn-verify {
+      display: block; width: 100%;
+      padding: 13px;
+      background: linear-gradient(110deg, #1e3a6e, #2b5faa);
+      color: #fff;
+      border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-bottom: 12px;
+    }
+    .btn-verify:hover { transform: scale(1.02); background: linear-gradient(110deg, #c0192b, #8c0f1a); }
+    .btn-verify:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-resend {
+      background: none; border: none;
+      color: #2b5faa; font-size: 0.85rem;
+      font-weight: 600; cursor: pointer;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    .btn-resend:hover  { color: #c0192b; }
+    .btn-resend:disabled { color: #b0b8c4; cursor: not-allowed; text-decoration: none; }
+
+    .btn-cancel-otp {
+      display: block; margin: 12px auto 0;
+      background: none; border: none;
+      color: #7a8fa6; font-size: 0.82rem;
+      cursor: pointer; text-decoration: underline;
+    }
+    .btn-cancel-otp:hover { color: #c0192b; }
+
+    /* transfer summary box inside modal */
+    .transfer-summary {
+      background: #f4f8ff;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 22px;
+      text-align: left;
+      font-size: 0.83rem;
+    }
+    .transfer-summary .row {
+      display: flex; justify-content: space-between;
+      padding: 4px 0; border-bottom: 1px solid #dce8f8;
+      color: #4a607a;
+    }
+    .transfer-summary .row:last-child { border-bottom: none; }
+    .transfer-summary .row strong { color: #0b1826; }
+
+    /* loading spinner on verify button */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
+
   <!-- Header -->
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <a href ="index.html"><img src="images/Apextrust.png" alt="ApexTrust" width="200" height="200"></a>
+        <a href="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="200" height="200"></a>
       </div>
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
         <ul>
           <li><a href="userdashboard.html">Dashboard</a></li>
-          <li><a href="transactions.html">Transactions</a></li>
+          <li><a href="transfer.html">Transfer</a></li>
           <li><a href="signin.html">Logout</a></li>
         </ul>
       </div>
@@ -26,72 +181,87 @@
   </header>
 
   <main>
-    <div class="transfer-user-info">
-        <h3>Sender Details</h3>
-        <p><strong>Name:</strong> <span id="userName"></span></p>
-        <p><strong>Account Number:</strong> <span id="userAccount"></span></p>
-        <p><strong>Main Balance:</strong> $<span id="mainBalance"></span></p>
-        <p><strong>Savings Balance:</strong> $<span id="savingsBalance"></span></p>
-        <p><strong>Card Balance:</strong> $<span id="cardBalance"></span></p>
-    </div>
-
     <section class="user-overview">
-      <h2><i class="fa fa-exchange-alt"></i> Transfer Funds</h2>
-      <p>Send money securely to another bank account.</p>
+      <h2>Transfer Funds</h2>
+      <p>Send money securely to any bank account.</p>
+    </section>
 
-      <div class="transfer-form-container">
+    <section class="form-section" style="max-width:560px;margin:30px auto;padding:0 16px;">
+      <div class="form-container">
+        <h3>New Transfer</h3>
         <form id="transferForm">
+          <label>From Account</label>
+          <select name="fromAccount" required>
+            <option value="">-- Select account --</option>
+            <option value="main">Main Account</option>
+            <option value="savings">Savings Account</option>
+            <option value="card">Card Account</option>
+          </select>
 
-          <!-- Choose Account -->
-          <div class="form-group">
-            <label for="fromAccount">Choose Account</label>
-            <select id="fromAccount" required>
-              <option value="">-- Select Account --</option>
-              <option value="main">Main Account</option>
-              <option value="savings">Savings Account</option>
-              <option value="card">Card</option>
-            </select>
-          </div>
+          <label>Recipient Bank</label>
+          <input type="text" name="recipientBank" placeholder="e.g. Chase Bank" required>
 
-          <!-- Recipient Bank -->
-          <div class="form-group">
-            <label for="recipientBank">Recipient Bank</label>
-            <input type="text" id="recipientBank" placeholder="Enter recipient bank name" required>
-          </div>
+          <label>Recipient Account Number</label>
+          <input type="text" name="recipientAccount" placeholder="Account number" required>
 
-        <!--Recipient Account Name-->
-            <div class="form-group">
-            <label for="recipientName">Recipient Name</label>
-            <input type="text" id="recipientName" placeholder="Enter recipient name" required>
-          </div>
-          <!-- Recipient Account Number -->
-          <div class="form-group">
-            <label for="recipientAccount">Recipient Account Number</label>
-            <input type="text" id="recipientAccount" placeholder="Enter account number" required>
-          </div>
+          <label>Recipient Name</label>
+          <input type="text" name="recipientName" placeholder="Full name" required>
 
-          <!-- Amount -->
-          <div class="form-group">
-            <label for="amount">Amount ($)</label>
-            <input type="number" id="amount" placeholder="Enter amount" required>
-          </div>
+          <label>Amount ($)</label>
+          <input type="number" name="amount" placeholder="0.00" min="1" step="0.01" required>
 
-          <!--Description-->
-          <div class="form-group">
-            <label for="description">Description</label>
-            <input type="text" id="description" placeholder="Enter description for transfer" required>
-          </div>
+          <label>Description</label>
+          <input type="text" name="description" placeholder="What's this for?" required>
 
-          <button type="submit" class="action-btn">
-            <i class="fa fa-paper-plane"></i> Send
+          <button type="submit" id="submitTransferBtn">
+            <i class="fa fa-paper-plane" style="margin-right:6px;"></i>Continue
           </button>
-
         </form>
-
-        <div id="transferMessage"></div>
       </div>
     </section>
   </main>
+
+  <!-- ── OTP Verification Modal ── -->
+  <div class="modal-overlay" id="otpModal">
+    <div class="modal-box">
+      <div class="modal-icon"><i class="fa fa-shield-halved"></i></div>
+      <h3>Verify Your Transfer</h3>
+      <p class="modal-sub">
+        We sent a 6-digit code to<br><strong id="otpEmailDisplay"></strong>
+      </p>
+
+      <!-- Transfer summary -->
+      <div class="transfer-summary" id="transferSummary"></div>
+
+      <!-- OTP boxes -->
+      <div class="otp-inputs">
+        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" pattern="[0-9]">
+        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" pattern="[0-9]">
+        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" pattern="[0-9]">
+        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" pattern="[0-9]">
+        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" pattern="[0-9]">
+        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" pattern="[0-9]">
+      </div>
+
+      <div class="otp-error" id="otpError"></div>
+
+      <div class="otp-timer">
+        Code expires in <span id="timerDisplay">5:00</span>
+      </div>
+
+      <button class="btn-verify" id="verifyBtn" disabled>
+        <i class="fa fa-lock-open" style="margin-right:6px;"></i>Verify & Transfer
+      </button>
+
+      <button class="btn-resend" id="resendBtn" disabled>
+        Resend code
+      </button>
+
+      <button class="btn-cancel-otp" id="cancelOtpBtn">
+        Cancel transfer
+      </button>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>
@@ -115,122 +285,236 @@
       </div>    
   </footer>
 
-  <!-- Scripts -->
   <script>
-  const toggle = document.querySelector('.menu-toggle');
-  const nav = document.querySelector('.nav');
-  toggle.addEventListener('click', () => {
-    nav.classList.toggle('open');
-  });
+    const toggle = document.querySelector('.menu-toggle');
+    toggle.addEventListener('click', () => document.querySelector('.nav').classList.toggle('open'));
 
-  const email = localStorage.getItem("userEmail");
+    const userEmail = localStorage.getItem("userEmail");
+    if (!userEmail) { alert("Not logged in!"); window.location.href = "signin.html"; }
 
-  if (!email) {
-    alert("User not logged in");
-    window.location.href = "signin.html";
-  }
+    // ── State ──
+    let timerInterval = null;
+    let pendingFormData = null;
 
-  const transferForm = document.getElementById("transferForm");
-  const messageBox = document.getElementById("transferMessage");
+    // ── Transfer form submit → initiate 2FA ──
+    document.getElementById("transferForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  const userName = document.getElementById("userName");
-  const userAccount = document.getElementById("userAccount");
-  const mainBalance = document.getElementById("mainBalance");
-  const savingsBalance = document.getElementById("savingsBalance");
-  const cardBalance = document.getElementById("cardBalance");
+      const btn = document.getElementById("submitTransferBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span>Sending OTP…`;
 
-  // ðŸ”¹ FETCH USER DATA FROM DATABASE
-  async function loadUser() {
-    if (!email) {
-      alert("No user email found in URL");
-      return;
-    }
+      const formData = Object.fromEntries(new FormData(e.target).entries());
+      formData.email = userEmail;
+      pendingFormData = formData;
 
-    try {
-      const res = await fetch(`/dashboard/${email}`);
-      const data = await res.json();
+      try {
+        const res  = await fetch("/transfer/initiate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+        const data = await res.json();
 
-      if (!data.success) {
-        alert("Failed to load user data");
-        return;
+        if (data.success) {
+          openOTPModal(formData);
+        } else {
+          alert("❌ " + data.message);
+        }
+      } catch (err) {
+        console.error("Initiate error:", err);
+        alert("❌ Server error. Please try again.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa fa-paper-plane" style="margin-right:6px;"></i>Continue`;
       }
-
-      const user = data.user;
-
-      userName.textContent = `${user.firstname} ${user.secondname}`;
-      userAccount.textContent = user.account_number;
-      mainBalance.textContent = user.account_balance;
-      savingsBalance.textContent = user.savings_balance;
-      cardBalance.textContent = user.card_balance;
-
-    } catch (err) {
-      console.error("Error loading user:", err);
-    }
-  }
-
-  loadUser();
-
-  // ðŸ”¹ HANDLE TRANSFER
-transferForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const fromAccount = document.getElementById("fromAccount").value;
-  const recipientBank = document.getElementById("recipientBank").value;
-  const recipientName = document.getElementById("recipientName").value;
-  const recipientAccount = document.getElementById("recipientAccount").value;
-  const amount = document.getElementById("amount").value;
-  const description = document.getElementById("description").value;
-
-  if (!email) {
-    messageBox.innerHTML = "<p style='color:red;'>User email missing.</p>";
-    return;
-  }
-
-  try {
-    const res = await fetch("/transfer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        fromAccount,
-        recipientBank,
-        recipientName,
-        recipientAccount,
-        recipientName,
-        amount,
-        description
-      })
     });
 
-    const data = await res.json();
+    // ── Open OTP modal ──
+    function openOTPModal(formData) {
+      // Show email
+      document.getElementById("otpEmailDisplay").textContent = userEmail;
 
-  if (data.success) {
-    // Check if transaction is pending and show alert
-    if (data.message === "Transfer pending. Please contact admin for help and support") {
-      alert("Transfer pending. Please contact admin for help and support");
+      // Show transfer summary
+      document.getElementById("transferSummary").innerHTML = `
+        <div class="row"><span>From</span><strong>${formData.fromAccount} account</strong></div>
+        <div class="row"><span>To</span><strong>${formData.recipientName}</strong></div>
+        <div class="row"><span>Bank</span><strong>${formData.recipientBank}</strong></div>
+        <div class="row"><span>Amount</span><strong>$${Number(formData.amount).toLocaleString()}</strong></div>
+      `;
+
+      // Clear OTP inputs
+      document.querySelectorAll(".otp-digit").forEach(i => {
+        i.value = "";
+        i.classList.remove("filled", "error");
+      });
+      document.getElementById("otpError").textContent = "";
+      document.getElementById("verifyBtn").disabled = true;
+      document.getElementById("resendBtn").disabled = true;
+
+      document.getElementById("otpModal").classList.add("active");
+      document.querySelectorAll(".otp-digit")[0].focus();
+
+      startTimer(5 * 60); // 5 minutes
     }
 
-    // Redirect to receipt page
-    window.location.href = `/receipt/${data.transactionRef}`;
+    // ── OTP digit input behaviour ──
+    const digits = document.querySelectorAll(".otp-digit");
 
-    return;
-  } else {
-    messageBox.innerHTML = `<p style='color:red;'>${data.message}</p>`;
-  }
+    digits.forEach((input, index) => {
+      input.addEventListener("input", () => {
+        // Only allow numbers
+        input.value = input.value.replace(/[^0-9]/g, "");
+        if (input.value) {
+          input.classList.add("filled");
+          input.classList.remove("error");
+          // Move to next
+          if (index < digits.length - 1) digits[index + 1].focus();
+        } else {
+          input.classList.remove("filled");
+        }
+        checkAllFilled();
+      });
 
-        transferForm.reset();
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !input.value && index > 0) {
+          digits[index - 1].focus();
+          digits[index - 1].value = "";
+          digits[index - 1].classList.remove("filled");
+          checkAllFilled();
+        }
+      });
 
+      // Allow paste of full OTP
+      input.addEventListener("paste", (e) => {
+        e.preventDefault();
+        const pasted = e.clipboardData.getData("text").replace(/[^0-9]/g, "").slice(0, 6);
+        digits.forEach((d, i) => {
+          d.value = pasted[i] || "";
+          d.classList.toggle("filled", !!d.value);
+        });
+        checkAllFilled();
+        if (pasted.length === 6) digits[5].focus();
+      });
+    });
+
+    function checkAllFilled() {
+      const allFilled = [...digits].every(d => d.value.length === 1);
+      document.getElementById("verifyBtn").disabled = !allFilled;
+    }
+
+    function getOTPValue() {
+      return [...digits].map(d => d.value).join("");
+    }
+
+    // ── Countdown timer ──
+    function startTimer(seconds) {
+      clearInterval(timerInterval);
+      let remaining = seconds;
+
+      const display = document.getElementById("timerDisplay");
+      const resendBtn = document.getElementById("resendBtn");
+
+      timerInterval = setInterval(() => {
+        remaining--;
+        const m = Math.floor(remaining / 60);
+        const s = remaining % 60;
+        display.textContent = `${m}:${String(s).padStart(2, "0")}`;
+
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          display.textContent = "0:00";
+          document.getElementById("verifyBtn").disabled = true;
+          document.getElementById("otpError").textContent = "Code expired. Please request a new one.";
+          resendBtn.disabled = false;
+        }
+
+        // Enable resend after 30 seconds
+        if (remaining <= (seconds - 30)) {
+          resendBtn.disabled = false;
+        }
+      }, 1000);
+    }
+
+    // ── Verify OTP ──
+    document.getElementById("verifyBtn").addEventListener("click", async () => {
+      const otp = getOTPValue();
+      const btn = document.getElementById("verifyBtn");
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span>Verifying…`;
+      document.getElementById("otpError").textContent = "";
+
+      try {
+        const res  = await fetch("/transfer/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: userEmail, otp })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          clearInterval(timerInterval);
+          document.getElementById("otpModal").classList.remove("active");
+
+          // Redirect to receipt
+          window.location.href = `/receipt/${data.transactionRef}`;
+        } else {
+          // Shake error
+          digits.forEach(d => d.classList.add("error"));
+          setTimeout(() => digits.forEach(d => d.classList.remove("error")), 500);
+          document.getElementById("otpError").textContent = data.message;
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa fa-lock-open" style="margin-right:6px;"></i>Verify & Transfer`;
+        }
       } catch (err) {
-        console.error("Transfer error:", err);
-        messageBox.innerHTML = "<p style='color:red;'>An error occurred. Please try again.</p>";
+        console.error("Verify error:", err);
+        document.getElementById("otpError").textContent = "Server error. Please try again.";
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa fa-lock-open" style="margin-right:6px;"></i>Verify & Transfer`;
       }
-});
-</script>
+    });
+
+    // ── Resend OTP ──
+    document.getElementById("resendBtn").addEventListener("click", async () => {
+      const btn = document.getElementById("resendBtn");
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      document.getElementById("otpError").textContent = "";
+
+      try {
+        const res  = await fetch("/transfer/resend-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: userEmail })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          // Clear inputs and restart timer
+          digits.forEach(d => { d.value = ""; d.classList.remove("filled", "error"); });
+          document.getElementById("verifyBtn").disabled = true;
+          startTimer(5 * 60);
+          btn.textContent = "Resend code";
+        } else {
+          document.getElementById("otpError").textContent = data.message;
+          btn.disabled = false;
+          btn.textContent = "Resend code";
+        }
+      } catch (err) {
+        document.getElementById("otpError").textContent = "Failed to resend. Try again.";
+        btn.disabled = false;
+        btn.textContent = "Resend code";
+      }
+    });
+
+    // ── Cancel transfer ──
+    document.getElementById("cancelOtpBtn").addEventListener("click", () => {
+      clearInterval(timerInterval);
+      document.getElementById("otpModal").classList.remove("active");
+      pendingFormData = null;
+    });
+  </script>
 
 </body>
 </html>
-
-
-
