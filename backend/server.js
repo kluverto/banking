@@ -558,6 +558,54 @@ app.post("/admin/transaction/:accountNumber", async (req, res) => {
   }
 });
 
+// Admin update user email
+app.put("/admin/user/email/:account", async (req, res) => {
+  const client = await db.connect();
+  try {
+    const accountNumber = req.params.account;
+    const { newEmail } = req.body;
+
+    if (!newEmail)
+      return res.status(400).json({ success: false, message: "New email is required" });
+
+    // Check new email isn't already taken
+    const existing = await client.query(
+      "SELECT email FROM users WHERE email = $1", [newEmail]
+    );
+    if (existing.rows.length > 0)
+      return res.status(400).json({ success: false, message: "Email already in use by another account" });
+
+    // Get current email from account number
+    const profileResult = await client.query(
+      "SELECT email FROM user_profile WHERE account_number = $1", [accountNumber]
+    );
+    if (profileResult.rows.length === 0)
+      return res.status(404).json({ success: false, message: "User not found" });
+
+    const oldEmail = profileResult.rows[0].email;
+
+    await client.query("BEGIN");
+
+    // Update all tables that reference the old email
+    await client.query("UPDATE users        SET email = $1 WHERE email = $2", [newEmail, oldEmail]);
+    await client.query("UPDATE user_profile SET email = $1 WHERE email = $2", [newEmail, oldEmail]);
+    await client.query("UPDATE transactions SET email = $1 WHERE email = $2", [newEmail, oldEmail]);
+    await client.query("UPDATE messages     SET sender   = $1 WHERE sender   = $2", [newEmail, oldEmail]);
+    await client.query("UPDATE messages     SET receiver = $1 WHERE receiver = $2", [newEmail, oldEmail]);
+
+    await client.query("COMMIT");
+
+    res.json({ success: true, message: `Email updated from ${oldEmail} to ${newEmail}` });
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.error("Error updating email:", err);
+    res.status(500).json({ success: false, message: "Server error: " + err.message });
+  } finally {
+    client.release();
+  }
+});
+
 app.get("/admin/user/email/:email", async (req, res) => {
   try {
     const email = req.params.email;
