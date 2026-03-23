@@ -20,7 +20,8 @@ const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 //middleware
 app.use(bodyparser.json());
@@ -95,7 +96,7 @@ const db = new Pool({
   ));
 
 //email transporter config using nodemailer):
-const transporter = nodemailer.createTransport({
+/*const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false, // TLS
@@ -115,7 +116,7 @@ transporter.verify((error, success) => {
   } else {
     console.log("✅ Email transporter ready");
   }
-});
+});*/
 
 const otpStore = {};
  
@@ -125,8 +126,8 @@ function generateOTP() {
 }
  
 async function sendOTPEmail(email, otp, firstname) {
-  await transporter.sendMail({
-    from: `"ApexTrust Bank" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: "ApexTrust Bank <@trustaccount.online>",
     to: email,
     subject: "Your Transfer Verification Code",
     html: `
