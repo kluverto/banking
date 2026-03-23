@@ -97,13 +97,24 @@ const db = new Pool({
 //email transporter config using nodemailer):
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // SSL
-  family: 4,    // ✅ force IPv4 — fixes ENETUNREACH on IPv6
+  port: 587,
+  secure: false, // TLS
+  family: 4,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false // allows self-signed certs on some hosts
+  }
+});
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ Email transporter failed:", error.message);
+  } else {
+    console.log("✅ Email transporter ready");
+  }
 });
 
 const otpStore = {};
