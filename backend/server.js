@@ -962,14 +962,6 @@ app.post("/transfer/initiate", async (req, res) => {
       }
     };
 
-    // Add this RIGHT BEFORE sendOTPEmail
-    console.log("=== OTP DEBUG ===");
-    console.log("Sending to:", verifiedEmail);
-    console.log("Firstname:", user.firstname);
-    console.log("OTP:", otp);
-    console.log("RESEND_KEY exists:", !!process.env.RESEND_API_KEY);
-    console.log("EMAIL_FROM:", process.env.EMAIL_FROM);
-
     // Send OTP email
     await sendOTPEmail(verifiedEmail, otp, user.firstname);
 
