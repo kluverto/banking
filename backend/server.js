@@ -127,7 +127,7 @@ function generateOTP() {
  
 async function sendOTPEmail(email, otp, firstname) {
   await resend.emails.send({
-    from: "ApexTrust Bank <${process.env.EMAIL_FROM}>",
+    from: `ApexTrust Bank <${process.env.EMAIL_FROM}>`,
     to: email,
     subject: "Your Transfer Verification Code",
     html: `
@@ -898,7 +898,6 @@ function generateTransactionRef() {
   return `TXN-${Date.now()}-${random}`;
 }
 
-
 // USER TRANSFER ROUTE
 app.post("/transfer/initiate", async (req, res) => {
   try {
@@ -963,38 +962,23 @@ app.post("/transfer/initiate", async (req, res) => {
       }
     };
 
-    console.log("📧 Attempting to send OTP to:", verifiedEmail);
-    console.log("👤 Firstname:", user.firstname);
-    console.log("🔑 Resend API key exists:", !!process.env.RESEND_API_KEY);
+    // Add this RIGHT BEFORE sendOTPEmail
+    console.log("=== OTP DEBUG ===");
+    console.log("Sending to:", verifiedEmail);
+    console.log("Firstname:", user.firstname);
+    console.log("OTP:", otp);
+    console.log("RESEND_KEY exists:", !!process.env.RESEND_API_KEY);
+    console.log("EMAIL_FROM:", process.env.EMAIL_FROM);
 
-    // 7. Send OTP email
+    // Send OTP email
     await sendOTPEmail(verifiedEmail, otp, user.firstname);
 
+    console.log("=== EMAIL SENT OK ===");
     res.json({ success: true, message: "OTP sent to your email address" });
 
   } catch (err) {
-    console.error("Transfer initiate error:", err);
+    console.error("=== INITIATE ERROR ===", err.message);
     res.status(500).json({ success: false, message: "Server error: " + err.message });
-  }
-});
-
-app.get("/test-email", async (req, res) => {
-  try {
-    const { data, error } = await resend.emails.send({
-      from: "ApexTrust Bank <onboarding@trustaccount.online>",
-      to: "kluverto12@gmail.com", // your registered Resend email,
-      subject: "Test Email",
-      html: "<p>If you see this, Resend is working!</p>",
-    });
-
-    if (error) {
-      console.error("Resend test error:", error);
-      return res.json({ success: false, error });
-    }
-
-    res.json({ success: true, data });
-  } catch (err) {
-    res.json({ success: false, message: err.message });
   }
 });
 
