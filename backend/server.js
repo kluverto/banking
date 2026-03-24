@@ -22,7 +22,7 @@ const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const { Resend } = require("resend");
 const resend = new Resend(process.env.RESEND_API_KEY);
-
+console.log("RESEND_API_KEY loaded:", !!process.env.RESEND_API_KEY);
 //middleware
 app.use(bodyparser.json());
 app.use(cors());
@@ -127,7 +127,7 @@ function generateOTP() {
  
 async function sendOTPEmail(email, otp, firstname) {
   await resend.emails.send({
-    from: "ApexTrust Bank <@trustaccount.online>",
+    from: "ApexTrust Bank <${process.env.EMAIL_FROM}>",
     to: email,
     subject: "Your Transfer Verification Code",
     html: `
@@ -963,6 +963,10 @@ app.post("/transfer/initiate", async (req, res) => {
       }
     };
 
+    console.log("📧 Attempting to send OTP to:", verifiedEmail);
+    console.log("👤 Firstname:", user.firstname);
+    console.log("🔑 Resend API key exists:", !!process.env.RESEND_API_KEY);
+
     // 7. Send OTP email
     await sendOTPEmail(verifiedEmail, otp, user.firstname);
 
@@ -971,6 +975,26 @@ app.post("/transfer/initiate", async (req, res) => {
   } catch (err) {
     console.error("Transfer initiate error:", err);
     res.status(500).json({ success: false, message: "Server error: " + err.message });
+  }
+});
+
+app.get("/test-email", async (req, res) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "ApexTrust Bank <onboarding@trustaccount.online>",
+      to: "kluverto12@gmail.com", // your registered Resend email,
+      subject: "Test Email",
+      html: "<p>If you see this, Resend is working!</p>",
+    });
+
+    if (error) {
+      console.error("Resend test error:", error);
+      return res.json({ success: false, error });
+    }
+
+    res.json({ success: true, data });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
   }
 });
 
