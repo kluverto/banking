@@ -3,17 +3,498 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexTrust Bank - Transfer Receipt</title>
-  <link rel="stylesheet" href="/receipt.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>ApexTrust Bank — Transaction Receipt</title>
+  <link rel="stylesheet" href="receipt.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:    #1e3a6e;
+      --navy-dk: #0e2246;
+      --red:     #c0192b;
+      --steel:   #2b5faa;
+      --ice:     #dce8f8;
+      --silver:  #b0b8c4;
+      --ink:     #0b1826;
+      --mist:    #f4f8ff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #eef2f9;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 60px;
+    }
+
+    /* ── Receipt Card ── */
+    .receipt-card {
+      width: 100%;
+      max-width: 640px;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow:
+        0 2px 4px rgba(14,34,70,0.06),
+        0 8px 32px rgba(14,34,70,0.12),
+        0 0 0 1px rgba(14,34,70,0.06);
+      overflow: hidden;
+      animation: receiptReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes receiptReveal {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Bank Header Band ── */
+    .receipt-header-band {
+      background: linear-gradient(110deg, var(--navy-dk) 0%, var(--navy) 60%, var(--steel) 100%);
+      padding: 28px 36px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative circles */
+    .receipt-header-band::before,
+    .receipt-header-band::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.07;
+      background: #fff;
+    }
+    .receipt-header-band::before { width: 220px; height: 220px; top: -80px; right: -50px; }
+    .receipt-header-band::after  { width: 120px; height: 120px; bottom: -50px; right: 80px; }
+
+    .header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .bank-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .bank-tagline {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .bank-address {
+      text-align: right;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+    }
+
+    /* status pill in header */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .status-pill.completed { background: rgba(209,250,229,0.2); color: #6ee7b7; border: 1px solid rgba(110,231,183,0.3); }
+    .status-pill.pending   { background: rgba(255,243,205,0.2); color: #fcd34d; border: 1px solid rgba(252,211,77,0.3); }
+    .status-pill.failed    { background: rgba(254,202,202,0.2); color: #fca5a5; border: 1px solid rgba(252,165,165,0.3); }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: blink 1.8s ease infinite;
+    }
+    .status-pill.completed .status-dot { animation: none; }
+    .status-pill.failed    .status-dot { animation: none; }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.3; }
+    }
+
+    /* ── Title Row ── */
+    .receipt-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 36px 0;
+      border-bottom: 1px solid var(--ice);
+      padding-bottom: 18px;
+      margin-top: 18px;
+    }
+
+    .receipt-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .receipt-subtitle {
+      font-size: 0.75rem;
+      color: var(--silver);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .receipt-ref-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--steel);
+      background: var(--mist);
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--ice);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Amount Hero ── */
+    .amount-hero {
+      text-align: center;
+      padding: 28px 36px 20px;
+      border-bottom: 1px dashed #dce8f8;
+      position: relative;
+    }
+
+    .amount-label {
+      font-size: 0.72rem;
+      color: var(--silver);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .amount-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .amount-value sup {
+      font-size: 1.4rem;
+      font-weight: 600;
+      vertical-align: super;
+      margin-right: 2px;
+    }
+
+    /* perforation dots */
+    .perforation {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 -2px;
+      margin: 0 -1px;
+      overflow: hidden;
+    }
+
+    .perforation span {
+      width: 14px; height: 14px;
+      background: #eef2f9;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin: 0 -2px;
+    }
+
+    /* ── Details Grid ── */
+    .receipt-details {
+      padding: 22px 36px 8px;
+    }
+
+    .detail-section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 12px;
+      margin-top: 18px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--ice);
+    }
+
+    .detail-section-label:first-child { margin-top: 0; }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 9px 0;
+      border-bottom: 1px solid #f0f5fc;
+      gap: 16px;
+      animation: rowFade 0.4s ease both;
+    }
+
+    @keyframes rowFade {
+      from { opacity: 0; transform: translateX(-8px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+
+    .detail-label {
+      font-size: 0.82rem;
+      color: #7a8fa6;
+      font-weight: 400;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .detail-value {
+      font-size: 0.88rem;
+      color: var(--ink);
+      font-weight: 500;
+      text-align: right;
+      word-break: break-all;
+    }
+
+    .detail-value.mono {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--steel);
+    }
+
+    /* ── Authorization Section ── */
+    .auth-section {
+      margin: 8px 36px 0;
+      padding: 20px 0 20px;
+      border-top: 1px dashed var(--ice);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .sig-block { text-align: center; }
+
+    .sig-line {
+      width: 140px;
+      height: 1px;
+      background: var(--ink);
+      margin: 0 auto 6px;
+    }
+
+    .sig-label {
+      font-size: 0.72rem;
+      color: var(--silver);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .digital-stamp {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      border: 2px solid var(--navy);
+      border-radius: 6px;
+      padding: 10px 18px;
+      position: relative;
+    }
+
+    .digital-stamp::before {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 1px solid var(--navy);
+      border-radius: 3px;
+      opacity: 0.3;
+    }
+
+    .stamp-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--navy);
+      letter-spacing: 0.12em;
+    }
+
+    .stamp-icon { font-size: 1.1rem; color: var(--navy); }
+
+    /* ── QR placeholder ── */
+    .qr-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 36px;
+      padding: 16px 20px;
+      background: var(--mist);
+      border-radius: 8px;
+      border: 1px solid var(--ice);
+    }
+
+    .qr-grid {
+      width: 52px; height: 52px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .qr-cell {
+      background: var(--navy);
+      border-radius: 1px;
+    }
+
+    .qr-cell.white { background: #fff; }
+
+    .qr-info p {
+      font-size: 0.78rem;
+      color: #4a607a;
+      line-height: 1.55;
+    }
+
+    .qr-info strong {
+      font-size: 0.8rem;
+      color: var(--navy);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ── Legal Footer ── */
+    .legal-text {
+      margin: 16px 36px 0;
+      padding: 14px 16px;
+      background: #fafbfd;
+      border-left: 3px solid var(--ice);
+      border-radius: 0 4px 4px 0;
+      font-size: 0.73rem;
+      color: var(--silver);
+      line-height: 1.65;
+    }
+
+    /* ── Action Buttons ── */
+    .receipt-actions {
+      display: flex;
+      gap: 12px;
+      padding: 24px 36px 32px;
+    }
+
+    .btn-download {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 13px;
+      background: linear-gradient(110deg, var(--navy-dk) 0%, var(--navy) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(14,34,70,0.25);
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(14,34,70,0.3);
+    }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 13px 20px;
+      background: var(--mist);
+      color: var(--navy);
+      border: 1.5px solid var(--ice);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-back:hover {
+      background: var(--ice);
+      border-color: var(--steel);
+      color: var(--steel);
+    }
+
+    /* ── Loading skeleton ── */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f4fb 25%, #e4ecf7 50%, #f0f4fb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 4px;
+      display: inline-block;
+      height: 14px;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* stagger row animations */
+    .detail-row:nth-child(1)  { animation-delay: 0.05s; }
+    .detail-row:nth-child(2)  { animation-delay: 0.10s; }
+    .detail-row:nth-child(3)  { animation-delay: 0.15s; }
+    .detail-row:nth-child(4)  { animation-delay: 0.20s; }
+    .detail-row:nth-child(5)  { animation-delay: 0.25s; }
+    .detail-row:nth-child(6)  { animation-delay: 0.30s; }
+    .detail-row:nth-child(7)  { animation-delay: 0.35s; }
+
+    @media (max-width: 520px) {
+      .receipt-header-band { padding: 22px 20px 20px; }
+      .header-top { flex-direction: column; gap: 10px; }
+      .bank-address { text-align: left; }
+      .receipt-title-row { padding: 16px 20px 14px; flex-direction: column; gap: 8px; }
+      .amount-hero { padding: 22px 20px 16px; }
+      .amount-value { font-size: 2.2rem; }
+      .receipt-details { padding: 18px 20px 8px; }
+      .auth-section { margin: 8px 20px 0; padding: 16px 0; }
+      .qr-block { margin: 0 20px; }
+      .legal-text { margin: 16px 20px 0; }
+      .receipt-actions { padding: 20px 20px 28px; flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
+
   <!-- Header -->
   <header>
     <section class="nav-bar">
       <div class="hero-image">
-        <a href ="index.html"><img src="/images/Apextrust.png" alt="ApexTrust Bank" width="200" height="200"></a>
+        <a href="index.html"><img src="/images/Apextrust.png" alt="ApexTrust Bank" width="200" height="200"></a>
       </div>
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
@@ -24,186 +505,258 @@
       </div>
     </section>
   </header>
-  <!--Main Content Area -->
+
   <main>
-    <div class="receipt-container">
+    <div class="receipt-card">
 
-      <div class="receipt-header">
+      <!-- Bank Header Band -->
+      <div class="receipt-header-band">
+        <div class="header-top">
+          <div>
+            <div class="bank-name">ApexTrust Bank</div>
+            <div class="bank-tagline">Trusted · Secure · Global</div>
+          </div>
+          <div class="bank-address">
+            21 Financial District<br>
+            New York, NY 10005<br>
+            SWIFT: UNBKUS33
+          </div>
+        </div>
+        <span class="status-pill pending" id="statusPill">
+          <span class="status-dot"></span>
+          <span id="statusPillText">Loading…</span>
+        </span>
+      </div>
+
+      <!-- Title Row -->
+      <div class="receipt-title-row">
         <div>
-          <h2>ApexTrust Bank</h2>
-          <p>Corporate Headquarters</p>
+          <div class="receipt-title">Official Transaction Receipt</div>
+          <div class="receipt-subtitle">System Generated Confirmation</div>
         </div>
-
-        <div class="bank-info">
-          21 Financial District<br>
-          New York, NY 10005<br>
-          SWIFT: UNBKUS33
+        <div class="receipt-ref-badge" id="refBadge">
+          <span class="skeleton" style="width:160px;"></span>
         </div>
       </div>
 
-      <div class="document-title">
-        <h3>OFFICIAL TRANSACTION RECEIPT</h3>
-        <span>System Generated Confirmation</span>
+      <!-- Amount Hero -->
+      <div class="amount-hero">
+        <div class="amount-label">Transfer Amount</div>
+        <div class="amount-value" id="amountDisplay">
+          <span class="skeleton" style="width:180px;height:44px;"></span>
+        </div>
       </div>
 
+      <!-- Perforation -->
+      <div class="perforation" id="perforation"></div>
+
+      <!-- Details -->
       <div class="receipt-details">
 
-        <div class="receipt-row">
-          <span>Transaction Reference:</span>
-          <span id="ref"></span>
+        <div class="detail-section-label">Transfer Details</div>
+
+        <div class="detail-row">
+          <span class="detail-label">Recipient Name</span>
+          <span class="detail-value" id="recipientName">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Recipient Bank</span>
+          <span class="detail-value" id="recipientBank">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Recipient Account</span>
+          <span class="detail-value mono" id="recipientAccount">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Description</span>
+          <span class="detail-value" id="description">—</span>
         </div>
 
-        <div class="receipt-row">
-          <span>Sender Email:</span>
-          <span id="email"></span>
+        <div class="detail-section-label">Sender Information</div>
+
+        <div class="detail-row">
+          <span class="detail-label">Sender Email</span>
+          <span class="detail-value" id="senderEmail">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">From Account</span>
+          <span class="detail-value mono" id="fromAccount">—</span>
         </div>
 
-        <div class="receipt-row">
-          <span>From Account:</span>
-          <span id="fromAccount"></span>
+        <div class="detail-section-label">Transaction Info</div>
+
+        <div class="detail-row">
+          <span class="detail-label">Reference</span>
+          <span class="detail-value mono" id="ref">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Date & Time</span>
+          <span class="detail-value" id="date">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Status</span>
+          <span class="detail-value" id="statusInline">—</span>
         </div>
 
-        <div class="receipt-row">
-          <span>Recipient Name:</span>
-          <span id="recipientName"></span>
-        </div>
-
-        <div class="receipt-row">
-          <span>Recipient Bank:</span>
-          <span id="recipientBank"></span>
-        </div>
-
-        <div class="receipt-row">
-          <span>Recipient Account:</span>
-          <span id="recipientAccount"></span>
-        </div>
-
-        <div class="receipt-row">
-          <span>Amount:</span>
-          <span id="amount"></span>
-        </div>
-
-        <div class="receipt-row">
-          <span>Description:</span>
-          <span id="description"></span>
-        </div>
-
-        <div class="receipt-row">
-          <span>Date & Time:</span>
-          <span id="date"></span>
-        </div>
-
-        <div class="receipt-row">
-          <span>Status:</span>
-          <span id="status"></span>
-        </div>
-      </div>
-      <div class="authorization-section">
-          <div class="signature-block">
-            <div class="signature-line"></div>
-            Authorized Signatory
-          </div>
-          <div class="signature-block">
-            <div class="digital-stamp">DIGITALLY VERIFIED</div>
-          </div>
       </div>
 
-      <div class="legal-footer">
-        This document is electronically generated by ApexTrust Bank's core banking system.
-        No physical signature is required. If you did not authorize this transaction,
-        contact customer support immediately.
+      <!-- Authorization -->
+      <div class="auth-section">
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-label">Authorized Signatory</div>
+        </div>
+        <div class="digital-stamp">
+          <i class="fa fa-shield-halved stamp-icon"></i>
+          <span class="stamp-text">DIGITALLY</span>
+          <span class="stamp-text">VERIFIED</span>
+        </div>
       </div>
 
-      <button id="downloadpdf" class="action-btn">
-        <i class="fa fa-download"></i> Download Receipt
-      </button>
+      <!-- QR Block -->
+      <div class="qr-block">
+        <div class="qr-grid" id="qrGrid"></div>
+        <div class="qr-info">
+          <strong>Verification Code</strong>
+          <p>Scan or quote your transaction reference when contacting support. This receipt is system-generated and valid without a physical signature.</p>
+        </div>
+      </div>
+
+      <!-- Legal -->
+      <div class="legal-text">
+        This document is electronically generated by ApexTrust Bank's core banking system. No physical signature is required. This receipt serves as official confirmation of the transaction detailed above. If you did not authorize this transaction, contact customer support immediately at apextrust@support.com.
+      </div>
+
+      <!-- Actions -->
+      <div class="receipt-actions">
+        <button class="btn-download" id="downloadpdf">
+          <i class="fa fa-download"></i> Download PDF Receipt
+        </button>
+        <a href="/userdashboard.html" class="btn-back">
+          <i class="fa fa-arrow-left"></i> Dashboard
+        </a>
+      </div>
 
     </div>
   </main>
+
   <!-- Footer -->
   <footer>
-      <div class="footer-container">
-          <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
-          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
-          <nav>
-              <ul>
-                  <li><a href="">Privacy Policy</a></li>
-                  <li><a href="">Terms of Service</a></li>
-                  <li><a href="">Contact Us</a></li>
-              </ul>
-          </nav>
-      </div>
-      <div class="social-media">
-          <a href="facebook"><i class="fa-brands fa-facebook"></i></a>
-          <a href="twitter"><i class="fa-brands fa-twitter"></i></a>
-          <a href="instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
-      </div>    
+    <div class="footer-container">
+      <h4>Contact Us</h4>
+      <p>Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+      <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+      <nav><ul>
+        <li><a href="">Privacy Policy</a></li>
+        <li><a href="">Terms of Service</a></li>
+        <li><a href="">Contact Us</a></li>
+      </ul></nav>
+    </div>
+    <div class="social-media">
+      <a href="#"><i class="fa-brands fa-facebook"></i></a>
+      <a href="#"><i class="fa-brands fa-twitter"></i></a>
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
   </footer>
 
   <script>
-    const toggle = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('.nav');
-    toggle.addEventListener('click', () => {
-        nav.classList.toggle('open');
+    // Nav toggle
+    document.querySelector('.menu-toggle').addEventListener('click', () => {
+      document.querySelector('.nav').classList.toggle('open');
     });
 
-    document.getElementById("downloadpdf").addEventListener("click", () => {
-      const ref = document.getElementById("ref").textContent;
-      window.location.href = `/api/receipt/${ref}/pdf`;
+    // Generate perforation dots
+    const perf = document.getElementById('perforation');
+    for (let i = 0; i < 42; i++) {
+      const dot = document.createElement('span');
+      perf.appendChild(dot);
+    }
+
+    // Generate fake QR grid pattern
+    const qrGrid = document.getElementById('qrGrid');
+    const pattern = [
+      1,1,1,1,1,
+      1,0,1,0,1,
+      1,1,0,1,1,
+      1,0,1,0,1,
+      1,1,1,1,1,
+    ];
+    pattern.forEach(cell => {
+      const div = document.createElement('div');
+      div.className = 'qr-cell' + (cell === 0 ? ' white' : '');
+      qrGrid.appendChild(div);
     });
-  </script>
-  <script>
-      const transactionRef = window.location.pathname.split("/").pop();
-      const email = localStorage.getItem("userEmail");
 
-      if (!email) {
-      alert("User not logged in");
-      window.location.href = "signin.html";
-      }
+    // Download PDF
+    document.getElementById('downloadpdf').addEventListener('click', () => {
+      const ref = document.getElementById('ref').textContent;
+      if (ref && ref !== '—') window.location.href = `/api/receipt/${ref}/pdf`;
+    });
 
-      async function loadReceipt() {
+    // Load receipt data
+    const transactionRef = window.location.pathname.split('/').pop();
+    const userEmail = localStorage.getItem('userEmail');
+
+    if (!userEmail) {
+      alert('Please log in first.');
+      window.location.href = '/signin.html';
+    }
+
+    async function loadReceipt() {
       try {
-          const res = await fetch(`/api/receipt/${transactionRef}`);
-          const data = await res.json();
+        const res  = await fetch(`/api/receipt/${transactionRef}`);
+        const data = await res.json();
 
-          if (!data.success) {
-          alert(data.message);
-          return;
-          }
+        if (!data.success) { alert(data.message); return; }
 
-          const t = data.transaction;
+        const t = data.transaction;
 
-          document.getElementById("ref").textContent = t.transaction_ref;
-          document.getElementById("email").textContent = t.email;
-          document.getElementById("fromAccount").textContent = t.account_number;
-          document.getElementById("recipientName").textContent = t.recipient_name;
-          document.getElementById("recipientBank").textContent = t.recipient_bank;
-          document.getElementById("recipientAccount").textContent = t.recipient_account;
-          document.getElementById("amount").textContent = "$" + t.amount;
-          document.getElementById("date").textContent =
-          new Date(t.date).toLocaleString();
+        // Amount
+        const amt = Number(t.amount).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        document.getElementById('amountDisplay').innerHTML = `<sup>$</sup>${amt}`;
 
-          const statusEl = document.getElementById("status");
-          statusEl.textContent = t.status;
+        // Ref badge
+        document.getElementById('refBadge').textContent = t.transaction_ref || '—';
 
-          statusEl.className =
-          t.status === "completed"
-              ? "status-success"
-              : "status-failed";
+        // Details
+        document.getElementById('ref').textContent            = t.transaction_ref   || '—';
+        document.getElementById('senderEmail').textContent    = t.email             || '—';
+        document.getElementById('fromAccount').textContent    = t.account_number    || '—';
+        document.getElementById('recipientName').textContent  = t.recipient_name    || '—';
+        document.getElementById('recipientBank').textContent  = t.recipient_bank    || '—';
+        document.getElementById('recipientAccount').textContent = t.recipient_account || '—';
+        document.getElementById('description').textContent    = t.description       || '—';
+        document.getElementById('date').textContent           = new Date(t.date).toLocaleString('en-US', {
+          weekday: 'short', year: 'numeric', month: 'short',
+          day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+        });
+
+        // Status pill
+        const pill     = document.getElementById('statusPill');
+        const pillText = document.getElementById('statusPillText');
+        const statusInline = document.getElementById('statusInline');
+        const s        = (t.status || 'unknown').toLowerCase();
+
+        pill.className     = `status-pill ${s}`;
+        pillText.textContent = t.status?.toUpperCase();
+
+        const statusColors = { completed: '#065f46', pending: '#856404', failed: '#8c0f1a' };
+        const statusBgs    = { completed: '#d1fae5', pending: '#fff3cd', failed: '#fde8ea' };
+        statusInline.textContent = t.status?.toUpperCase();
+        statusInline.style.cssText = `
+          display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.78rem;font-weight:700;
+          background:${statusBgs[s] || '#f0f0f0'};color:${statusColors[s] || '#333'};letter-spacing:0.06em;
+        `;
 
       } catch (err) {
-          console.error("Error loading receipt:", err);
-          alert("Failed to load receipt");
+        console.error('Receipt load error:', err);
+        alert('Failed to load receipt. Please try again.');
       }
     }
 
-      loadReceipt();
+    loadReceipt();
   </script>
 
 </body>
 </html>
-
-
-
