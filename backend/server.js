@@ -23,6 +23,8 @@ const fs = require("fs");
 const { Resend } = require("resend");
 const resend = new Resend(process.env.RESEND_API_KEY);
 console.log("RESEND_API_KEY loaded:", !!process.env.RESEND_API_KEY);
+const lastResendAttempt = new Map();
+const crypto = require('crypto');
 //middleware
 app.use(bodyparser.json());
 app.use(cors());
@@ -124,7 +126,7 @@ const otpStore = {};
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
- 
+ console.log("From address being used:", process.env.EMAIL_FROM);
 async function sendOTPEmail(email, otp, firstname) {
   await resend.emails.send({
     from: `ApexTrust Bank <${process.env.EMAIL_FROM}>`,
@@ -198,6 +200,15 @@ app.post("/signin", async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ success: false });
         }
+
+        // 🔒 Block sign-in until email is verified
+        if (!user.is_verified) {
+            return res.status(403).json({ 
+                success: false, 
+                message: "Please verify your email before signing in" 
+            });
+        }
+
         //fetch user profiles from user_profile
         const profileResult = await db.query(
             "SELECT * FROM user_profile WHERE email = $1", [email]
@@ -228,10 +239,44 @@ app.post("/signup", async (req, res) => {
     const { FirstName, SecondName, email, PhoneNumber, dob, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 1. Insert into users
+    // Check if this email already exists
+    const existing = await db.query("SELECT is_verified FROM users WHERE email = $1", [email]);
+
+    if (existing.rows.length > 0) {
+      if (existing.rows[0].is_verified) {
+        return res.status(409).json({ success: false, message: "Email already registered. Please sign in." });
+      } else {
+        // Unverified account exists — just resend a fresh OTP instead of failing
+        const otp = generateOTP();
+        const otpHash = await bcrypt.hash(otp, 10);
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+        await db.query("DELETE FROM otp_verifications WHERE email = $1", [email]);
+        await db.query(
+          `INSERT INTO otp_verifications (email, otp_hash, expires_at) VALUES ($1, $2, $3)`,
+          [email, otpHash, expiresAt]
+        );
+
+        await resend.emails.send({
+          from: `ApexTrust Bank <${process.env.EMAIL_FROM}>`,
+          to: email,
+          subject: 'Your ApexTrust Verification Code',
+          html: `<div style="font-family: sans-serif; padding: 20px;">
+                   <h2>Verify your email</h2>
+                   <p>Your verification code is:</p>
+                   <h1 style="letter-spacing: 4px;">${otp}</h1>
+                   <p>This code expires in 10 minutes.</p>
+                 </div>`
+        });
+
+        return res.json({ success: true, message: "Account already pending verification — new OTP sent" });
+      }
+    }
+
+    // 1. Insert into users as unverified
     await db.query(
-      `INSERT INTO users (firstname, secondname, email, phonenumber, dob, password)
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING email`,
+      `INSERT INTO users (firstname, secondname, email, phonenumber, dob, password, is_verified)
+       VALUES ($1, $2, $3, $4, $5, $6, FALSE) RETURNING email`,
       [FirstName, SecondName, email, PhoneNumber, dob, hashedPassword]
     );
 
@@ -257,11 +302,138 @@ app.post("/signup", async (req, res) => {
       [email, newAccountNumber, "Account Created", 0, "Success", "Initial account creation"]
     );
 
-    res.json({ success: true, message: "User registered successfully" });
+    // 5. Generate + store OTP
+    const otp = generateOTP();
+    const otpHash = await bcrypt.hash(otp, 10);
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    await db.query(
+      `INSERT INTO otp_verifications (email, otp_hash, expires_at)
+       VALUES ($1, $2, $3)`,
+      [email, otpHash, expiresAt]
+    );
+
+    // 6. Send OTP email
+    await resend.emails.send({
+      from: `ApexTrust Bank <${process.env.EMAIL_FROM}>`,
+      to: email,
+      subject: 'Your ApexTrust Verification Code',
+      html: `<div style="font-family: sans-serif; padding: 20px;">
+               <h2>Verify your email</h2>
+               <p>Hi ${FirstName}, your verification code is:</p>
+               <h1 style="letter-spacing: 4px;">${otp}</h1>
+               <p>This code expires in 10 minutes.</p>
+             </div>`
+    });
+
+    res.json({ success: true, message: "OTP sent to email" });
   } catch (err) {
     console.error("Error inserting user:", err);
     res.status(500).json({ success: false, message: "Signup failed" });
   }
+});
+
+app.post("/verify-otp", async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const userResult = await db.query('SELECT is_verified FROM users WHERE email = $1', [email]);
+    if (userResult.rows.length === 0) {
+      return res.json({ success: false, message: "No account found" });
+    }
+    if (userResult.rows[0].is_verified) {
+      return res.json({ success: false, message: "Account already verified" });
+    }
+
+    const otpResult = await db.query(
+      `SELECT * FROM otp_verifications WHERE email = $1 ORDER BY created_at DESC LIMIT 1`,
+      [email]
+    );
+    if (otpResult.rows.length === 0) {
+      return res.json({ success: false, message: "No OTP found, please sign up again" });
+    }
+
+    const record = otpResult.rows[0];
+    if (new Date() > new Date(record.expires_at)) {
+      return res.json({ success: false, message: "OTP expired" });
+    }
+    if (record.attempts >= 5) {
+      return res.json({ success: false, message: "Too many attempts" });
+    }
+
+    const isValid = await bcrypt.compare(otp, record.otp_hash);
+    if (!isValid) {
+      await db.query(`UPDATE otp_verifications SET attempts = attempts + 1 WHERE id = $1`, [record.id]);
+      return res.json({ success: false, message: "Incorrect OTP" });
+    }
+
+    await db.query('UPDATE users SET is_verified = TRUE WHERE email = $1', [email]);
+    await db.query('DELETE FROM otp_verifications WHERE email = $1', [email]);
+
+    res.json({ success: true, message: "Account verified successfully" });
+  } catch (err) {
+    console.error("Verify OTP error:", err);
+    res.status(500).json({ success: false, message: "Verification failed" });
+  }
+});
+
+app.post("/resend-otp", async (req, res) => {
+    try {
+            const { email } = req.body;
+            const last = lastResendAttempt.get(email);
+            if (last && Date.now() - last < 60 * 1000) {
+                return res.status(429).json({ success: false, message: "Please wait a minute before requesting another code" });
+            }
+            lastResendAttempt.set(email, Date.now());
+
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Email is required" });
+        }
+
+        const userResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "No account found for this email" });
+        }
+
+        const user = userResult.rows[0];
+
+        if (user.is_verified) {
+            return res.status(400).json({ success: false, message: "Account already verified, please sign in" });
+        }
+
+        // Generate a new OTP
+        const otp = generateOTP();
+        const otpHash = await bcrypt.hash(otp, 10);
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+
+        // Remove any old OTPs for this email first, then insert the new one
+        await db.query("DELETE FROM otp_verifications WHERE email = $1", [email]);
+        await db.query(
+            `INSERT INTO otp_verifications (email, otp_hash, expires_at)
+             VALUES ($1, $2, $3)`,
+            [email, otpHash, expiresAt]
+        );
+
+        // Send the new OTP email
+        await resend.emails.send({
+            from: `ApexTrust Bank <${process.env.EMAIL_FROM}>`,
+            to: email,
+            subject: 'Your New ApexTrust Verification Code',
+            html: `<div style="font-family: sans-serif; padding: 20px;">
+                     <h2>Verify your email</h2>
+                     <p>Here is your new verification code:</p>
+                     <h1 style="letter-spacing: 4px;">${otp}</h1>
+                     <p>This code expires in 10 minutes.</p>
+                   </div>`
+        });
+
+        res.json({ success: true, message: "A new OTP has been sent to your email" });
+
+    } catch (err) {
+        console.error("Resend OTP error:", err);
+        res.status(500).json({ success: false, message: "Failed to resend OTP" });
+    }
 });
 
 // dashboard route
