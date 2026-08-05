@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexTrust Bank - Transactions</title>
+  <title data-i18n-title="title.transactions">ApexTrust Bank - Transactions</title>
   <link rel="stylesheet" href="transactions.css">
+  <link rel="stylesheet" href="i18n.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -21,53 +22,56 @@
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
         <ul>
-          <li><a href="userdashboard.html">Dashboard</a></li>
-          <li><a href="transfer.html">Transfers</a></li>
-          <li><a href="">Settings</a></li>
-          <li><a href="signin.html">Logout</a></li>
+          <li><a href="userdashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+          <li><a href="transfer.html" data-i18n="nav.transfer">Transfers</a></li>
+          <li><a href="" data-i18n="nav.settings">Settings</a></li>
+          <li><a href="signin.html" data-i18n="nav.logout">Logout</a></li>
         </ul>
+        <div class="language-switcher">
+          <label for="language-select" class="sr-only">Language</label>
+          <select id="language-select" aria-label="Select language"></select>
+        </div>
       </div>
     </section>
-  </header>
 
   <!-- Main -->
   <main>
 
     <section class="user-overview">
-      <h2>Transaction History</h2>
-      <p>View all your account activity.</p>
+      <h2 data-i18n="transactions.title">Transaction History</h2>
+      <p data-i18n="transactions.subtext">View all your account activity.</p>
     </section>
 
     <!-- Filters -->
     <section class="quick-actions">
-      <h3>Filter Transactions</h3>
+      <h3 data-i18n="transactions.filterHeading">Filter Transactions</h3>
       <div class="actions-grid">
         <select id="filterType">
-          <option value="">All Types</option>
-          <option value="credit">Credit</option>
-          <option value="debit">Debit</option>
+          <option value="" data-i18n="transactions.allTypes">All Types</option>
+          <option value="credit" data-i18n="transactions.credit">Credit</option>
+          <option value="debit" data-i18n="transactions.debit">Debit</option>
         </select>
         <select id="filterStatus">
-          <option value="">All Status</option>
-          <option value="completed">Completed</option>
-          <option value="pending">Pending</option>
-          <option value="failed">Failed</option>
+          <option value="" data-i18n="transactions.allStatus">All Status</option>
+          <option value="completed" data-i18n="transactions.completed">Completed</option>
+          <option value="pending" data-i18n="transactions.pending">Pending</option>
+          <option value="failed" data-i18n="transactions.failed">Failed</option>
         </select>
-        <button onclick="applyFilters()">Apply Filter</button>
+        <button onclick="applyFilters()" data-i18n="transactions.applyFilter">Apply Filter</button>
       </div>
     </section>
 
     <!-- Transactions Table -->
     <section class="recent-trans">
-      <h3>All Transactions</h3>
+      <h3 data-i18n="transactions.title">All Transactions</h3>
       <table id="transactions">
         <thead>
           <tr>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
+            <th data-i18n="userdashboard.description">Description</th>
+            <th data-i18n="userdashboard.type">Type</th>
+            <th data-i18n="userdashboard.amount">Amount</th>
+            <th data-i18n="userdashboard.status">Status</th>
+            <th data-i18n="userdashboard.date">Date</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -81,13 +85,13 @@
         <span id="newMsgBadge" style="display:none;">1</span>
       </div>
       <div id="chatWindow">
-        <div id="chatHeader">Support Chat
-          <span id="closeChat" style="float:right;cursor:pointer;">âœ–</span>
+        <div id="chatHeader" data-i18n="common.supportChat">Support Chat
+          <span id="closeChat" style="float:right;cursor:pointer;">&#10006;</span>
         </div>
         <div id="messages"></div>
         <div id="inputContainer">
-          <input type="text" id="messageInput" placeholder="Type a message" />
-          <button id="sendBtn">Send</button>
+          <input type="text" id="messageInput" data-i18n-placeholder="common.typeMessage" placeholder="Type a message" />
+          <button id="sendBtn" data-i18n="common.sendButton">Send</button>
         </div>
       </div>
     </div>
@@ -96,14 +100,14 @@
 
     <footer>
         <div class="footer-container">
-            <h4>Contact Us</h4>
-            <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
-            <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+            <h4 data-i18n="common.contactUs">Contact Us</h4>
+            <p><span data-i18n="common.email">Email:</span> <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+            <p data-i18n="common.copyright">© 2026 ApexTrust Bank. All rights reserved.</p>
             <nav>
                 <ul>
-                    <li><a href="">Privacy Policy</a></li>
-                    <li><a href="">Terms of Service</a></li>
-                    <li><a href="">Contact Us</a></li>
+                    <li><a href="" data-i18n="common.privacyPolicy">Privacy Policy</a></li>
+                    <li><a href="" data-i18n="common.termsOfService">Terms of Service</a></li>
+                    <li><a href="" data-i18n="common.contactLink">Contact Us</a></li>
                 </ul>
             </nav>
         </div>
@@ -117,6 +121,7 @@
 
   <!-- âœ… Socket.IO MUST load before any script that uses `socket` -->
   <script src="/socket.io/socket.io.js"></script>
+  <script src="translation.js"></script>
 
   <script>
     // â”€â”€ Nav toggle â”€â”€

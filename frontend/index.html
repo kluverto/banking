@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexTrust Bank</title>
+    <title data-i18n-title="title.index">ApexTrust Bank</title>
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,11 +18,15 @@
             <button class="menu-toggle">&#9776;</button>
             <div class="nav">
              <ul>
-                <li><a href="signin.html">Sign-in</a></li>
-                <li><a href="">About us</a></li>
-                <li><a href="">Services</a></li>
-                <li><a href="">Support</a></li>
+                <li><a href="signin.html" data-i18n="nav.signin">Sign-in</a></li>
+                <li><a href="" data-i18n="nav.about">About us</a></li>
+                <li><a href="" data-i18n="nav.services">Services</a></li>
+                <li><a href="" data-i18n="nav.support">Support</a></li>
               </ul>
+              <div class="language-switcher">
+                <label for="language-select" class="sr-only">Language</label>
+                <select id="language-select" aria-label="Select language"></select>
+              </div>
             </div>
         </section>
     </header>
@@ -31,41 +35,41 @@
         <section class="main-content">
             <a href="about.html"><div class="welcome-message">
               <ul>
-                <p>What we offer:</p>
-                <li>Advanced encryption to keep transactions safe.</li>
-                <li>Real-time fraud monitoring with instant alerts.</li>
-                <li>Decades of proven track record in the banking industry.</li>
-                <li>Global network of branches/ATMs for easy access.</li>
-                <li>24/7 customer service with dedicated relationship managers.</li>
-                <li>Personalized financial advice from certified experts.</li>
-                <li>Exclusive rewards & benefits tailored to lifestyle.</li>
-                <li>Fast approvals & easy onboarding for new accounts.</li>
-                <li>Clear, upfront fees with no hidden charges.</li>
+                <p data-i18n="index.offerHeader">What we offer:</p>
+                <li data-i18n="index.offer1">Advanced encryption to keep transactions safe.</li>
+                <li data-i18n="index.offer2">Real-time fraud monitoring with instant alerts.</li>
+                <li data-i18n="index.offer3">Decades of proven track record in the banking industry.</li>
+                <li data-i18n="index.offer4">Global network of branches/ATMs for easy access.</li>
+                <li data-i18n="index.offer5">24/7 customer service with dedicated relationship managers.</li>
+                <li data-i18n="index.offer6">Personalized financial advice from certified experts.</li>
+                <li data-i18n="index.offer7">Exclusive rewards & benefits tailored to lifestyle.</li>
+                <li data-i18n="index.offer8">Fast approvals & easy onboarding for new accounts.</li>
+                <li data-i18n="index.offer9">Clear, upfront fees with no hidden charges.</li>
               </ul>
             </div></a>
         <div class="image-container">
-            <a href="signup.html"><img src="images/join_us.jpg" alt="join us", width="600px"></a>
+            <a href="signup.html"><img src="images/join_us.jpg" alt="join us" width="600px"></a>
         </div>    
         </section>
         <section class="services">
-                <h3>Our Services include:</h3>
-                <div><a href="signin.html">Personal Banking</a></div>
-                <div><a href="">Investments Services</a></div>
-                <div><a href="">Pension Funds</a></div>
+                <h3 data-i18n="index.servicesHeading">Our Services include:</h3>
+                <div><a href="signin.html" data-i18n="index.personalBanking">Personal Banking</a></div>
+                <div><a href="" data-i18n="index.investmentServices">Investments Services</a></div>
+                <div><a href="" data-i18n="index.pensionFunds">Pension Funds</a></div>
         </section>
         
     </main>
     <!--footer-->
     <footer>
         <div class="footer-container">
-            <h4>Contact Us</h4>
-            <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
-            <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+            <h4 data-i18n="common.contactUs">Contact Us</h4>
+            <p><span data-i18n="common.email">Email:</span> <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+            <p data-i18n="common.copyright">© 2026 ApexTrust Bank. All rights reserved.</p>
             <nav>
                 <ul>
-                    <li><a href="">Privacy Policy</a></li>
-                    <li><a href="">Terms of Service</a></li>
-                    <li><a href="">Contact Us</a></li>
+                    <li><a href="" data-i18n="common.privacyPolicy">Privacy Policy</a></li>
+                    <li><a href="" data-i18n="common.termsOfService">Terms of Service</a></li>
+                    <li><a href="" data-i18n="common.contactLink">Contact Us</a></li>
                 </ul>
             </nav>
         </div>
@@ -77,6 +81,7 @@
         </div>    
     </footer>
     
+    <script src="translation.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

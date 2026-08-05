@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexTrust Bank Admin</title>
+  <title data-i18n-title="title.admin">ApexTrust Bank Admin</title>
   <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="i18n.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -18,12 +19,12 @@
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
         <ul>
-          <li><a href="admin.html">Dashboard</a></li>
-          <li><a href="manage_users.html">Users</a></li>
-          <li><a href="admin-transaction.html">Transactions</a></li>
-          <li><a href="reports.html">Reports</a></li>
-          <li><a href="settings.html">Settings</a></li>
-          <li class="logout"><a href="signin.html">Logout</a></li>
+          <li><a href="admin.html" data-i18n="nav.dashboard">Dashboard</a></li>
+          <li><a href="manage_users.html" data-i18n="nav.users">Users</a></li>
+          <li><a href="admin-transaction.html" data-i18n="nav.transactions">Transactions</a></li>
+          <li><a href="reports.html" data-i18n="nav.reports">Reports</a></li>
+          <li><a href="settings.html" data-i18n="nav.settings">Settings</a></li>
+          <li class="logout"><a href="signin.html" data-i18n="nav.logout">Logout</a></li>
         </ul>
       </div>
     </section>
@@ -32,30 +33,30 @@
   <!-- Main content -->
   <main>
     <section class="admin-overview">
-      <h2>Welcome, Admin</h2>
-      <p>Quick overview of the bank's system status.</p>
+      <h2 data-i18n="admin.welcome">Welcome, Admin</h2>
+      <p data-i18n="admin.overviewText">Quick overview of the bank's system status.</p>
 
       <div class="cards-container">
         <a href="manage_users.html">
           <div class="card">
             <i class="fa-solid fa-users"></i>
-            <h3>Total Users</h3>
+            <h3 data-i18n="admin.totalUsers">Total Users</h3>
             <p class="total_users"></p>
           </div>
         </a>
         <div class="card">
           <i class="fa-solid fa-right-left"></i>
-          <h3>Transactions Today</h3>
+          <h3 data-i18n="admin.transactionsToday">Transactions Today</h3>
           <p class="today_count"></p>
         </div>
         <div class="card">
           <i class="fa-solid fa-dollar-sign"></i>
-          <h3>Total Balance</h3>
+          <h3 data-i18n="admin.totalBalance">Total Balance</h3>
           <p class="total_balance"></p>
         </div>
         <a href="admin-transaction.html?filter=pending"><div class="card">
           <i class="fa fa-bell"></i>
-          <h3>Pending Transactions</h3>
+          <h3 data-i18n="admin.pendingTransactions">Pending Transactions</h3>
           <p class="pending_count"></p>
         </div>
        </a>
@@ -66,69 +67,69 @@
     <section>
       <div class="form-container">
         <form id="adminTransactionForm">
-          <h3>Credit/Debit User Balance</h3>
+          <h3 data-i18n="admin.transactionFormTitle">Credit/Debit User Balance</h3>
           <div id="userDetail">
-            <label for="email">Select User</label>
+            <label for="email" data-i18n="admin.selectUser">Select User</label>
             <select name="email" class="selectUser" required>
               <option value="">-- Select a user --</option>
             </select>
-            <label for="target">Select Account Type</label>
+            <label for="target" data-i18n="admin.selectAccountType">Select Account Type</label>
             <select name="target" required class="detail">
-              <option value="account_balance">Main Account</option>
-              <option value="savings_balance">Savings</option>
-              <option value="card_balance">Card</option>
+              <option value="account_balance" data-i18n="admin.accountMain">Main Account</option>
+              <option value="savings_balance" data-i18n="admin.accountSavings">Savings</option>
+              <option value="card_balance" data-i18n="admin.accountCard">Card</option>
             </select>
-            <label for="type">Transaction Type</label>
+            <label for="type" data-i18n="admin.transactionType">Transaction Type</label>
             <select name="type" required class="detail">
-              <option value="credit">Credit</option>
-              <option value="debit">Debit</option>
+              <option value="credit" data-i18n="admin.credit">Credit</option>
+              <option value="debit" data-i18n="admin.debit">Debit</option>
             </select>
-            <label for="status">Status</label>
+            <label for="status" data-i18n="admin.status">Status</label>
             <select name="status" required class="detail">
-              <option value="pending">Pending</option>
-              <option value="completed">Completed</option>
-              <option value="failed">Failed</option>
+              <option value="pending" data-i18n="admin.pending">Pending</option>
+              <option value="completed" data-i18n="admin.completed">Completed</option>
+              <option value="failed" data-i18n="admin.failed">Failed</option>
             </select>
           </div>
 
-          <label for="amount">Amount</label>
-          <input type="number" name="amount" placeholder="Enter amount" required>
+          <label for="amount" data-i18n="admin.amount">Amount</label>
+          <input type="number" name="amount" data-i18n-placeholder="admin.enterAmount" placeholder="Enter amount" required>
 
-          <label for="description">Description</label>
-          <input type="text" name="description" placeholder="Description (optional)">
+          <label for="description" data-i18n="admin.description">Description</label>
+          <input type="text" name="description" data-i18n-placeholder="admin.descriptionOptional" placeholder="Description (optional)">
 
-          <button type="submit">Submit</button>
+          <button type="submit" data-i18n="admin.submit">Submit</button>
         </form>
       </div>
 
       <div class="create-user-container">
         <h3>Create New User</h3>
         <form id="adminCreateUserForm">
-          <input type="text" name="firstname" placeholder="First Name" required />
-          <input type="text" name="secondname" placeholder="Second Name" required />
-          <input type="email" name="email" placeholder="Email" required />
-          <input type="text" name="phonenumber" placeholder="Phone Number" required />
-          <input type="date" name="dob" placeholder="Date of Birth" required />
-          <input type="number" name="account_balance" placeholder="Initial Account Balance" required />
-          <input type="number" name="savings_balance" placeholder="Initial Savings Balance" required />
-          <input type="number" name="card_balance" placeholder="Initial Card Balance" required />
-          <input type="password" name="password" placeholder="Password" required />
-          <button type="submit">Create User</button>
+          <input type="text" name="firstname" data-i18n-placeholder="admin.firstName" placeholder="First Name" required />
+          <input type="text" name="secondname" data-i18n-placeholder="admin.secondName" placeholder="Second Name" required />
+          <input type="email" name="email" data-i18n-placeholder="admin.userEmail" placeholder="Email" required />
+          <input type="text" name="phonenumber" data-i18n-placeholder="admin.phoneNumber" placeholder="Phone Number" required />
+          <input type="date" name="dob" data-i18n-placeholder="admin.dob" placeholder="Date of Birth" required />
+          <input type="number" name="account_balance" data-i18n-placeholder="admin.initialAccountBalance" placeholder="Initial Account Balance" required />
+          <input type="number" name="savings_balance" data-i18n-placeholder="admin.initialSavingsBalance" placeholder="Initial Savings Balance" required />
+          <input type="number" name="card_balance" data-i18n-placeholder="admin.initialCardBalance" placeholder="Initial Card Balance" required />
+          <input type="password" name="password" data-i18n-placeholder="admin.password" placeholder="Password" required />
+          <button type="submit" data-i18n="admin.createUserButton">Create User</button>
         </form>
       </div>
     </section>
 
     <section class="recent-activity">
-      <h3>Recent User Activity</h3>
+      <h3 data-i18n="admin.userTableUser">Recent User Activity</h3>
       <table>
         <thead>
           <tr>
-            <th>User</th>
-            <th>Account Number</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
+            <th data-i18n="admin.userTableUser">User</th>
+            <th data-i18n="admin.userTableAccountNumber">Account Number</th>
+            <th data-i18n="admin.userTableType">Type</th>
+            <th data-i18n="admin.userTableAmount">Amount</th>
+            <th data-i18n="admin.userTableStatus">Status</th>
+            <th data-i18n="admin.userTableDate">Date</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -142,20 +143,20 @@
         <span id="newMsgBadge" style="display:none;">1</span>
       </div>
       <div id="chatWindow">
-        <div id="chatHeader">
+        <div id="chatHeader" data-i18n="common.supportChat">
           Support Chat
           <span id="closeChat" style="float:right;cursor:pointer;">&#10006;</span>
         </div>
         <div id="userSelectContainer">
           <select id="userSelect">
-            <option value="">-- Select a user --</option>
+            <option value="" data-i18n="admin.selectUser">-- Select a user --</option>
           </select>
-          <button id="joinRoomBtn">Join Chat</button>
+          <button id="joinRoomBtn" data-i18n="admin.joinChat">Join Chat</button>
         </div>
         <div id="messages"></div>
         <div id="inputContainer">
-          <input type="text" id="messageInput" placeholder="Type a message" />
-          <button id="sendBtn">Send</button>
+          <input type="text" id="messageInput" data-i18n-placeholder="common.typeMessage" placeholder="Type a message" />
+          <button id="sendBtn" data-i18n="common.sendButton">Send</button>
         </div>
       </div>
     </div>
@@ -164,14 +165,14 @@
   <!-- Footer -->
   <footer>
     <div class="footer-container">
-      <h4>Contact Us</h4>
-      <p>Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
-      <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+      <h4 data-i18n="common.contactUs">Contact Us</h4>
+      <p><span data-i18n="common.email">Email:</span> <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+      <p data-i18n="common.copyright">© 2026 ApexTrust Bank. All rights reserved.</p>
       <nav>
         <ul>
-          <li><a href="">Privacy Policy</a></li>
-          <li><a href="">Terms of Service</a></li>
-          <li><a href="">Contact Us</a></li>
+          <li><a href="" data-i18n="common.privacyPolicy">Privacy Policy</a></li>
+          <li><a href="" data-i18n="common.termsOfService">Terms of Service</a></li>
+          <li><a href="" data-i18n="common.contactLink">Contact Us</a></li>
         </ul>
       </nav>
     </div>
@@ -188,6 +189,8 @@
     const nav = document.querySelector('.nav');
     toggle.addEventListener('click', () => nav.classList.toggle('open'));
   </script>
+
+  <script src="translation.js"></script>
 
   <script>
     // Populate transaction form user dropdown

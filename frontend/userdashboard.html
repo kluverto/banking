@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexTrust Bank - User Dashboard</title>
+  <title data-i18n-title="title.dashboard">ApexTrust Bank - User Dashboard</title>
   <link rel="stylesheet" href="userdashboard.css">
+  <link rel="stylesheet" href="i18n.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -18,10 +19,14 @@
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
         <ul>
-          <li><a href="userdashboard.html">Dashboard</a></li>
-          <li><a href="transfer.html">Transfer</a></li>
-          <li><a href="signin.html">Logout</a></li>
+          <li><a href="userdashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+          <li><a href="transfer.html" data-i18n="nav.transfer">Transfer</a></li>
+          <li><a href="signin.html" data-i18n="nav.logout">Logout</a></li>
         </ul>
+        <div class="language-switcher">
+          <label for="language-select" class="sr-only">Language</label>
+          <select id="language-select" aria-label="Select language"></select>
+        </div>
       </div>
     </section>
   </header>
@@ -38,47 +43,47 @@
         </label>
         <input type="file" id="profileUpload" accept="image/*" hidden/>
       </div>
-      <h2>Welcome back </h2> <h2 class="user-name"></h2> <h2 class="user-number"></h2>
-      <p>Your financial summary at a glance.</p>
+      <h2 data-i18n="userdashboard.welcome">Welcome back </h2> <h2 class="user-name"></h2> <h2 class="user-number"></h2>
+      <p data-i18n="userdashboard.summary">Your financial summary at a glance.</p>
 
       <div class="cards-container">
         <div class="card">
           <i class="fa fa-wallet"></i>
-          <h3>Account Balance</h3>
+          <h3 data-i18n="userdashboard.accountBalance">Account Balance</h3>
           <p class="user-balance"></p>
         </div>
         <div class="card">
           <i class="fa fa-piggy-bank"></i>
-          <h3>Savings Balance</h3>
+          <h3 data-i18n="userdashboard.savingsBalance">Savings Balance</h3>
           <p class="user-savings"></p>
         </div>
         <div class="card">
           <i class="fa fa-credit-card"></i>
-          <h3>Credit Card</h3>
-          <p class="user-card"> due</p>
+          <h3 data-i18n="userdashboard.creditCard">Credit Card</h3>
+          <p class="user-card" data-i18n="userdashboard.due"> due</p>
         </div>
       </div>
     </section>
 
     <section class="quick-actions">
-      <h3>Quick Actions</h3>
+      <h3 data-i18n="userdashboard.quickActions">Quick Actions</h3>
       <div class="actions-grid">
-        <a href="transfer.html" class="action-btn"><i class="fa fa-exchange-alt"></i> Transfer Funds</a>
-        <a href="" class="action-btn"><i class="fa fa-file-invoice"></i> Pay Bills</a>
-        <a href="transactions.html" class="action-btn"><i class="fa fa-university"></i> View Transaction History</a>
+        <a href="transfer.html" class="action-btn"><i class="fa fa-exchange-alt"></i> <span data-i18n="userdashboard.transferFunds">Transfer Funds</span></a>
+        <a href="" class="action-btn"><i class="fa fa-file-invoice"></i> <span data-i18n="userdashboard.payBills">Pay Bills</span></a>
+        <a href="transactions.html" class="action-btn"><i class="fa fa-university"></i> <span data-i18n="userdashboard.viewHistory">View Transaction History</span></a>
       </div>
     </section>
 
     <section class="recent-trans">
-      <h3>Recent Transactions</h3>
+      <h3 data-i18n="userdashboard.recentTransactions">Recent Transactions</h3>
       <table id="transactions">
         <thead>
           <tr>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
+            <th data-i18n="userdashboard.description">Description</th>
+            <th data-i18n="userdashboard.type">Type</th>
+            <th data-i18n="userdashboard.amount">Amount</th>
+            <th data-i18n="userdashboard.status">Status</th>
+            <th data-i18n="userdashboard.date">Date</th>
           </tr>
         </thead>
         <tbody>
@@ -92,11 +97,11 @@
         <span id="newMsgBadge" style="display:none;">1</span>
       </div>
       <div id="chatWindow">
-        <div id="chatHeader">Support Chat <span id="closeChat" style="float:right;cursor:pointer;">âœ–</span></div>
+        <div id="chatHeader" data-i18n="common.supportChat">Support Chat <span id="closeChat" style="float:right;cursor:pointer;">âœ–</span></div>
         <div id="messages"></div>
         <div id="inputContainer">
-        <input type="text" id="messageInput" placeholder="Type a message" />
-        <button id="sendBtn">Send</button>
+        <input type="text" id="messageInput" data-i18n-placeholder="common.typeMessage" placeholder="Type a message" />
+        <button id="sendBtn" data-i18n="common.sendButton">Send</button>
         </div>
       </div>
     </div>
@@ -105,14 +110,14 @@
   <!-- Footer -->
   <footer>
       <div class="footer-container">
-          <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
-          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+          <h4 data-i18n="common.contactUs">Contact Us</h4>
+          <p><span data-i18n="common.email">Email:</span> <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+          <p data-i18n="common.copyright">© 2026 ApexTrust Bank. All rights reserved.</p>
           <nav>
               <ul>
-                  <li><a href="">Privacy Policy</a></li>
-                  <li><a href="">Terms of Service</a></li>
-                  <li><a href="">Contact Us</a></li>
+                  <li><a href="" data-i18n="common.privacyPolicy">Privacy Policy</a></li>
+                  <li><a href="" data-i18n="common.termsOfService">Terms of Service</a></li>
+                  <li><a href="" data-i18n="common.contactLink">Contact Us</a></li>
               </ul>
           </nav>
       </div>
@@ -130,6 +135,7 @@
         nav.classList.toggle('open');
     });
   </script>
+  <script src="translation.js"></script>
   <script>
     const email = localStorage.getItem("userEmail");
     const profilePic = document.getElementById("profilePic"); // âœ… moved to top

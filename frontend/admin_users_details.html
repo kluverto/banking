@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin - User Details</title>\r\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin_users_details.css">
-  <style>
+  <link rel="stylesheet" href="admin_users_details.css">\r\n  <link rel="stylesheet" href="i18n.css">\r\n  <style>
     form { max-width: 400px; margin: 20px auto; display: flex; flex-direction: column; gap: 10px; }
     input { padding: 8px; }
     button { padding: 10px; cursor: pointer; }
@@ -20,42 +19,46 @@
       </div>
       <div class="nav">
         <ul>
-          <li><a href="admin.html">Dashboard</a></li>
-          <li><a href="manage_users.html" class="active">Users</a></li>
-          <li><a href="transactions.html">Transactions</a></li>
-          <li><a href="reports.html">Reports</a></li>
-          <li><a href="settings.html">Settings</a></li>
-          <li class="logout"><a href="signin.html">Logout</a></li>
+          <li><a href="admin.html" data-i18n="nav.dashboard">Dashboard</a></li>
+          <li><a href="manage_users.html" class="active" data-i18n="nav.users">Users</a></li>
+          <li><a href="transactions.html" data-i18n="nav.transactions">Transactions</a></li>
+          <li><a href="reports.html" data-i18n="nav.reports">Reports</a></li>
+          <li><a href="settings.html" data-i18n="nav.settings">Settings</a></li>
+          <li class="logout"><a href="signin.html" data-i18n="nav.logout">Logout</a></li>
         </ul>
+        <div class="language-switcher">
+          <label for="language-select" class="sr-only">Language</label>
+          <select id="language-select" aria-label="Select language"></select>
+        </div>
       </div>
     </section>
   </header>
 
 <body>
-  <h1>User Details</h1>
+  <h1 data-i18n="adminUserDetails.pageHeading">User Details</h1>
   <form id="userForm">
-    <input type="text" name="firstname" placeholder="First Name">
-    <input type="text" name="secondname" placeholder="Second Name">
-    <input type="text" name="phonenumber" placeholder="Phone Number">
-    <input type="date" name="date_of_birth" placeholder="Date of Birth">
-    <input type="text" name="account_number" placeholder="Account Number" readonly>
-    <input type="number" name="account_balance" placeholder="Account Balance">
-    <input type="number" name="savings_balance" placeholder="Savings Balance">
-    <input type="number" name="card_balance" placeholder="Card Balance">
-    <button type="submit">Update User</button>
+    <input type="text" name="firstname" placeholder="First Name" data-i18n-placeholder="adminUserDetails.firstName">
+    <input type="text" name="secondname" placeholder="Second Name" data-i18n-placeholder="adminUserDetails.secondName">
+    <input type="text" name="phonenumber" placeholder="Phone Number" data-i18n-placeholder="adminUserDetails.phoneNumber">
+    <input type="date" name="date_of_birth" placeholder="Date of Birth" data-i18n-placeholder="adminUserDetails.dob">
+    <input type="text" name="account_number" placeholder="Account Number" readonly data-i18n-placeholder="adminUserDetails.accountNumber">
+    <input type="number" name="account_balance" placeholder="Account Balance" data-i18n-placeholder="adminUserDetails.accountBalance">
+    <input type="number" name="savings_balance" placeholder="Savings Balance" data-i18n-placeholder="adminUserDetails.savingsBalance">
+    <input type="number" name="card_balance" placeholder="Card Balance" data-i18n-placeholder="adminUserDetails.cardBalance">
+    <button type="submit" data-i18n="adminUserDetails.updateUserButton">Update User</button>
   </form>
 
   <!-- Footer -->
   <footer>
       <div class="footer-container">
-          <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
-          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+          <h4 data-i18n="common.contactUs">Contact Us</h4>
+          <p><span data-i18n="common.email">Email:</span> <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+          <p data-i18n="common.copyright">© 2026 ApexTrust Bank. All rights reserved.</p>
           <nav>
               <ul>
-                  <li><a href="">Privacy Policy</a></li>
-                  <li><a href="">Terms of Service</a></li>
-                  <li><a href="">Contact Us</a></li>
+                  <li><a href="" data-i18n="common.privacyPolicy">Privacy Policy</a></li>
+                  <li><a href="" data-i18n="common.termsOfService">Terms of Service</a></li>
+                  <li><a href="" data-i18n="common.contactLink">Contact Us</a></li>
               </ul>
           </nav>
       </div>
@@ -67,6 +70,7 @@
       </div>    
   </footer>
 
+  <script src="translation.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const accountNumber = params.get("account");
@@ -124,6 +128,7 @@
   </script>
 </body>
 </html>
+
 
 
 

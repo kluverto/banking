@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign-in_ApexTrust Bank</title>
+    <title data-i18n-title="title.signin">Sign-in_ApexTrust Bank</title>
     <link rel="stylesheet" href="signin.css">
+    <link rel="stylesheet" href="i18n.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -12,33 +13,37 @@
     <header>
         <section class="nav-bar">
             <div class="hero-image">
-              <a href="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="300px", height="300px"></a>
+              <a href="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="300px" height="300px"></a>
             </div>
             <button class="menu-toggle">&#9776;</button>
             <div class="nav">
              <ul>
-                <li><a href="signup.html">Sign-up</a></li>
-                <li><a href="about.html">About us</a></li>
-                <li><a href="">Services</a></li>
-                <li><a href="">Support</a></li>
+                <li><a href="signup.html" data-i18n="nav.signup">Sign-up</a></li>
+                <li><a href="about.html" data-i18n="nav.about">About us</a></li>
+                <li><a href="" data-i18n="nav.services">Services</a></li>
+                <li><a href="" data-i18n="nav.support">Support</a></li>
               </ul>
+              <div class="language-switcher">
+                <label for="language-select" class="sr-only">Language</label>
+                <select id="language-select" aria-label="Select language"></select>
+              </div>
             </div>
         </section>
     </header>
 
     <main>
         <section class="signin-section">
-            <h2>Sign In to Your Account</h2>
+            <h2 data-i18n="signin.heading">Sign In to Your Account</h2>
             <form class="signin-form">
                 <div class="form-group">
-                    <label for="email">Username:</label>
-                    <input type="text" id="email" name="email" required placeholder="Enter a valid email"><br>
-                    <label for="password">Password:</label>
-                    <div class="input-wrapper"><input type="password" id="password" name="password" required placeholder="Enter your password"><span><i id="toggle" class="fa-solid fa-eye"></i></span></div>
-                    <a href="">Forgot password?</a>
-                    <p id="errorMsg" style="color:red"><p>
+                    <label for="email" data-i18n="signin.usernameLabel">Username:</label>
+                    <input type="text" id="email" name="email" required data-i18n-placeholder="signin.placeholderEmail" placeholder="Enter a valid email"><br>
+                    <label for="password" data-i18n="signin.passwordLabel">Password:</label>
+                    <div class="input-wrapper"><input type="password" id="password" name="password" required data-i18n-placeholder="signin.placeholderPassword" placeholder="Enter your password"><span><i id="toggle" class="fa-solid fa-eye"></i></span></div>
+                    <a href="" data-i18n="signin.forgotPassword">Forgot password?</a>
+                    <p id="errorMsg" style="color:red"></p>
                     <div class="submit-group">
-                    <button type="submit" name='signin_btn' class="submit-btn">Sign In</button>
+                    <button type="submit" name='signin_btn' class="submit-btn"><span data-i18n="signin.submit">Sign In</span></button>
                     </div>
                 </div>
             </form>
@@ -71,6 +76,7 @@
             nav.classList.toggle('open');
         });
     </script>
+    <script src="translation.js"></script>
     <script src="signin.js"></script>
 </body>
 </html>

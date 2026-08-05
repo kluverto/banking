@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign-up_ApexTrust Bank</title>
+    <title data-i18n-title="title.signup">Sign-up_ApexTrust Bank</title>
     <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="i18n.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -12,56 +13,60 @@
     <header>
         <section class="nav-bar">
             <div class="hero-image">
-              <a href="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="300px", height="300px"></a>
+              <a href="index.html"><img src="images/Apextrust.png" alt="ApexTrust Bank" width="300px" height="300px"></a>
             </div>
             <button class="menu-toggle">&#9776;</button>   
             <div class="nav">
              <ul>
-                <li><a href="signin.html">Sign-in</a></li>
-                <li><a href="">About us</a></li>
-                <li><a href="">Services</a></li>
-                <li><a href="">Support</a></li>
+                <li><a href="signin.html" data-i18n="nav.signin">Sign-in</a></li>
+                <li><a href="" data-i18n="nav.about">About us</a></li>
+                <li><a href="" data-i18n="nav.services">Services</a></li>
+                <li><a href="" data-i18n="nav.support">Support</a></li>
               </ul>
+              <div class="language-switcher">
+                <label for="language-select" class="sr-only">Language</label>
+                <select id="language-select" aria-label="Select language"></select>
+              </div>
             </div>
         </section>
     </header>
 
     <main>
         <section class="signup-form">
-            <h1>Join ApexTrust Bank</h1>
-            <p><i>Banking without compromise your gateway to prestige, security, and growth.</i></p>
+            <h1 data-i18n="signup.heroHeadline">Join ApexTrust Bank</h1>
+            <p><i data-i18n="signup.heroSubtext">Banking without compromise your gateway to prestige, security, and growth.</i></p>
             <div class="neat">
                 <form class="form" method="post">
-                    <label for="First name">First name:</label>
-                    <input type="text" id="First name" name="FirstName" required placeholder="Enter your first name">
+                    <label for="First name" data-i18n="signup.firstName">First name:</label>
+                    <input type="text" id="First name" name="FirstName" required data-i18n-placeholder="signup.placeholderFirstName" placeholder="Enter your first name">
                     <br>
-                    <label for="Second name">Second name:</label>
-                    <input type="text" id="Second name" name="SecondName" required placeholder="Enter your second name">
+                    <label for="Second name" data-i18n="signup.secondName">Second name:</label>
+                    <input type="text" id="Second name" name="SecondName" required data-i18n-placeholder="signup.placeholderSecondName" placeholder="Enter your second name">
                     <br>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required placeholder="Enter your email eg:john@gmail.com">
+                    <label for="email" data-i18n="signup.email">Email:</label>
+                    <input type="email" id="email" name="email" required data-i18n-placeholder="signup.placeholderEmail" placeholder="Enter your email eg:john@gmail.com">
                     <br>
-                    <label for="ssn">SSN:</label>
-                    <input type="text" id="ssn" name="ssn" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="XXX-XX-XXXX">
-                    <br
-                    <label for="phone-number">Phone Number:</label>
-                    <input type="tel" id="phone-number" name="PhoneNumber" required placeholder="Enter your phone number eg: 123-456-7890">
+                    <label for="ssn" data-i18n="signup.ssn">SSN/TIN:</label>
+                    <input type="text" id="ssn" name="ssn" inputmode="numeric" autocomplete="off" maxlength="11" data-i18n-placeholder="signup.placeholderSsn" placeholder="XXX-XX-XXXX">
                     <br>
-                    <label for ="date-of-birth">Date of Birth:</label>
+                    <label for="phone-number" data-i18n="signup.phoneNumber">Phone Number:</label>
+                    <input type="tel" id="phone-number" name="PhoneNumber" required data-i18n-placeholder="signup.placeholderPhone" placeholder="Enter your phone number eg: 123-456-7890">
+                    <br>
+                    <label for ="date-of-birth" data-i18n="signup.dob">Date of Birth:</label>
                     <input type="date" id="date-of-birth" name="dob" required>
                     <br>
                     <div class="password-container">
-                    <label for="password">Password:</label>
-                    <div class="input-wrapper"><input type="password" id="password" name="password" required placeholder="Enter your password"><span><i id="toggle" class="fa-solid fa-eye"></i></span></div>
+                    <label for="password" data-i18n="signup.password">Password:</label>
+                    <div class="input-wrapper"><input type="password" id="password" name="password" required data-i18n-placeholder="signup.placeholderPassword" placeholder="Enter your password"><span><i id="toggle" class="fa-solid fa-eye"></i></span></div>
                     <br>
-                    <label for="confirm-password">Confirm Password:</label>
-                    <div class="input-wrapper"><input type="password" id="confirm-password" name="confirm-password" required placeholder="Confirm password"><span><i id="ctoggle" class="fa-solid fa-eye"></i></span></div>
+                    <label for="confirm-password" data-i18n="signup.confirmPassword">Confirm Password:</label>
+                    <div class="input-wrapper"><input type="password" id="confirm-password" name="confirm-password" required data-i18n-placeholder="signup.placeholderConfirmPassword" placeholder="Confirm password"><span><i id="ctoggle" class="fa-solid fa-eye"></i></span></div>
                     <br>
                     </div>
-                    <button type="submit" class="btn"><span>Sign Up</span></button>
+                    <button type="submit" class="btn"><span data-i18n="signup.signUpButton">Sign Up</span></button>
                
                     <div class="agreement">
-                        <p>By signing up, you agree to our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.</p>
+                        <p data-i18n="signup.termsAgreement">By signing up, you agree to our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.</p>
                     </div>
              </form>
            </div>  
@@ -113,6 +118,7 @@
                 nav.classList.toggle('open');
             });
         </script>
+    <script src="translation.js"></script>
     <script src="signup.js"></script>
 </body>
 </html>

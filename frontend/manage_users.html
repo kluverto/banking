@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Users-ApexTrust Bank</title>
+  <title data-i18n-title="manageUsers.pageTitle">Manage Users-ApexTrust Bank</title>
   <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="i18n.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -250,28 +251,32 @@
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
         <ul>
-          <li><a href="admin.html">Dashboard</a></li>
-          <li><a href="manage_users.html">Users</a></li>
-          <li><a href="admin-transaction.html">Transactions</a></li>
-          <li><a href="reports.html">Reports</a></li>
-          <li><a href="settings.html">Settings</a></li>
-          <li class="logout"><a href="signin.html">Logout</a></li>
+          <li><a href="admin.html" data-i18n="nav.dashboard">Dashboard</a></li>
+          <li><a href="manage_users.html" data-i18n="nav.users">Users</a></li>
+          <li><a href="admin-transaction.html" data-i18n="nav.transactions">Transactions</a></li>
+          <li><a href="reports.html" data-i18n="nav.reports">Reports</a></li>
+          <li><a href="settings.html" data-i18n="nav.settings">Settings</a></li>
+          <li class="logout"><a href="signin.html" data-i18n="nav.logout">Logout</a></li>
         </ul>
+        <div class="language-switcher">
+          <label for="language-select" class="sr-only">Language</label>
+          <select id="language-select" aria-label="Select language"></select>
+        </div>
       </div>
     </section>
   </header>
 
   <!-- Page Header -->
   <div class="page-header">
-    <h2><i class="fa fa-users" style="margin-right:8px;"></i>Manage Users</h2>
-    <p>View, edit, delete users and manage their transaction history.</p>
+    <h2><i class="fa fa-users" style="margin-right:8px;"></i><span data-i18n="manageUsers.pageHeading">Manage Users</span></h2>
+    <p data-i18n="manageUsers.pageSubtext">View, edit, delete users and manage their transaction history.</p>
   </div>
 
   <!-- Toolbar -->
   <div class="toolbar">
-    <input type="text" id="searchInput" placeholder="🔍  Search by name or email">
+    <input type="text" id="searchInput" placeholder="🔍  Search by name or email" data-i18n-placeholder="manageUsers.searchPlaceholder">
     <button class="btn-danger-outline" id="clearAllTxBtn">
-      <i class="fa fa-trash-alt" style="margin-right:5px;"></i>Clear All Transactions
+      <i class="fa fa-trash-alt" style="margin-right:5px;"></i><span data-i18n="manageUsers.clearAllTransactions">Clear All Transactions</span>
     </button>
   </div>
 
@@ -280,13 +285,13 @@
     <table id="usersTable">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Account No.</th>
-          <th>Main Balance</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th data-i18n="manageUsers.id">#</th>
+          <th data-i18n="manageUsers.name">Name</th>
+          <th data-i18n="manageUsers.email">Email</th>
+          <th data-i18n="manageUsers.accountNumber">Account No.</th>
+          <th data-i18n="manageUsers.mainBalance">Main Balance</th>
+          <th data-i18n="manageUsers.status">Status</th>
+          <th data-i18n="manageUsers.actions">Actions</th>
         </tr>
       </thead>
       <tbody id="usersTbody">
@@ -303,9 +308,9 @@
       <p>This will permanently remove the user, their profile, and <strong>all transaction history</strong>. This action cannot be undone.</p>
       <div class="modal-user-info" id="deleteModalInfo"></div>
       <div class="modal-actions">
-        <button class="btn-cancel" id="deleteCancelBtn">Cancel</button>
+        <button class="btn-cancel" id="deleteCancelBtn" data-i18n="common.cancel">Cancel</button>
         <button class="btn-confirm-delete" id="deleteConfirmBtn">
-          <i class="fa fa-trash" style="margin-right:5px;"></i>Yes, Delete
+          <i class="fa fa-trash" style="margin-right:5px;"></i><span data-i18n="manageUsers.yesDelete">Yes, Delete</span>
         </button>
       </div>
     </div>
@@ -319,9 +324,9 @@
       <p>All transactions for this user will be permanently deleted. Account balances will not be affected.</p>
       <div class="modal-user-info" id="clearModalInfo"></div>
       <div class="modal-actions">
-        <button class="btn-cancel" id="clearCancelBtn">Cancel</button>
+        <button class="btn-cancel" id="clearCancelBtn" data-i18n="common.cancel">Cancel</button>
         <button class="btn-confirm-clear" id="clearConfirmBtn">
-          <i class="fa fa-broom" style="margin-right:5px;"></i>Yes, Clear
+          <i class="fa fa-broom" style="margin-right:5px;"></i><span data-i18n="manageUsers.yesClear">Yes, Clear</span>
         </button>
       </div>
     </div>
@@ -334,9 +339,9 @@
       <h3>Clear ALL Transactions</h3>
       <p>This will permanently delete <strong>every transaction</strong> across all users in the system. This cannot be undone.</p>
       <div class="modal-actions">
-        <button class="btn-cancel" id="clearAllCancelBtn">Cancel</button>
+        <button class="btn-cancel" id="clearAllCancelBtn" data-i18n="common.cancel">Cancel</button>
         <button class="btn-confirm-delete" id="clearAllConfirmBtn">
-          <i class="fa fa-trash" style="margin-right:5px;"></i>Yes, Clear All
+          <i class="fa fa-trash" style="margin-right:5px;"></i><span data-i18n="manageUsers.yesClearAll">Yes, Clear All</span>
         </button>
       </div>
     </div>
@@ -347,11 +352,11 @@
       <div class="modal-icon" style="background:#fff3cd;color:#856404;">
         <i class="fa fa-envelope"></i>
       </div>
-      <h3>Change User Email</h3>
-      <p>This updates the email across all tables including transactions and messages.</p>
+      <h3 data-i18n="manageUsers.changeEmailTitle">Change User Email</h3>
+      <p data-i18n="manageUsers.changeEmailText">This updates the email across all tables including transactions and messages.</p>
       <div class="modal-user-info" id="emailModalInfo"></div>
 
-      <label style="display:block;text-align:left;font-size:0.83rem;font-weight:700;color:#2b3e5a;margin-bottom:6px;">
+      <label style="display:block;text-align:left;font-size:0.83rem;font-weight:700;color:#2b3e5a;margin-bottom:6px;" data-i18n="manageUsers.newEmailLabel">
         New Email Address
       </label>
       <input
@@ -368,9 +373,9 @@
       </div>
 
       <div class="modal-actions">
-        <button class="btn-cancel" id="emailCancelBtn">Cancel</button>
+        <button class="btn-cancel" id="emailCancelBtn" data-i18n="common.cancel">Cancel</button>
         <button class="btn-confirm-clear" id="emailConfirmBtn">
-          <i class="fa fa-floppy-disk" style="margin-right:5px;"></i>Save Email
+          <i class="fa fa-floppy-disk" style="margin-right:5px;"></i><span data-i18n="manageUsers.saveEmail">Save Email</span>
         </button>
       </div>
     </div>
@@ -382,14 +387,14 @@
   <!-- Footer -->
   <footer>
       <div class="footer-container">
-          <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
-          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+          <h4 data-i18n="common.contactUs">Contact Us</h4>
+          <p><span data-i18n="common.email">Email:</span> <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+          <p data-i18n="common.copyright">© 2026 ApexTrust Bank. All rights reserved.</p>
           <nav>
               <ul>
-                  <li><a href="">Privacy Policy</a></li>
-                  <li><a href="">Terms of Service</a></li>
-                  <li><a href="">Contact Us</a></li>
+                  <li><a href="" data-i18n="common.privacyPolicy">Privacy Policy</a></li>
+                  <li><a href="" data-i18n="common.termsOfService">Terms of Service</a></li>
+                  <li><a href="" data-i18n="common.contactLink">Contact Us</a></li>
               </ul>
           </nav>
       </div>
@@ -401,6 +406,7 @@
       </div>    
   </footer>
 
+  <script src="translation.js"></script>
   <script>
     //Nav toggle
     document.querySelector('.menu-toggle').addEventListener('click', () => {

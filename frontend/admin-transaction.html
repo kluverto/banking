@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Transactions â€” ApexTrust Bank</title>
+  <title data-i18n-title="adminTransactions.pageTitle">Admin Transactions — ApexTrust Bank</title>
   <link rel="stylesheet" href="admin-transaction.css">
+  <link rel="stylesheet" href="i18n.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -272,39 +273,43 @@
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
         <ul>
-          <li><a href="admin.html">Dashboard</a></li>
-          <li><a href="manage_users.html">Users</a></li>
-          <li><a href="admin-transaction.html">Transactions</a></li>
-          <li><a href="reports.html">Reports</a></li>
-          <li><a href="settings.html">Settings</a></li>
-          <li><a href="signin.html">Logout</a></li>
+          <li><a href="admin.html" data-i18n="nav.dashboard">Dashboard</a></li>
+          <li><a href="manage_users.html" data-i18n="nav.users">Users</a></li>
+          <li><a href="admin-transaction.html" data-i18n="nav.transactions">Transactions</a></li>
+          <li><a href="reports.html" data-i18n="nav.reports">Reports</a></li>
+          <li><a href="settings.html" data-i18n="nav.settings">Settings</a></li>
+          <li><a href="signin.html" data-i18n="nav.logout">Logout</a></li>
         </ul>
+        <div class="language-switcher">
+          <label for="language-select" class="sr-only">Language</label>
+          <select id="language-select" aria-label="Select language"></select>
+        </div>
       </div>
     </section>
   </header>
 
   <!-- Page Header -->
   <div class="page-header">
-    <h2><i class="fa fa-clock-rotate-left" style="margin-right:8px;"></i>Transaction Management</h2>
-    <p>Approve, reject, and edit transaction dates across all accounts.</p>
+    <h2><i class="fa fa-clock-rotate-left" style="margin-right:8px;"></i><span data-i18n="adminTransactions.pageHeading">Transaction Management</span></h2>
+    <p data-i18n="adminTransactions.pageSubtext">Approve, reject, and edit transaction dates across all accounts.</p>
   </div>
 
   <!-- Toolbar -->
   <div class="toolbar">
     <div class="toolbar-filters">
-      <input type="text" id="searchInput" placeholder="🔍 Search email or descriptionâ€¦" style="width:220px;">
+      <input type="text" id="searchInput" placeholder="🔍 Search email or description…" data-i18n-placeholder="adminTransactions.searchPlaceholder" style="width:220px;">
       <select id="filterType">
-        <option value="">All Types</option>
-        <option value="credit">Credit</option>
-        <option value="debit">Debit</option>
+        <option value="" data-i18n="adminTransactions.allTypes">All Types</option>
+        <option value="credit" data-i18n="adminTransactions.credit">Credit</option>
+        <option value="debit" data-i18n="adminTransactions.debit">Debit</option>
       </select>
       <select id="filterStatus">
-        <option value="">All Status</option>
-        <option value="completed">Completed</option>
-        <option value="pending">Pending</option>
-        <option value="failed">Failed</option>
+        <option value="" data-i18n="adminTransactions.allStatus">All Status</option>
+        <option value="completed" data-i18n="adminTransactions.completed">Completed</option>
+        <option value="pending" data-i18n="adminTransactions.pending">Pending</option>
+        <option value="failed" data-i18n="adminTransactions.failed">Failed</option>
       </select>
-      <button class="btn-primary" onclick="applyFilters()">
+      <button class="btn-primary" onclick="applyFilters()" data-i18n="adminTransactions.filterButton">
         <i class="fa fa-filter"></i> Filter
       </button>
     </div>
@@ -378,13 +383,13 @@
   <!-- Footer -->
   <footer>
     <div class="footer-container">
-      <h4>Contact Us</h4>
-      <p>Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
-      <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+      <h4 data-i18n="common.contactUs">Contact Us</h4>
+      <p><span data-i18n="common.email">Email:</span> <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+      <p data-i18n="common.copyright">© 2026 ApexTrust Bank. All rights reserved.</p>
       <nav><ul>
-        <li><a href="">Privacy Policy</a></li>
-        <li><a href="">Terms of Service</a></li>
-        <li><a href="">Contact Us</a></li>
+        <li><a href="" data-i18n="common.privacyPolicy">Privacy Policy</a></li>
+        <li><a href="" data-i18n="common.termsOfService">Terms of Service</a></li>
+        <li><a href="" data-i18n="common.contactLink">Contact Us</a></li>
       </ul></nav>
     </div>
     <div class="social-media">
@@ -395,6 +400,7 @@
     </div>
   </footer>
 
+  <script src="translation.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     //Nav toggle

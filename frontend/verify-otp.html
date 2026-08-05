@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify OTP</title>
+    <title data-i18n-title="verifyOtp.title">Verify OTP</title>
 </head>
 <body>
 <form id="otp-form">
-  <label for="otp">Enter the code sent to your email:</label>
-  <input type="text" id="otp" maxlength="6" inputmode="numeric" required>
-  <button type="submit">Verify</button>
+  <label for="otp" data-i18n="verifyOtp.instructions">Enter the code sent to your email:</label>
+  <input type="text" id="otp" maxlength="6" inputmode="numeric" required data-i18n-placeholder="verifyOtp.placeholderOtp" placeholder="Enter code">
+  <button type="submit" data-i18n="verifyOtp.submit">Verify</button>
 </form>
-<p>Didn't get a code? <a href="#" id="resend-link">Resend it</a></p>
-
+<p data-i18n-html="verifyOtp.resendLine">Didn't get a code? <a href="#" id="resend-link">Resend it</a></p>
+<script src="translation.js"></script>
 <script>
   document.getElementById("otp-form").addEventListener("submit", async (e) => {
     e.preventDefault();

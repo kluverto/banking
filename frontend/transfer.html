@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexTrust Bank - Transfer</title>
+  <title data-i18n-title="title.transfer">ApexTrust Bank - Transfer</title>
   <link rel="stylesheet" href="transfer.css">
+  <link rel="stylesheet" href="i18n.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <style>
     /* ── OTP Modal ── */
@@ -172,48 +173,52 @@
       <button class="menu-toggle">&#9776;</button>
       <div class="nav">
         <ul>
-          <li><a href="userdashboard.html">Dashboard</a></li>
-          <li><a href="transfer.html">Transfer</a></li>
-          <li><a href="signin.html">Logout</a></li>
+          <li><a href="userdashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+          <li><a href="transfer.html" data-i18n="nav.transfer">Transfer</a></li>
+          <li><a href="signin.html" data-i18n="nav.logout">Logout</a></li>
         </ul>
+        <div class="language-switcher">
+          <label for="language-select" class="sr-only">Language</label>
+          <select id="language-select" aria-label="Select language"></select>
+        </div>
       </div>
     </section>
   </header>
 
   <main>
     <section class="user-overview">
-      <h2>Transfer Funds</h2>
-      <p>Send money securely to any bank account.</p>
+      <h2 data-i18n="transfer.title">Transfer Funds</h2>
+      <p data-i18n="transfer.subtext">Send money securely to any bank account.</p>
     </section>
 
     <section class="form-section" style="max-width:560px;margin:30px auto;padding:0 16px;">
       <div class="form-container">
-        <h3>New Transfer</h3>
+        <h3 data-i18n="transfer.newTransfer">New Transfer</h3>
         <form id="transferForm">
-          <label>From Account</label>
+          <label data-i18n="transfer.fromAccount">From Account</label>
           <select name="fromAccount" required>
-            <option value="">-- Select account --</option>
-            <option value="main">Main Account</option>
-            <option value="savings">Savings Account</option>
-            <option value="card">Card Account</option>
+            <option value="" data-i18n="transfer.selectAccount">-- Select account --</option>
+            <option value="main" data-i18n="transfer.accountMain">Main Account</option>
+            <option value="savings" data-i18n="transfer.accountSavings">Savings Account</option>
+            <option value="card" data-i18n="transfer.accountCard">Card Account</option>
           </select>
 
-          <label>Recipient Bank</label>
-          <input type="text" name="recipientBank" placeholder="e.g. Chase Bank" required>
+          <label data-i18n="transfer.recipientBank">Recipient Bank</label>
+          <input type="text" name="recipientBank" data-i18n-placeholder="transfer.recipientBankPlaceholder" placeholder="e.g. Chase Bank" required>
 
-          <label>Recipient Account Number</label>
-          <input type="text" name="recipientAccount" placeholder="Account number" required>
+          <label data-i18n="transfer.recipientAccount">Recipient Account Number</label>
+          <input type="text" name="recipientAccount" data-i18n-placeholder="transfer.recipientAccountPlaceholder" placeholder="Account number" required>
 
-          <label>Recipient Name</label>
-          <input type="text" name="recipientName" placeholder="Full name" required>
+          <label data-i18n="transfer.recipientName">Recipient Name</label>
+          <input type="text" name="recipientName" data-i18n-placeholder="transfer.recipientNamePlaceholder" placeholder="Full name" required>
 
-          <label>Amount ($)</label>
-          <input type="number" name="amount" placeholder="0.00" min="1" step="0.01" required>
+          <label data-i18n="transfer.amount">Amount ($)</label>
+          <input type="number" name="amount" data-i18n-placeholder="transfer.amountPlaceholder" placeholder="0.00" min="1" step="0.01" required>
 
-          <label>Description</label>
-          <input type="text" name="description" placeholder="What's this for?" required>
+          <label data-i18n="transfer.description">Description</label>
+          <input type="text" name="description" data-i18n-placeholder="transfer.descriptionPlaceholder" placeholder="What's this for?" required>
 
-          <button type="submit" id="submitTransferBtn">
+          <button type="submit" id="submitTransferBtn" data-i18n="transfer.continueButton">
             <i class="fa fa-paper-plane" style="margin-right:6px;"></i>Continue
           </button>
         </form>
@@ -249,15 +254,13 @@
         Code expires in <span id="timerDisplay">5:00</span>
       </div>
 
-      <button class="btn-verify" id="verifyBtn" disabled>
+      <button class="btn-verify" id="verifyBtn" disabled data-i18n="transfer.verifyButton">
         <i class="fa fa-lock-open" style="margin-right:6px;"></i>Verify & Transfer
       </button>
 
-      <button class="btn-resend" id="resendBtn" disabled>
-        Resend code
-      </button>
+      <button class="btn-resend" id="resendBtn" disabled data-i18n="transfer.resendCode">Resend code</button>
 
-      <button class="btn-cancel-otp" id="cancelOtpBtn">
+      <button class="btn-cancel-otp" id="cancelOtpBtn" data-i18n="transfer.cancelTransfer">
         Cancel transfer
       </button>
     </div>
@@ -266,14 +269,14 @@
   <!-- Footer -->
   <footer>
       <div class="footer-container">
-          <h4>Contact Us</h4>
-          <p id="email">Email: <a href="mailto:apextrust@support.com">apextrust@support.com</a>
-          <p>&copy; 2026 ApexTrust Bank. All rights reserved.</p>
+          <h4 data-i18n="common.contactUs">Contact Us</h4>
+          <p><span data-i18n="common.email">Email:</span> <a href="mailto:apextrust@support.com">apextrust@support.com</a></p>
+          <p data-i18n="common.copyright">© 2026 ApexTrust Bank. All rights reserved.</p>
           <nav>
               <ul>
-                  <li><a href="">Privacy Policy</a></li>
-                  <li><a href="">Terms of Service</a></li>
-                  <li><a href="">Contact Us</a></li>
+                  <li><a href="" data-i18n="common.privacyPolicy">Privacy Policy</a></li>
+                  <li><a href="" data-i18n="common.termsOfService">Terms of Service</a></li>
+                  <li><a href="" data-i18n="common.contactLink">Contact Us</a></li>
               </ul>
           </nav>
       </div>
@@ -285,6 +288,7 @@
       </div>    
   </footer>
 
+  <script src="translation.js"></script>
   <script>
     const toggle = document.querySelector('.menu-toggle');
     toggle.addEventListener('click', () => document.querySelector('.nav').classList.toggle('open'));
