@@ -689,7 +689,7 @@ const TRANSLATIONS = {
       modalText: "Hemos enviado un código de 6 dígitos a",
       placeholderEnterCode: "Introduce el código",
       verifyButton: "Verificar",
-      resendLine: "¿No recibiste el código? Reenviar"
+      resendLine: "¿No recibiste el código? Reenviar",
       signupError: "Por favor completa todos los campos."
     },
     signin: {
