@@ -201,8 +201,10 @@ app.post("/signin", async (req, res) => {
             return res.status(401).json({ success: false });
         }
 
-        // 🔒 Block sign-in until email is verified
-        if (!user.is_verified) {
+        const isAdmin = email === "admin@email.com";
+
+        // 🔒 Require email verification for regular users only.
+        if (!isAdmin && !user.is_verified) {
             return res.status(403).json({ 
                 success: false, 
                 message: "Please verify your email before signing in" 
@@ -216,8 +218,8 @@ app.post("/signin", async (req, res) => {
 
         const profile = profileResult.rows[0] || {};
         let role = "user";
-        if (email === "admin@email.com") {
-        role = "admin";
+        if (isAdmin) {
+            role = "admin";
         }
         res.json({
             success: true,
