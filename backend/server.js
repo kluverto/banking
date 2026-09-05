@@ -297,11 +297,12 @@ app.post("/signup", async (req, res) => {
     const newAccountNumber = profileResult.rows[0].account_number;
 
     // 4. Insert initial transaction
+    const initialTransactionRef = generateTransactionRef();
     await db.query(
       `INSERT INTO transactions 
-       (email, account_number, type, amount, status, date, description)
-       VALUES ($1, $2, $3, $4, $5, NOW(), $6)`,
-      [email, newAccountNumber, "Account Created", 0, "Success", "Initial account creation"]
+       (transaction_ref, email, account_number, type, amount, status, date, description)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7)`,
+      [initialTransactionRef, email, newAccountNumber, "Account Created", 0, "Success", "Initial account creation"]
     );
 
     // 5. Generate + store OTP
@@ -537,15 +538,32 @@ app.get("/admin/stats", async (req, res) => {
 
 //Admin create new user route
 app.post("/admin/create-user", async (req, res) => {
+  let client;
   try {
     const { firstname, secondname, email, phonenumber, password, dob: submittedDob, date_of_birth, account_balance, savings_balance, card_balance } = req.body;
-    const dob = (date_of_birth || submittedDob) ? new Date(date_of_birth || submittedDob).toISOString().split("T")[0] : null;
+    const rawDob = date_of_birth || submittedDob;
+    const dobDate = rawDob ? new Date(rawDob) : null;
+    const dob = dobDate && !Number.isNaN(dobDate.getTime()) ? dobDate.toISOString().split("T")[0] : null;
+    const balances = [account_balance, savings_balance, card_balance].map(Number);
+
+    if (!firstname || !secondname || !email || !phonenumber || !password || !dob || balances.some((balance) => !Number.isFinite(balance))) {
+      return res.status(400).json({ success: false, message: "All user fields and valid balances are required." });
+    }
+
+    client = await db.connect();
+    await client.query("BEGIN");
+
+    const existingUser = await client.query("SELECT 1 FROM users WHERE email = $1", [email]);
+    if (existingUser.rowCount > 0) {
+      await client.query("ROLLBACK");
+      return res.status(409).json({ success: false, message: "A user with this email already exists." });
+    }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Admin-created users are immediately verified and do not require OTP/sign-up verification.
-    await db.query(
+    await client.query(
       `INSERT INTO users (firstname, secondname, email, phonenumber, dob, password, is_verified)
        VALUES ($1, $2, $3, $4, $5, $6, TRUE)`,
       [firstname, secondname, email, phonenumber, dob, hashedPassword]
@@ -555,24 +573,34 @@ app.post("/admin/create-user", async (req, res) => {
     const accountNumber = Math.floor(1000000000 + Math.random() * 9000000000);
 
     // Insert into user_profile table
-    await db.query(
+    await client.query(
       `INSERT INTO user_profile (firstname, secondname, phonenumber, email, account_number, account_balance, savings_balance, card_balance, dob)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-      [firstname, secondname, phonenumber, email, accountNumber, Number(account_balance), Number(savings_balance), Number(card_balance), dob]
+      [firstname, secondname, phonenumber, email, accountNumber, balances[0], balances[1], balances[2], dob]
     );
 
     //Insert into transactions table
-    await db.query(
+    const initialTransactionRef = generateTransactionRef();
+    await client.query(
       `INSERT INTO transactions 
-       (email, account_number, type, amount, status, date, description)
-       VALUES ($1, $2, $3, $4, $5, NOW(), $6)`,
-      [email, accountNumber, "Account Created",  Number(account_balance), "Success", "Initial account creation"]
+       (transaction_ref, email, account_number, type, amount, status, date, description)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7)`,
+      [initialTransactionRef, email, accountNumber, "Account Created", balances[0], "Success", "Initial account creation"]
     );
 
+    await client.query("COMMIT");
     res.json({ success: true, message: "User created successfully" });
   } catch (err) {
+    if (client) {
+      await client.query("ROLLBACK").catch(() => {});
+    }
     console.error("Error creating user:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+    if (err.code === "23505") {
+      return res.status(409).json({ success: false, message: "A user with this email or account number already exists." });
+    }
+    res.status(500).json({ success: false, message: "Unable to create user. Check the server logs for the database error." });
+  } finally {
+    client?.release();
   }
 });
 
@@ -728,16 +756,18 @@ app.post("/admin/transaction/:accountNumber", async (req, res) => {
     }
 
     // Always insert transaction log
+    const transactionRef = generateTransactionRef();
     await db.query(
       `INSERT INTO transactions 
-       (account_number, email, type, amount, status, description, date)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-      [accountNumber, email, type, amt, status, description || "Admin action"]
+       (transaction_ref, account_number, email, type, amount, status, description, date)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())`,
+      [transactionRef, accountNumber, email, type, amt, status, description || "Admin action"]
     );
 
     res.json({
       success: true,
       message: `Transaction recorded with status: ${status}`,
+      transactionRef,
       ...(newBalance !== null ? { newBalance } : {})
     });
 
