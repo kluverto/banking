@@ -544,10 +544,10 @@ app.post("/admin/create-user", async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert into users table
+    // Admin-created users are immediately verified and do not require OTP/sign-up verification.
     await db.query(
-      `INSERT INTO users (firstname, secondname, email, phonenumber, dob, password)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
+      `INSERT INTO users (firstname, secondname, email, phonenumber, dob, password, is_verified)
+       VALUES ($1, $2, $3, $4, $5, $6, TRUE)`,
       [firstname, secondname, email, phonenumber, dob, hashedPassword]
     );
 
