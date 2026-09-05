@@ -538,8 +538,8 @@ app.get("/admin/stats", async (req, res) => {
 //Admin create new user route
 app.post("/admin/create-user", async (req, res) => {
   try {
-    const { firstname, secondname, email, phonenumber, password, date_of_birth, account_balance, savings_balance, card_balance } = req.body;
-    const dob = date_of_birth ? new Date(date_of_birth).toISOString().split("T")[0] : null;
+    const { firstname, secondname, email, phonenumber, password, dob: submittedDob, date_of_birth, account_balance, savings_balance, card_balance } = req.body;
+    const dob = (date_of_birth || submittedDob) ? new Date(date_of_birth || submittedDob).toISOString().split("T")[0] : null;
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
